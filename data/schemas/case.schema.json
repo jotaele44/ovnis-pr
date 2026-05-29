@@ -1,0 +1,162 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jotaele44/PRUFON/data/schemas/case.schema.json",
+  "title": "PRUFON Case Record",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "record_id",
+    "record_type",
+    "date_local",
+    "location_name",
+    "description",
+    "source_url",
+    "evidence_tier",
+    "dedupe_status",
+    "review_action"
+  ],
+  "properties": {
+    "record_id": {
+      "type": "string",
+      "minLength": 3,
+      "description": "Stable case_id for master rows or candidate_id for quarantined intake rows."
+    },
+    "record_type": {
+      "type": "string",
+      "enum": ["candidate", "master", "duplicate", "update_existing", "echo_noise", "rejected"]
+    },
+    "case_id": {
+      "type": ["string", "null"]
+    },
+    "candidate_id": {
+      "type": ["string", "null"]
+    },
+    "date_local": {
+      "type": "string",
+      "pattern": "^[0-9]{4}(-[0-9]{2}){0,2}$",
+      "description": "Use YYYY, YYYY-MM, or YYYY-MM-DD."
+    },
+    "time_local": {
+      "type": ["string", "null"],
+      "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$"
+    },
+    "timezone": {
+      "type": ["string", "null"],
+      "default": "America/Puerto_Rico"
+    },
+    "location_name": {
+      "type": "string",
+      "minLength": 3
+    },
+    "municipality": {
+      "type": ["string", "null"]
+    },
+    "nearest_feature": {
+      "type": ["string", "null"]
+    },
+    "latitude": {
+      "type": ["number", "null"],
+      "minimum": 17.0,
+      "maximum": 20.0
+    },
+    "longitude": {
+      "type": ["number", "null"],
+      "minimum": -69.5,
+      "maximum": -63.5
+    },
+    "location_confidence": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "maximum": 1
+    },
+    "environment": {
+      "type": ["string", "null"],
+      "enum": [null, "air", "sea", "underwater", "land", "coastal", "radar", "space", "unknown"]
+    },
+    "object_type": {
+      "type": ["string", "null"]
+    },
+    "description": {
+      "type": "string",
+      "minLength": 20
+    },
+    "language": {
+      "type": ["string", "null"],
+      "enum": [null, "en", "es", "bilingual", "unknown"]
+    },
+    "translation_status": {
+      "type": ["string", "null"],
+      "enum": [null, "original", "machine_translated", "human_translated", "not_required"]
+    },
+    "witness_type": {
+      "type": ["string", "null"]
+    },
+    "witness_count": {
+      "type": ["integer", "null"],
+      "minimum": 0
+    },
+    "evidence_tier": {
+      "type": "string",
+      "enum": ["T1", "T2", "T3", "T4"]
+    },
+    "source_url": {
+      "type": "string",
+      "minLength": 4
+    },
+    "source_citation": {
+      "type": ["string", "null"]
+    },
+    "source_family": {
+      "type": ["string", "null"]
+    },
+    "source_hash": {
+      "type": ["string", "null"]
+    },
+    "retrieved_at": {
+      "type": ["string", "null"]
+    },
+    "dedupe_status": {
+      "type": "string",
+      "enum": ["new", "possible_duplicate", "duplicate", "update_existing", "not_checked", "rejected"]
+    },
+    "dedupe_confidence": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "maximum": 1
+    },
+    "matched_case_id": {
+      "type": ["string", "null"]
+    },
+    "review_action": {
+      "type": "string",
+      "enum": ["promote", "merge", "reject", "monitor", "pending"]
+    },
+    "contradiction_note": {
+      "type": ["string", "null"]
+    },
+    "gap_note": {
+      "type": ["string", "null"]
+    },
+    "source_reliability": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "maximum": 1
+    },
+    "chronology_confidence": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "maximum": 1
+    },
+    "case_confidence": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "maximum": 1
+    },
+    "created_at": {
+      "type": ["string", "null"]
+    },
+    "updated_at": {
+      "type": ["string", "null"]
+    }
+  }
+}
