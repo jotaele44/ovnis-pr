@@ -1,0 +1,2 @@
+source_id,name,language,source_family,reliability_default,scrape_method,active,notes
+SRC-0000,Placeholder Source,unknown,placeholder,T4,manual,no,Replace with real source registry entries before production web intake.
