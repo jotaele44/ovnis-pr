@@ -90,3 +90,6 @@ data/Compiled Datasets/Source_Data/PR_UAP_Master_Ledger_v4.xlsx
 data/Compiled Datasets/Source_Data/PR_UAP_Master_Ledger_v4_enriched.xlsx
 data/Compiled Datasets/Source_Data/Puerto_Rico_UAP_Master_302.html
 data/Tools/pr_ufo_acquisition_engine.zip
+
+# generated canonical export (built by scripts/federation_export.py)
+exports/federation/

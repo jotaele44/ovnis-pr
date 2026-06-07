@@ -22,21 +22,23 @@
     "validate_ledgers": "python3 scripts/validate_case_ledgers.py",
     "dedupe": "python3 scripts/dedupe_candidates.py",
     "score": "python3 scripts/score_candidates.py",
-    "test_suite": "python3 scripts/validate_case_ledgers.py"
+    "test_suite": "python3 scripts/validate_case_ledgers.py",
+    "export_canonical": "python3 scripts/federation_export.py --mode test"
   },
   "canonical_outputs": {
     "master_cases": "data/master/master_cases.jsonl",
     "candidate_cases": "data/candidates/candidate_cases.jsonl",
     "source_registry": "data/reference/source_registry.csv",
-    "case_schema": "data/schemas/case.schema.json"
+    "case_schema": "data/schemas/case.schema.json",
+    "canonical_export_dir": "exports/federation"
   },
   "federation_readiness_gate": {
     "ready_for_hub_discovery": true,
     "ready_for_hub_live_execution": false,
     "blocking_conditions": [
-      "master ledger holds only seed/sample cases (gap-sweep batches 1-9 closed; full backfill pending)",
-      "case records use the PRUFON case schema; mapping to the Hub JSONL stream contract (sources/entities/relationships) is a federation follow-up",
-      "no automated unit-test suite — validate_case_ledgers.py is the offline gate"
+      "master ledger holds only a placeholder row; real cases (gap-sweep backfill) not yet loaded",
+      "canonical export adapter (scripts/federation_export.py) projects cases->entities/sources/relationships; production mode is blocked until non-placeholder cases are loaded",
+      "no automated unit-test suite \u2014 validate_case_ledgers.py + the export smoke are the offline gates"
     ]
   }
 }
