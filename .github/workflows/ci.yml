@@ -19,3 +19,13 @@ jobs:
         run: python -c "import json; json.load(open('data/schemas/case.schema.json')); print('schema ok')"
       - name: Validate case ledgers
         run: python3 scripts/validate_case_ledgers.py
+      - name: Export canonical streams (smoke)
+        run: |
+          python3 scripts/federation_export.py --mode test
+          test -f exports/federation/manifest.json
+      - name: Production export rejects synthetic placeholder
+        run: |
+          if python3 scripts/federation_export.py --mode production; then
+            echo "ERROR: production export should reject the synthetic placeholder" && exit 1
+          fi
+          echo "OK: production correctly rejected synthetic rows"
