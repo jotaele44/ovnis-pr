@@ -18,11 +18,11 @@
     "intake_doctrine": "Automated ingestion writes only to the candidate ledger; master promotion occurs through reviewed PRs."
   },
   "hub_callable_commands": {
-    "setup": "python3 scripts/validate_case_ledgers.py",
+    "setup": "python -m pip install pytest jsonschema",
     "validate_ledgers": "python3 scripts/validate_case_ledgers.py",
     "dedupe": "python3 scripts/dedupe_candidates.py",
     "score": "python3 scripts/score_candidates.py",
-    "test_suite": "python3 scripts/validate_case_ledgers.py",
+    "test_suite": "python -m pytest -q",
     "export_canonical": "python3 scripts/federation_export.py --mode test"
   },
   "canonical_outputs": {
@@ -37,8 +37,7 @@
     "ready_for_hub_live_execution": false,
     "blocking_conditions": [
       "master ledger holds only a placeholder row; real cases (gap-sweep backfill) not yet loaded",
-      "canonical export adapter (scripts/federation_export.py) projects cases->entities/sources/relationships; production mode is blocked until non-placeholder cases are loaded",
-      "no automated unit-test suite \u2014 validate_case_ledgers.py + the export smoke are the offline gates"
+      "canonical export adapter (scripts/federation_export.py) projects cases->entities/sources/relationships; production mode is blocked until non-placeholder cases are loaded"
     ]
   }
 }
