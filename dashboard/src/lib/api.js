@@ -1,0 +1,36 @@
+// REST client for the PRUFON FastAPI backend.
+// Backend: server/backend/main.py  (uvicorn server.backend.main:app --port 8000)
+// Reads the Git-native JSONL ledgers + release GeoJSON. 470 cases / 364 mapped.
+import snapshot from './snapshot.json' // {} in normal builds; populated for VITE_OFFLINE exports
+export const API_BASE = import.meta.env.VITE_API_BASE ?? 'http://localhost:8000'
+
+// Offline export build: resolve from an embedded data snapshot instead of fetching.
+// (A file:// page cannot fetch at all, so standalone exports bake the data in.)
+const OFFLINE = import.meta.env.VITE_OFFLINE === '1'
+
+async function getJSON(path, fallback = null) {
+  if (OFFLINE) {
+    const key = path.split('?')[0] // server-side filters degrade to the unfiltered snapshot
+    return key in snapshot ? snapshot[key] : fallback
+  }
+  try {
+    const res = await fetch(`${API_BASE}${path}`, { signal: AbortSignal.timeout(8000) })
+    if (!res.ok) return fallback
+    return await res.json()
+  } catch {
+    return fallback
+  }
+}
+
+const qs = (params) => {
+  const p = Object.entries(params).filter(([, v]) => v != null && v !== '')
+  return p.length ? '?' + new URLSearchParams(p).toString() : ''
+}
+
+export const getHealth = () => getJSON('/health', { status: 'down' })
+export const getCases = (f = {}) => getJSON(`/cases${qs(f)}`, [])
+export const getCase = (id) => getJSON(`/cases/${encodeURIComponent(id)}`, null)
+export const getCandidates = () => getJSON('/candidates', [])
+export const getGeojson = () => getJSON('/geojson', { type: 'FeatureCollection', features: [] })
+export const getStats = () => getJSON('/stats', null)
+export const search = (q) => getJSON(`/search${qs({ q })}`, [])
