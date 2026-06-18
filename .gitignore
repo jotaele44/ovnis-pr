@@ -1,4 +1,12 @@
 .DS_Store
+
+# Secrets — never track credentials
+.env
+.env.*
+*.key
+*.pem
+*.p12
+secrets/
 data/Compiled Datasets/Source_Data/PR_UAP_Cases_436.json
 data/Case Evidence/Blue_Book/Case_Files/1074848.pdf
 data/Case Evidence/Blue_Book/Case_Files/1952-05.pdf
