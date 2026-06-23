@@ -11,9 +11,9 @@ def _rel_types(streams):
     return {r["relationship_type"] for r in streams["relationships"]}
 
 
-def test_streams_have_three_keys(master_case, now):
+def test_streams_have_four_keys(master_case, now):
     s = build_streams([master_case()], now)
-    assert set(s) == {"sources", "entities", "relationships"}
+    assert set(s) == {"sources", "entities", "relationships", "observations"}
 
 
 def test_master_becomes_uap_case_entity(master_case, now):
@@ -34,11 +34,23 @@ def test_id_prefixes(master_case, now):
     assert all(e["entity_id"].startswith("ent_") for e in s["entities"])
     assert all(r["source_id"].startswith("src_") for r in s["sources"])
     assert all(r["relationship_id"].startswith("rel_") for r in s["relationships"])
+    assert all(o["observation_id"].startswith("obs_") for o in s["observations"])
+
+
+def test_observation_fields(master_case, now):
+    s = build_streams([master_case()], now)
+    assert len(s["observations"]) == 1
+    obs = s["observations"][0]
+    assert obs["observation_id"].startswith("obs_")
+    assert obs["entity_id"].startswith("ent_")
+    assert obs["source_id"].startswith("src_")
+    assert obs["evidence_tier"] == "T2"
+    assert obs["date_local"] == "2024-06-15"
 
 
 def test_non_master_records_skipped(master_case, now):
     s = build_streams([master_case(record_type="candidate")], now)
-    assert s["entities"] == [] and s["sources"] == [] and s["relationships"] == []
+    assert s["entities"] == [] and s["sources"] == [] and s["relationships"] == [] and s["observations"] == []
 
 
 def test_confidence_tier_mapping(master_case, now):
@@ -95,7 +107,7 @@ def test_write_package_manifest(master_case, now, tmp_path):
     assert manifest["package_id"].startswith("pkg_")
     assert manifest["producer"] == "prufon-pr"
     assert manifest["mode"] == "test"
-    assert {f["stream"] for f in manifest["files"]} == {"sources", "entities", "relationships"}
+    assert {f["stream"] for f in manifest["files"]} == {"sources", "entities", "relationships", "observations"}
     # per-file sha256 + record_count present
     for f in manifest["files"]:
         assert f["sha256"] and f["record_count"] >= 1
