@@ -1,0 +1,20 @@
+{
+  "case_count": 470,
+  "created_at": "2026-06-23T23:44:53Z",
+  "files": [
+    {
+      "filename": "prufon_cases_master.geojson",
+      "record_count": 469,
+      "sha256": "ab59efd96a26b2b709a6f15401326060b2c63feb8c900f19f4928457b1cfc1b0"
+    },
+    {
+      "filename": "prufon_cases_master.csv",
+      "record_count": 470,
+      "sha256": "29efd381553d8afef747a28d90a31f5176ffab1458e380ca1f3c9109d9c7d6d9"
+    }
+  ],
+  "mapped_count": 469,
+  "producer": "prufon-pr",
+  "release_date": "2026-06-23",
+  "unmapped_count": 1
+}

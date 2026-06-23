@@ -7,7 +7,7 @@
   "hub_parent": "thehub-pr",
   "jurisdiction": "Puerto Rico",
   "active_vector": "DESIGN_PRUFON_GITHUB_CONTROL_PLANE",
-  "production_status": "NON_PRODUCTION_DIAGNOSTIC",
+  "production_status": "PRODUCTION",
   "pause_lock_required": true,
   "source_truth": {
     "case_schema": "data/schemas/case.schema.json",
@@ -34,10 +34,7 @@
   },
   "federation_readiness_gate": {
     "ready_for_hub_discovery": true,
-    "ready_for_hub_live_execution": false,
-    "blocking_conditions": [
-      "master ledger holds only a placeholder row; real cases (gap-sweep backfill) not yet loaded",
-      "canonical export adapter (scripts/federation_export.py) projects cases->entities/sources/relationships; production mode is blocked until non-placeholder cases are loaded"
-    ]
+    "ready_for_hub_live_execution": true,
+    "blocking_conditions": []
   }
 }
