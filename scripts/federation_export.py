@@ -3,18 +3,19 @@
 
 Maps the PRUFON case model onto the Hub's canonical contract:
   * each master case            -> one `entities` row  (entity_type=uap_case)
+  * each master case            -> one `observations` row
   * each distinct municipality  -> one `entities` row  (entity_type=municipality)
   * each distinct source        -> one `sources` row
   * case -> source              -> one `relationships` row (reported_by)
   * case -> municipality        -> one `relationships` row (located_in)
   * case -> matched case        -> one `relationships` row (duplicate_of)
 
-Writes `exports/federation/{sources,entities,relationships}.jsonl` + a
-Hub-conformant `manifest.json` (federation_export_manifest). Dependency-light
+Writes `exports/federation/{sources,entities,relationships,observations}.jsonl`
++ a Hub-conformant `manifest.json` (federation_export_manifest). Dependency-light
 (stdlib only), consistent with the rest of PRUFON.
 
-Deterministic IDs: `src_/ent_/rel_` + sha256(key)[:32], so the same case always
-maps to the same federation id.
+Deterministic IDs: `src_/ent_/rel_/obs_` + sha256(key)[:32], so the same case
+always maps to the same federation id.
 """
 from __future__ import annotations
 
@@ -62,6 +63,7 @@ def build_streams(cases: List[Dict[str, Any]], now: str) -> Dict[str, List[Dict[
     sources: Dict[str, Dict[str, Any]] = {}
     entities: Dict[str, Dict[str, Any]] = {}
     relationships: Dict[str, Dict[str, Any]] = {}
+    observations: Dict[str, Dict[str, Any]] = {}
     src_inputs = ["data/master/master_cases.jsonl"]
 
     for case in cases:
@@ -159,10 +161,35 @@ def build_streams(cases: List[Dict[str, Any]], now: str) -> Dict[str, List[Dict[
             relationships[rel_id] = _relationship(rel_id, source_id, ent_id, target,
                                                   "duplicate_of", confidence, synthetic, created, now)
 
+        # --- observation ---
+        obs_id = _fid("obs", "case", case_key)
+        observations[obs_id] = {
+            "observation_id": obs_id,
+            "entity_id": ent_id,
+            "source_id": source_id,
+            "date_local": case.get("date_local"),
+            "time_local": case.get("time_local"),
+            "location_name": case.get("location_name"),
+            "municipality": case.get("municipality"),
+            "latitude": case.get("latitude"),
+            "longitude": case.get("longitude"),
+            "environment": case.get("environment"),
+            "object_type": case.get("object_type"),
+            "witness_type": case.get("witness_type"),
+            "witness_count": case.get("witness_count"),
+            "evidence_tier": case.get("evidence_tier"),
+            "confidence": confidence,
+            "lineage": _lineage("OBSERVATION", src_inputs),
+            "synthetic": synthetic,
+            "created_at": created,
+            "extracted_at": now,
+        }
+
     return {
         "sources": list(sources.values()),
         "entities": list(entities.values()),
         "relationships": list(relationships.values()),
+        "observations": list(observations.values()),
     }
 
 
@@ -190,13 +217,14 @@ STREAM_SCHEMA = {
     "sources": "federation_source.schema.json",
     "entities": "federation_entity.schema.json",
     "relationships": "federation_relationship.schema.json",
+    "observations": "federation_observation.schema.json",
 }
 
 
 def write_package(streams: Dict[str, List[Dict[str, Any]]], out_dir: Path, mode: str, now: str) -> Path:
     out_dir.mkdir(parents=True, exist_ok=True)
     files = []
-    for stream in ("sources", "entities", "relationships"):
+    for stream in ("sources", "entities", "relationships", "observations"):
         rows = streams[stream]
         if not rows:
             continue

@@ -1,1 +1,21 @@
-{}
+{
+  "/candidates": [],
+  "/cases": [],
+  "/geojson": {
+    "features": [],
+    "type": "FeatureCollection"
+  },
+  "/health": {
+    "mapped": 0,
+    "master": 0,
+    "status": "ok",
+    "unmapped": 0
+  },
+  "/stats": {
+    "byDecade": {},
+    "byTier": {},
+    "mapped": 0,
+    "total": 0,
+    "unmapped": 0
+  }
+}
