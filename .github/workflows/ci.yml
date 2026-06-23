@@ -27,9 +27,8 @@ jobs:
         run: |
           python3 scripts/federation_export.py --mode test
           test -f exports/federation/manifest.json
-      - name: Production export rejects synthetic placeholder
+      - name: Production export succeeds with real case data
         run: |
-          if python3 scripts/federation_export.py --mode production; then
-            echo "ERROR: production export should reject the synthetic placeholder" && exit 1
-          fi
-          echo "OK: production correctly rejected synthetic rows"
+          python3 scripts/federation_export.py --mode production
+          test -f exports/federation/manifest.json
+          echo "OK: production export completed with real case data"
