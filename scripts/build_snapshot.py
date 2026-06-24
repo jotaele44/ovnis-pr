@@ -54,6 +54,24 @@ def _latest_geojson() -> Optional[Path]:
     return candidates[0] if candidates else None
 
 
+def _shape_for_api(case: Dict[str, Any]) -> Dict[str, Any]:
+    """Add dashboard-expected derived fields (mirrors server/backend/main.py)."""
+    date_local = case.get("date_local", "")
+    lat = case.get("latitude")
+    lon = case.get("longitude")
+    shaped = dict(case)
+    shaped["date_raw"] = date_local
+    shaped["decade"] = _decade(date_local)
+    shaped["location"] = {
+        "lat": lat,
+        "lon": lon,
+        "string": case.get("location_name", ""),
+        "municipality": case.get("municipality"),
+    }
+    shaped["location_string"] = case.get("location_name", "")
+    return shaped
+
+
 def _case_to_feature(case: Dict[str, Any]) -> Dict[str, Any]:
     return {
         "type": "Feature",
@@ -90,7 +108,7 @@ def main() -> int:
             "mapped": len(mapped),
             "unmapped": len(master) - len(mapped),
         },
-        "/cases": master,
+        "/cases": [_shape_for_api(c) for c in master],
         "/candidates": candidates,
         "/geojson": geojson,
         "/stats": {

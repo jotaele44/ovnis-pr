@@ -69,6 +69,24 @@ def _latest_geojson() -> Optional[Path]:
     return candidates[0] if candidates else None
 
 
+def _shape_for_api(case: Dict[str, Any]) -> Dict[str, Any]:
+    """Add dashboard-expected derived fields to a raw ledger record."""
+    date_local = case.get("date_local", "")
+    lat = case.get("latitude")
+    lon = case.get("longitude")
+    shaped = dict(case)
+    shaped["date_raw"] = date_local
+    shaped["decade"] = _decade(date_local)
+    shaped["location"] = {
+        "lat": lat,
+        "lon": lon,
+        "string": case.get("location_name", ""),
+        "municipality": case.get("municipality"),
+    }
+    shaped["location_string"] = case.get("location_name", "")
+    return shaped
+
+
 def _case_to_feature(case: Dict[str, Any]) -> Dict[str, Any]:
     return {
         "type": "Feature",
@@ -80,7 +98,8 @@ def _case_to_feature(case: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-def _matches_query(case: Dict[str, Any], q: str) -> bool:
+
+
     q_lower = q.lower()
     searchable = " ".join(filter(None, [
         case.get("description", ""),
@@ -117,14 +136,14 @@ def cases(
         result = [c for c in result if c.get("evidence_tier") == tier]
     if q:
         result = [c for c in result if _matches_query(c, q)]
-    return result
+    return [_shape_for_api(c) for c in result]
 
 
 @app.get("/cases/{case_id}")
 def case_detail(case_id: str) -> Dict[str, Any]:
     for case in _load_master():
         if case.get("case_id") == case_id or case.get("record_id") == case_id:
-            return case
+            return _shape_for_api(case)
     raise HTTPException(status_code=404, detail="Case not found")
 
 
@@ -167,4 +186,4 @@ def stats() -> Dict[str, Any]:
 
 @app.get("/search")
 def search(q: str = Query(..., min_length=1)) -> List[Dict[str, Any]]:
-    return [c for c in _load_master() if _matches_query(c, q)]
+    return [_shape_for_api(c) for c in _load_master() if _matches_query(c, q)]
