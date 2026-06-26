@@ -8,7 +8,7 @@ import {
   Select, SelectTrigger, SelectValue, SelectContent, SelectItem,
 } from '@/components/ui/select'
 import { tierBadge } from '@/lib/format'
-import { confidenceTone, locString, hasCoords } from '@/lib/prufon-format'
+import { confidenceTone, locString, hasCoords } from '@/lib/ovnis-format'
 import { cn } from '@/lib/utils'
 import { MapPinOff } from 'lucide-react'
 

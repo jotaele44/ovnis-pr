@@ -50,7 +50,7 @@ def _decade(date_str: str) -> Optional[str]:
 def _latest_geojson() -> Optional[Path]:
     if not RELEASES_DIR.exists():
         return None
-    candidates = sorted(RELEASES_DIR.glob("*/prufon_cases_master.geojson"), reverse=True)
+    candidates = sorted(RELEASES_DIR.glob("*/ovnis_cases_master.geojson"), reverse=True)
     return candidates[0] if candidates else None
 
 

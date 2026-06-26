@@ -1,6 +1,6 @@
-# PRUFON Dashboard (Ovnis-PR)
+# OVNIS Dashboard (Ovnis-PR)
 
-Local-only React dashboard for the PRUFON UAP sighting registry. Same federation
+Local-only React dashboard for the OVNIS UAP sighting registry. Same federation
 frontend process — Vite + React (JSX) + Tailwind + shadcn/ui + react-query,
 Base44 auth stripped. **MapLibre GL** renders the sighting map.
 
@@ -30,6 +30,6 @@ Open http://localhost:5173. (`VITE_API_BASE` overrides the API base; default
 
 ## Backend (`server/backend/main.py`)
 Reads `data/master/master_cases.jsonl`, `data/candidates/candidate_cases.jsonl`,
-and the latest `releases/*/prufon_cases_master.geojson` (stdlib json/csv — no DB,
+and the latest `releases/*/ovnis_cases_master.geojson` (stdlib json/csv — no DB,
 the Git files are the authority). Lists/stats include unmapped cases; `/geojson`
 serves only the 364 mapped features. CORS allows `:5173`.

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Project PRUFON case ledgers into the PRII federation canonical streams.
+"""Project OVNIS case ledgers into the PRII federation canonical streams.
 
-Maps the PRUFON case model onto the Hub's canonical contract:
+Maps the OVNIS case model onto the Hub's canonical contract:
   * each master case            -> one `entities` row  (entity_type=uap_case)
   * each master case            -> one `observations` row
   * each distinct municipality  -> one `entities` row  (entity_type=municipality)
@@ -12,7 +12,7 @@ Maps the PRUFON case model onto the Hub's canonical contract:
 
 Writes `exports/federation/{sources,entities,relationships,observations}.jsonl`
 + a Hub-conformant `manifest.json` (federation_export_manifest). Dependency-light
-(stdlib only), consistent with the rest of PRUFON.
+(stdlib only), consistent with the rest of OVNIS.
 
 Deterministic IDs: `src_/ent_/rel_/obs_` + sha256(key)[:32], so the same case
 always maps to the same federation id.
@@ -27,7 +27,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-PRODUCER = "prufon-pr"
+PRODUCER = "ovnis-pr"
 CONTRACT_VERSION = "1.0.0"
 PRODUCER_SCRIPT = "scripts/federation_export.py"
 
@@ -255,7 +255,7 @@ def write_package(streams: Dict[str, List[Dict[str, Any]]], out_dir: Path, mode:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="Export PRUFON cases as PRII canonical streams.")
+    ap = argparse.ArgumentParser(description="Export OVNIS cases as PRII canonical streams.")
     ap.add_argument("--ledger", default=str(REPO_ROOT / "data/master/master_cases.jsonl"))
     ap.add_argument("--out", default=str(REPO_ROOT / "exports/federation"))
     ap.add_argument("--mode", default="test", choices=["test", "production"])

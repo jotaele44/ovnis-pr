@@ -43,7 +43,7 @@ jobs:
           missing = sorted(required - set(manifest))
           assert not missing, f"federation.json missing required keys: {missing}"
           assert manifest["schema_version"] == "repo_federation_manifest_v1"
-          assert manifest["program_id"] == "prufon-pr"
+          assert manifest["program_id"] == "ovnis-pr"
           assert manifest["hub_parent"] == "thehub-pr"
           assert "setup" in manifest["hub_callable_commands"]
           assert "test_suite" in manifest["hub_callable_commands"]
@@ -58,7 +58,7 @@ jobs:
         run: python3 scripts/validate_case_ledgers.py
 
       - name: Export canonical package
-        run: python3 scripts/federation_export.py --mode test --out /tmp/prufon_federation
+        run: python3 scripts/federation_export.py --mode test --out /tmp/ovnis_federation
 
       - name: Tests
         run: |

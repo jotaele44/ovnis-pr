@@ -1,8 +1,8 @@
-# PRUFON Case Promotion Standard
+# OVNIS Case Promotion Standard
 
 ## Purpose
 
-This standard controls how a candidate case becomes a promoted PRUFON case.
+This standard controls how a candidate case becomes a promoted OVNIS case.
 
 The master ledger must remain chronologically stable, deduplicated, source-traceable, and evidence-bounded.
 

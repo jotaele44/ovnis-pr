@@ -3,7 +3,7 @@ import {
 } from '@/components/ui/sheet'
 import { Badge } from '@/components/ui/badge'
 import { tierBadge } from '@/lib/format'
-import { confidenceTone, locString, hasCoords } from '@/lib/prufon-format'
+import { confidenceTone, locString, hasCoords } from '@/lib/ovnis-format'
 import { cn } from '@/lib/utils'
 
 export default function CaseDetail({ case: c, onClose }) {

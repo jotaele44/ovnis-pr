@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Build a versioned release snapshot from the PRUFON master ledger.
+"""Build a versioned release snapshot from the OVNIS master ledger.
 
 Writes to releases/{YYYY-MM-DD}/:
-  prufon_cases_master.geojson   GeoJSON FeatureCollection (mapped cases only)
-  prufon_cases_master.csv       CSV of all master cases
+  ovnis_cases_master.geojson   GeoJSON FeatureCollection (mapped cases only)
+  ovnis_cases_master.csv       CSV of all master cases
   manifest.json                 Release metadata and checksums
 
 Usage:
@@ -79,7 +79,7 @@ def build_csv(cases: List[Dict[str, Any]]) -> str:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="Build a versioned PRUFON release snapshot.")
+    ap = argparse.ArgumentParser(description="Build a versioned OVNIS release snapshot.")
     ap.add_argument("--date", default=str(date.today()), help="Release date tag (YYYY-MM-DD)")
     ap.add_argument("--ledger", default=str(MASTER_LEDGER))
     ap.add_argument("--out", default=None, help="Output directory (default: releases/{date})")
@@ -95,12 +95,12 @@ def main() -> int:
 
     geojson_data = build_geojson(cases)
     geojson_bytes = json.dumps(geojson_data, indent=2, sort_keys=True).encode()
-    geojson_path = out_dir / "prufon_cases_master.geojson"
+    geojson_path = out_dir / "ovnis_cases_master.geojson"
     geojson_path.write_bytes(geojson_bytes)
 
     csv_data = build_csv(cases)
     csv_bytes = csv_data.encode()
-    csv_path = out_dir / "prufon_cases_master.csv"
+    csv_path = out_dir / "ovnis_cases_master.csv"
     csv_path.write_bytes(csv_bytes)
 
     now = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
@@ -108,18 +108,18 @@ def main() -> int:
     manifest = {
         "release_date": args.date,
         "created_at": now,
-        "producer": "prufon-pr",
+        "producer": "ovnis-pr",
         "case_count": len(cases),
         "mapped_count": mapped,
         "unmapped_count": len(cases) - mapped,
         "files": [
             {
-                "filename": "prufon_cases_master.geojson",
+                "filename": "ovnis_cases_master.geojson",
                 "record_count": len(geojson_data["features"]),
                 "sha256": _sha256(geojson_bytes),
             },
             {
-                "filename": "prufon_cases_master.csv",
+                "filename": "ovnis_cases_master.csv",
                 "record_count": len(cases),
                 "sha256": _sha256(csv_bytes),
             },

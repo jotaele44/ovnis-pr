@@ -1,4 +1,4 @@
-// REST client for the PRUFON FastAPI backend.
+// REST client for the OVNIS FastAPI backend.
 // Backend: server/backend/main.py  (uvicorn server.backend.main:app --port 8000)
 // Reads the Git-native JSONL ledgers + release GeoJSON. 470 cases / 364 mapped.
 import snapshot from './snapshot.json' // {} in normal builds; populated for VITE_OFFLINE exports

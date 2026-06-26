@@ -1,14 +1,14 @@
-# PRUFON GitHub Control Plane
+# OVNIS GitHub Control Plane
 
 ## Operating position
 
-GitHub is the control plane for PRUFON, not the only operational database.
+GitHub is the control plane for OVNIS, not the only operational database.
 
 The repository should govern code, schema, validation, review gates, candidate intake, deduplication, evidence scoring, and release snapshots. The live analytical database can be SQLite, DuckDB, or later PostgreSQL/PostGIS, but every promoted case must remain reproducible from versioned files, manifests, and validation reports.
 
 ## Active vector
 
-`DESIGN_PRUFON_GITHUB_CONTROL_PLANE`
+`DESIGN_OVNIS_GITHUB_CONTROL_PLANE`
 
 ## Control-plane objectives
 
@@ -25,7 +25,7 @@ The repository should govern code, schema, validation, review gates, candidate i
 ## Repository layers
 
 ```text
-PRUFON/
+OVNIS/
   data/
     candidates/          # quarantined web/social/manual intake
     master/              # promoted case ledger snapshots
@@ -124,9 +124,9 @@ Not allowed without human review:
 Release snapshots should include:
 
 ```text
-prufon_cases_master.csv
-prufon_cases_master.jsonl
-prufon_candidate_cases.csv
+ovnis_cases_master.csv
+ovnis_cases_master.jsonl
+ovnis_candidate_cases.csv
 already_listed.csv
 updates_new_evidence.csv
 echoes_noise.csv

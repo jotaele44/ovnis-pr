@@ -2,7 +2,7 @@ import { useStats } from '@/lib/hooks'
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Cell,
 } from 'recharts'
-import { tierHex } from '@/lib/prufon-format'
+import { tierHex } from '@/lib/ovnis-format'
 
 function toData(obj = {}) {
   return Object.entries(obj).map(([name, value]) => ({ name, value }))

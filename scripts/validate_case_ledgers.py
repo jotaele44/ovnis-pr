@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Validate PRUFON JSONL case ledgers.
+"""Validate OVNIS JSONL case ledgers.
 
 This validator is intentionally dependency-light. If jsonschema is installed,
 it performs full JSON Schema validation. Without jsonschema, it still enforces
-core PRUFON control-plane gates.
+core OVNIS control-plane gates.
 """
 
 from __future__ import annotations
@@ -168,7 +168,7 @@ def validate(paths: list[Path], schema_path: Path) -> int:
         else:
             errors.append(message)
 
-    print("# PRUFON ledger validation report")
+    print("# OVNIS ledger validation report")
     print(f"\nRows checked: {len(all_rows)}")
     print(f"Ledgers checked: {len(paths)}")
     print(f"Errors: {len(errors)}")
@@ -188,11 +188,11 @@ def validate(paths: list[Path], schema_path: Path) -> int:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Validate PRUFON case ledgers")
+    parser = argparse.ArgumentParser(description="Validate OVNIS case ledgers")
     parser.add_argument(
         "--schema",
         default="data/schemas/case.schema.json",
-        help="Path to PRUFON JSON Schema",
+        help="Path to OVNIS JSON Schema",
     )
     parser.add_argument(
         "ledgers",

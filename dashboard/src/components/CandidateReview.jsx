@@ -1,7 +1,7 @@
 import { useCandidates } from '@/lib/hooks'
 import { Badge } from '@/components/ui/badge'
 import { tierBadge } from '@/lib/format'
-import { locString } from '@/lib/prufon-format'
+import { locString } from '@/lib/ovnis-format'
 import { cn } from '@/lib/utils'
 
 const STATUS_TONE = {
