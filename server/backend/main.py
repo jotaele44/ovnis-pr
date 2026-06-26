@@ -1,4 +1,4 @@
-"""Read-only FastAPI backend for the PRUFON dashboard.
+"""Read-only FastAPI backend for the OVNIS dashboard.
 
 The Git ledgers remain the authority. This service does not mutate records and does
 not infer production case counts from README copy; it reports the actual files on
@@ -21,8 +21,8 @@ CANDIDATE_PATH = ROOT / "data" / "candidates" / "candidate_cases.jsonl"
 RELEASES_DIR = ROOT / "releases"
 
 app = FastAPI(
-    title="PRUFON Dashboard API",
-    description="Thin read-only API over PRUFON JSONL ledgers and release GeoJSON.",
+    title="OVNIS Dashboard API",
+    description="Thin read-only API over OVNIS JSONL ledgers and release GeoJSON.",
     version="0.1.0",
 )
 
@@ -166,7 +166,7 @@ def all_candidates() -> list[dict[str, Any]]:
 def latest_geojson_path() -> Path | None:
     if not RELEASES_DIR.exists():
         return None
-    matches = sorted(RELEASES_DIR.rglob("prufon_cases_master.geojson"))
+    matches = sorted(RELEASES_DIR.rglob("ovnis_cases_master.geojson"))
     return matches[-1] if matches else None
 
 
@@ -215,7 +215,7 @@ def is_placeholder(row: dict[str, Any]) -> bool:
         str(row.get(key) or "")
         for key in ("case_id", "candidate_id", "source_url", "source_citation", "description", "gap_note")
     ).lower()
-    return "placeholder" in text or "prufon-0000" in text or "cand-0000" in text
+    return "placeholder" in text or "ovnis-0000" in text or "cand-0000" in text
 
 
 def data_status(cases: list[dict[str, Any]], candidates: list[dict[str, Any]]) -> str:

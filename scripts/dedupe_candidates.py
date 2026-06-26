@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate a preliminary PRUFON dedupe report.
+"""Generate a preliminary OVNIS dedupe report.
 
 This is a conservative review-queue generator. It does not merge or promote cases.
 """
@@ -76,7 +76,7 @@ def match_score(candidate: dict[str, Any], master: dict[str, Any]) -> float:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Generate PRUFON dedupe review report")
+    parser = argparse.ArgumentParser(description="Generate OVNIS dedupe review report")
     parser.add_argument("--candidates", default="data/candidates/candidate_cases.jsonl")
     parser.add_argument("--master", default="data/master/master_cases.jsonl")
     parser.add_argument("--output", default="reports/dedupe_candidates.csv")

@@ -1,15 +1,15 @@
-# PRUFON — Puerto Rico Historical Case Corpus Producer (PRII federation)
+# OVNIS — Puerto Rico Historical Case Corpus Producer (PRII federation)
 
-`PRUFON` is the historical case-corpus producer for Puerto Rico-centered anomalous-event research in the Puerto Rico Integrated Intelligence (PRII) federation.
+`OVNIS` is the historical case-corpus producer for Puerto Rico-centered anomalous-event research in the Puerto Rico Integrated Intelligence (PRII) federation.
 
-Its federation alias is `prufon-pr`. It should preserve case provenance, chronology, location references, witness/source tiers, document lineage, and review state for downstream analysis in [`thehub-pr`](https://github.com/jotaele44/thehub-pr) and analytical consumers.
+Its federation alias is `ovnis-pr`. It should preserve case provenance, chronology, location references, witness/source tiers, document lineage, and review state for downstream analysis in [`thehub-pr`](https://github.com/jotaele44/thehub-pr) and analytical consumers.
 
 ## Federation role
 
 | Field | Value |
 |---|---|
-| Repository | `jotaele44/PRUFON` |
-| Federation alias | `prufon-pr` |
+| Repository | `jotaele44/ovnis-pr` |
+| Federation alias | `ovnis-pr` |
 | Parent hub | [`thehub-pr`](https://github.com/jotaele44/thehub-pr) |
 | Primary function | Historical case corpus and review pipeline |
 | Jurisdiction focus | Puerto Rico |
@@ -22,7 +22,7 @@ Its federation alias is `prufon-pr`. It should preserve case provenance, chronol
 | No silent substitution | Unknown values stay unknown rather than inferred as fact |
 | Tiered evidence | Separate technical records, operational records, eyewitness material, and secondary sources |
 | Review queue | Ambiguous cases remain staged until enough metadata exists for promotion |
-| Federation boundary | PRUFON exports case records; Hub performs cross-producer correlation |
+| Federation boundary | OVNIS exports case records; Hub performs cross-producer correlation |
 
 ## Suggested repository layout
 
@@ -50,7 +50,7 @@ exports/          federation-ready export packages
 
 ## Federation export target
 
-PRUFON should emit canonical Hub-compatible records:
+OVNIS should emit canonical Hub-compatible records:
 
 ```text
 sources.jsonl

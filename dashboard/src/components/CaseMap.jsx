@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import maplibregl from 'maplibre-gl'
 
-// MapLibre map of PRUFON sighting cases. Renders the release GeoJSON directly
+// MapLibre map of OVNIS sighting cases. Renders the release GeoJSON directly
 // (Point features colored by evidence tier). Same wrapper pattern as the
 // skywatcher template — note the h-full container (not absolute inset-0), since
 // maplibre-gl.css sets .maplibregl-map{position:relative} and would otherwise

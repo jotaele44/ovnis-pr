@@ -1,4 +1,4 @@
-// PRUFON display helpers. Evidence tier T1 (strongest) → T4 (weakest).
+// OVNIS display helpers. Evidence tier T1 (strongest) → T4 (weakest).
 
 const TIER_HEX = { T1: '#38bdf8', T2: '#818cf8', T3: '#a78bfa', T4: '#64748b' }
 export const tierHex = (t) => TIER_HEX[t] ?? '#64748b'

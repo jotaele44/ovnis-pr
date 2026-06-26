@@ -1,12 +1,12 @@
 {
   "schema_version": "repo_federation_manifest_v1",
-  "program_id": "prufon-pr",
-  "repository_full_name": "jotaele44/PRUFON",
+  "program_id": "ovnis-pr",
+  "repository_full_name": "jotaele44/ovnis-pr",
   "repository_legacy_name": "PRUFON",
   "federation_role": "anomaly_intelligence_node",
   "hub_parent": "thehub-pr",
   "jurisdiction": "Puerto Rico",
-  "active_vector": "DESIGN_PRUFON_GITHUB_CONTROL_PLANE",
+  "active_vector": "DESIGN_OVNIS_GITHUB_CONTROL_PLANE",
   "production_status": "PRODUCTION",
   "pause_lock_required": true,
   "source_truth": {

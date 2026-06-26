@@ -25,7 +25,7 @@ export default function Dashboard() {
       <header className="flex items-center gap-2 px-4 py-2.5 border-b border-slate-800 bg-slate-900">
         <Telescope className="h-5 w-5 text-violet-400" />
         <div className="flex-1">
-          <h1 className="text-sm font-semibold text-slate-100 leading-none">PRUFON · Ovnis-PR</h1>
+          <h1 className="text-sm font-semibold text-slate-100 leading-none">OVNIS · Ovnis-PR</h1>
           <p className="text-[11px] text-slate-500 mt-0.5">Puerto Rico UAP sighting registry & witness review</p>
         </div>
         <div className="flex items-center gap-2 text-xs text-slate-400">

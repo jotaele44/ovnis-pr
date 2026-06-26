@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Preliminary PRUFON candidate scoring.
+"""Preliminary OVNIS candidate scoring.
 
 This script assigns separable scores. It does not promote cases.
 """
@@ -59,7 +59,7 @@ def write_csv(rows: list[dict[str, Any]], path: Path) -> None:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Score PRUFON candidate rows without promoting them")
+    parser = argparse.ArgumentParser(description="Score OVNIS candidate rows without promoting them")
     parser.add_argument("--input", default="data/candidates/candidate_cases.jsonl")
     parser.add_argument("--output", default="reports/candidate_scoring.csv")
     args = parser.parse_args()

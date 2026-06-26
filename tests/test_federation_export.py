@@ -105,7 +105,7 @@ def test_write_package_manifest(master_case, now, tmp_path):
     manifest_path = write_package(s, tmp_path, "test", now)
     manifest = json.loads(manifest_path.read_text())
     assert manifest["package_id"].startswith("pkg_")
-    assert manifest["producer"] == "prufon-pr"
+    assert manifest["producer"] == "ovnis-pr"
     assert manifest["mode"] == "test"
     assert {f["stream"] for f in manifest["files"]} == {"sources", "entities", "relationships", "observations"}
     # per-file sha256 + record_count present

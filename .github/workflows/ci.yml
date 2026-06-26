@@ -1,4 +1,4 @@
-name: PRUFON CI
+name: OVNIS CI
 
 on:
   push:
