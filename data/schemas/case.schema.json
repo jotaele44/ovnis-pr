@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/jotaele44/PRUFON/data/schemas/case.schema.json",
-  "title": "PRUFON Case Record",
+  "$id": "https://github.com/jotaele44/ovnis-pr/data/schemas/case.schema.json",
+  "title": "OVNIS Case Record",
   "type": "object",
   "additionalProperties": true,
   "required": [
