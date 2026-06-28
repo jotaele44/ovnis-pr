@@ -104,3 +104,6 @@ data/Tools/pr_ufo_acquisition_engine.zip
 
 # generated canonical export (built by scripts/federation_export.py)
 exports/federation/
+
+# generated federation maintenance report (audit artifact, not committed)
+reports/maintenance/
