@@ -23,7 +23,7 @@
     "dedupe": "python3 scripts/dedupe_candidates.py",
     "score": "python3 scripts/score_candidates.py",
     "test_suite": "python -m pytest -q",
-    "export_canonical": "python3 scripts/federation_export.py --mode test",
+    "export_canonical": "python3 scripts/federation_export.py --mode production",
     "maintenance": "python3 scripts/run_maintenance.py --repo ovnis-pr --mode audit"
   },
   "canonical_outputs": {
