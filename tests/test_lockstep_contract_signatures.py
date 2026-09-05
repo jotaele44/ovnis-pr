@@ -20,9 +20,10 @@ def _tree(path: str) -> ast.Module:
 
 def _module_literal(tree: ast.Module, name: str) -> Any:
     for node in tree.body:
-        if isinstance(node, ast.Assign):
-            if any(isinstance(target, ast.Name) and target.id == name for target in node.targets):
-                return ast.literal_eval(node.value)
+        if isinstance(node, ast.Assign) and any(
+            isinstance(target, ast.Name) and target.id == name for target in node.targets
+        ):
+            return ast.literal_eval(node.value)
     raise AssertionError(f"module literal {name!r} not found")
 
 
@@ -57,18 +58,22 @@ class ExportContractSignatureTests(unittest.TestCase):
         write_package = _function(self.tree, "write_package")
         manifest_dict: ast.Dict | None = None
         for node in ast.walk(write_package):
-            if isinstance(node, ast.Assign) and any(
-                isinstance(target, ast.Name) and target.id == "manifest" for target in node.targets
+            if (
+                isinstance(node, ast.Assign)
+                and any(
+                    isinstance(target, ast.Name) and target.id == "manifest"
+                    for target in node.targets
+                )
+                and isinstance(node.value, ast.Dict)
             ):
-                if isinstance(node.value, ast.Dict):
-                    manifest_dict = node.value
-                    break
+                manifest_dict = node.value
+                break
         self.assertIsNotNone(manifest_dict)
         assert manifest_dict is not None
         self.assertEqual(_dict_keys(manifest_dict), set(self.signature["manifest_keys"]))
 
         federation_dict: ast.Dict | None = None
-        for key, value in zip(manifest_dict.keys, manifest_dict.values):
+        for key, value in zip(manifest_dict.keys, manifest_dict.values, strict=True):
             if isinstance(key, ast.Constant) and key.value == "federation" and isinstance(value, ast.Dict):
                 federation_dict = value
                 break
@@ -77,7 +82,7 @@ class ExportContractSignatureTests(unittest.TestCase):
         federation_keys = _dict_keys(federation_dict)
         self.assertEqual(federation_keys, {"producer_repo", "hub_parent"})
         hub_parent_value = None
-        for key, value in zip(federation_dict.keys, federation_dict.values):
+        for key, value in zip(federation_dict.keys, federation_dict.values, strict=True):
             if isinstance(key, ast.Constant) and key.value == "hub_parent":
                 hub_parent_value = ast.literal_eval(value)
         self.assertEqual(hub_parent_value, self.signature["hub_parent"])
