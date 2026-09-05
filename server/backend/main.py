@@ -19,6 +19,7 @@ ROOT = Path(__file__).resolve().parents[2]
 MASTER_PATH = ROOT / "data" / "master" / "master_cases.jsonl"
 CANDIDATE_PATH = ROOT / "data" / "candidates" / "candidate_cases.jsonl"
 RELEASES_DIR = ROOT / "releases"
+MUNICIPIOS_PATH = ROOT / "dashboard" / "public" / "geo" / "pr_municipios.geojson"
 
 app = FastAPI(
     title="OVNIS Dashboard API",
@@ -332,3 +333,91 @@ def search(q: str = Query(default="")) -> list[dict[str, Any]]:
     if not q:
         return []
     return [row for row in all_cases() if matches_query(row, q)]
+
+
+def _municipios_features() -> list[dict[str, Any]]:
+    if not MUNICIPIOS_PATH.is_file():
+        return []
+    with MUNICIPIOS_PATH.open("r", encoding="utf-8") as handle:
+        doc = json.load(handle)
+    return doc.get("features", [])
+
+
+def _municipios_name_to_geoid(features: list[dict[str, Any]]) -> dict[str, str]:
+    mapping: dict[str, str] = {}
+    for feature in features:
+        props = feature.get("properties") or {}
+        name = props.get("name")
+        geoid = props.get("geoid")
+        if name and geoid:
+            mapping[name] = str(geoid)
+    return mapping
+
+
+def _point_in_ring(lon: float, lat: float, ring: list[list[float]]) -> bool:
+    """Standard even-odd ray-casting test, run once per ring so a caller can
+    apply it to a polygon's exterior and then its holes."""
+    inside = False
+    j = len(ring) - 1
+    for i, (xi, yi) in enumerate(ring):
+        xj, yj = ring[j]
+        if (yi > lat) != (yj > lat) and lon < (xj - xi) * (lat - yi) / (yj - yi) + xi:
+            inside = not inside
+        j = i
+    return inside
+
+
+def _point_in_geometry(lon: float, lat: float, geometry: dict[str, Any]) -> bool:
+    gtype = geometry.get("type")
+    coords = geometry.get("coordinates") or []
+    polygons = coords if gtype == "MultiPolygon" else [coords] if gtype == "Polygon" else []
+    for rings in polygons:
+        if not rings or not _point_in_ring(lon, lat, rings[0]):
+            continue
+        if not any(_point_in_ring(lon, lat, hole) for hole in rings[1:]):
+            return True
+    return False
+
+
+@app.get("/municipios/case_density")
+def municipios_case_density() -> dict[str, Any]:
+    """Case count per municipio, keyed by GEOID, for the map's density
+    choropleth.
+
+    Tries a name join first — cases carry either a `municipality` or
+    `municipio` field (schemas/case_record.schema.json) — the same
+    name->GEOID `Counter` pattern aguayluz-pr's event_density and
+    spiderweb-pr's gazetteer density endpoints use. In production this
+    field is populated with coarse region labels ("southwest", "vieques",
+    "island-wide") rather than real municipio names on every case that has
+    it at all (over 80% are null), so the name join alone would report
+    ~100% unmatched despite 364/470 cases actually carrying real
+    coordinates. Falling back to a point-in-polygon test against each
+    case's own latitude/longitude closes that gap with the corpus's most
+    precise location data instead of leaving the choropleth empty.
+    """
+    features = _municipios_features()
+    name_to_geoid = _municipios_name_to_geoid(features)
+    by_geoid: Counter[str] = Counter()
+    unmatched = 0
+    cases = all_cases()
+    for case in cases:
+        name = case.get("municipality") or case.get("municipio")
+        geoid = name_to_geoid.get(name) if name else None
+        if geoid is None:
+            lat = as_float(case.get("latitude"))
+            lon = as_float(case.get("longitude"))
+            if lat is not None and lon is not None:
+                for feature in features:
+                    if _point_in_geometry(lon, lat, feature["geometry"]):
+                        geoid = str((feature.get("properties") or {}).get("geoid"))
+                        break
+        if geoid is None:
+            unmatched += 1
+            continue
+        by_geoid[geoid] += 1
+    return {
+        "by_geoid": dict(by_geoid),
+        "total_cases": len(cases),
+        "unmatched": unmatched,
+    }

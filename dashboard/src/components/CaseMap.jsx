@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import * as maplibregl from 'maplibre-gl'
+import { useSpatialTools, SpatialToolsPanel } from './SpatialToolsPanel'
+import { getMunicipiosCaseDensity } from '../lib/api'
 
 // MapLibre map of OVNIS sighting cases. Renders the release GeoJSON directly
 // (Point features colored by evidence tier). Same wrapper pattern as the
@@ -10,8 +12,13 @@ import * as maplibregl from 'maplibre-gl'
 // (served from '/') and the VITE_OFFLINE single-file file:// export (base './').
 const MUNICIPIOS_URL = new URL('geo/pr_municipios.geojson', document.baseURI).href
 
-// Municipality outlines ship with the app (public/geo/) and sit under the
-// raster tiles, so the map still shows Puerto Rico geography when offline.
+// AWS's free public elevation tile set — no API key, same free-public-tile
+// precedent as the OSM raster basemap below.
+const TERRAIN_DEM_URL = 'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'
+
+// Municipios are added at runtime (style.load) rather than baked into this
+// base style, since the case-density choropleth needs `promoteId` + feature-
+// state — a plain style-JSON source can't be reconfigured that way later.
 const OSM_STYLE = {
   version: 8,
   sources: {
@@ -21,15 +28,30 @@ const OSM_STYLE = {
       tileSize: 256,
       attribution: '© OpenStreetMap contributors',
     },
-    municipios: { type: 'geojson', data: MUNICIPIOS_URL },
   },
   layers: [
     { id: 'bg', type: 'background', paint: { 'background-color': '#0b1220' } },
-    { id: 'municipios-fill', type: 'fill', source: 'municipios', paint: { 'fill-color': '#101d33', 'fill-opacity': 0.9 } },
-    { id: 'municipios-line', type: 'line', source: 'municipios', paint: { 'line-color': '#33517b', 'line-width': 0.8 } },
     { id: 'osm', type: 'raster', source: 'osm', paint: { 'raster-opacity': 0.85, 'raster-saturation': -0.3 } },
   ],
 }
+
+// Case-count choropleth for GET /municipios/case_density. Null-safe: a
+// municipio with no density fetched yet (fillMode 'off') keeps the flat wash
+// rather than reading as "zero cases".
+const NO_DENSITY_FILL = '#101d33'
+const DENSITY_FILL_COLOR = [
+  'case', ['==', ['feature-state', 'case_count'], null], NO_DENSITY_FILL,
+  ['step', ['feature-state', 'case_count'],
+    '#1e3a5f',
+    1, '#2563eb',
+    10, '#818cf8',
+    30, '#38bdf8',
+  ],
+]
+const DENSITY_FILL_OPACITY = [
+  'case', ['==', ['feature-state', 'case_count'], null], 0.9,
+  0.7,
+]
 
 const EMPTY = { type: 'FeatureCollection', features: [] }
 const PR_CENTER = [-66.4, 18.22]
@@ -78,6 +100,10 @@ export default function CaseMap({ geojson, onSelect }) {
   const [showHeatmap, setShowHeatmap] = useState(false)
   const [dateStart, setDateStart] = useState('')
   const [dateEnd, setDateEnd] = useState('')
+  const [showTerrain, setShowTerrain] = useState(false)
+  const [densityMode, setDensityMode] = useState('off')
+  const [showTools, setShowTools] = useState(false)
+  const [mapReady, setMapReady] = useState(false)
 
   const filteredGeojson = useMemo(() => {
     if (!dateStart && !dateEnd) return geojson || EMPTY
@@ -100,6 +126,27 @@ export default function CaseMap({ geojson, onSelect }) {
     // 'style.load' instead of 'load': the latter waits for raster tiles,
     // which never resolve offline, and the data layer would never appear.
     map.on('style.load', () => {
+      // promoteId lets MapLibre feature-state key off geoid directly, so the
+      // density choropleth (below) needs no client-side geometry mutation.
+      map.addSource('municipios', { type: 'geojson', data: MUNICIPIOS_URL, promoteId: 'geoid' })
+      map.addLayer({
+        id: 'municipios-fill', type: 'fill', source: 'municipios',
+        paint: { 'fill-color': DENSITY_FILL_COLOR, 'fill-opacity': DENSITY_FILL_OPACITY },
+      }, 'osm')
+      map.addLayer({
+        id: 'municipios-line', type: 'line', source: 'municipios',
+        paint: { 'line-color': '#33517b', 'line-width': 0.8 },
+      }, 'osm')
+
+      map.addSource('terrain-dem', {
+        type: 'raster-dem', tiles: [TERRAIN_DEM_URL], tileSize: 256, encoding: 'terrarium',
+      })
+      map.addLayer({
+        id: 'hillshade', type: 'hillshade', source: 'terrain-dem',
+        paint: { 'hillshade-exaggeration': 0.6 },
+        layout: { visibility: 'none' },
+      }, 'osm')
+
       map.addSource('cases', {
         type: 'geojson',
         data: filteredRef.current || EMPTY,
@@ -141,6 +188,7 @@ export default function CaseMap({ geojson, onSelect }) {
         },
       })
       readyRef.current = true
+      setMapReady(true)
       map.on('mouseenter', 'cases-dot', () => (map.getCanvas().style.cursor = 'pointer'))
       map.on('mouseleave', 'cases-dot', () => (map.getCanvas().style.cursor = ''))
       map.on('click', 'cases-dot', (e) => onSelectRef.current?.(e.features[0].properties))
@@ -169,6 +217,49 @@ export default function CaseMap({ geojson, onSelect }) {
     mapRef.current.setLayoutProperty('cases-heatmap', 'visibility', showHeatmap ? 'visible' : 'none')
   }, [showHeatmap])
 
+  useEffect(() => {
+    if (!mapReady || !mapRef.current) return
+    const map = mapRef.current
+    map.setLayoutProperty('hillshade', 'visibility', showTerrain ? 'visible' : 'none')
+    if (showTerrain) {
+      map.setTerrain({ source: 'terrain-dem', exaggeration: 1.3 })
+      map.easeTo({ pitch: 55, duration: 600 })
+    } else {
+      map.setTerrain(null)
+      map.easeTo({ pitch: 0, duration: 600 })
+    }
+  }, [showTerrain, mapReady])
+
+  useEffect(() => {
+    if (!mapReady || !mapRef.current) return
+    const map = mapRef.current
+    map.setPaintProperty('municipios-fill', 'fill-color', densityMode === 'density' ? DENSITY_FILL_COLOR : NO_DENSITY_FILL)
+    map.setPaintProperty('municipios-fill', 'fill-opacity', densityMode === 'density' ? DENSITY_FILL_OPACITY : 0.9)
+  }, [densityMode, mapReady])
+
+  useEffect(() => {
+    if (!mapReady || !mapRef.current || densityMode !== 'density') return
+    const map = mapRef.current
+    let cancelled = false
+    getMunicipiosCaseDensity()
+      .then(({ by_geoid }) => {
+        if (cancelled) return
+        for (const [geoid, count] of Object.entries(by_geoid || {})) {
+          map.setFeatureState({ source: 'municipios', id: geoid }, { case_count: count })
+        }
+      })
+      .catch(() => {}) // an optional overlay failing to load isn't worth surfacing as an error
+    return () => {
+      cancelled = true
+    }
+  }, [densityMode, mapReady])
+
+  const spatialToolTargets = useMemo(
+    () => ({ Cases: () => filteredGeojson.features }),
+    [filteredGeojson],
+  )
+  const spatialTools = useSpatialTools({ mapRef, mapReady, targets: spatialToolTargets })
+
   return (
     <div className="relative h-full w-full">
       <div ref={containerRef} className="h-full w-full" />
@@ -181,17 +272,59 @@ export default function CaseMap({ geojson, onSelect }) {
             {label}
           </div>
         ))}
+        {densityMode === 'density' && (
+          <>
+            <div className="mb-1.5 mt-2 border-t border-slate-800 pt-2 text-[10px] uppercase tracking-wide text-slate-500">Case density</div>
+            {[
+              { label: '30+', color: '#38bdf8' },
+              { label: '10–29', color: '#818cf8' },
+              { label: '1–9', color: '#2563eb' },
+              { label: '0', color: '#1e3a5f' },
+            ].map(({ label, color }) => (
+              <div key={label} className="mb-0.5 flex items-center gap-1.5 last:mb-0">
+                <span className="inline-block h-2 w-2 shrink-0 rounded-sm" style={{ background: color }} />
+                {label}
+              </div>
+            ))}
+          </>
+        )}
       </div>
 
       <div className="absolute right-2 top-2 flex flex-col items-end gap-1.5">
-        <button
-          type="button"
-          aria-pressed={showHeatmap}
-          onClick={() => setShowHeatmap((v) => !v)}
-          className={`rounded border px-2 py-1 text-[11px] transition ${showHeatmap ? 'border-sky-500/40 bg-sky-500/10 text-sky-300' : 'border-slate-800 bg-slate-900/80 text-slate-400 hover:text-slate-200'}`}
-        >
-          Heatmap
-        </button>
+        <div className="flex gap-1.5">
+          <button
+            type="button"
+            aria-pressed={showHeatmap}
+            onClick={() => setShowHeatmap((v) => !v)}
+            className={`rounded border px-2 py-1 text-[11px] transition ${showHeatmap ? 'border-sky-500/40 bg-sky-500/10 text-sky-300' : 'border-slate-800 bg-slate-900/80 text-slate-400 hover:text-slate-200'}`}
+          >
+            Heatmap
+          </button>
+          <button
+            type="button"
+            aria-pressed={showTerrain}
+            onClick={() => setShowTerrain((v) => !v)}
+            className={`rounded border px-2 py-1 text-[11px] transition ${showTerrain ? 'border-teal-500/40 bg-teal-500/10 text-teal-300' : 'border-slate-800 bg-slate-900/80 text-slate-400 hover:text-slate-200'}`}
+          >
+            Terrain
+          </button>
+          <button
+            type="button"
+            aria-pressed={densityMode === 'density'}
+            onClick={() => setDensityMode((m) => (m === 'density' ? 'off' : 'density'))}
+            className={`rounded border px-2 py-1 text-[11px] transition ${densityMode === 'density' ? 'border-blue-500/40 bg-blue-500/10 text-blue-300' : 'border-slate-800 bg-slate-900/80 text-slate-400 hover:text-slate-200'}`}
+          >
+            Density
+          </button>
+          <button
+            type="button"
+            aria-pressed={showTools}
+            onClick={() => setShowTools((v) => !v)}
+            className={`rounded border px-2 py-1 text-[11px] transition ${showTools ? 'border-pink-500/40 bg-pink-500/10 text-pink-300' : 'border-slate-800 bg-slate-900/80 text-slate-400 hover:text-slate-200'}`}
+          >
+            Spatial tools
+          </button>
+        </div>
         <div className="flex items-center gap-1 rounded border border-slate-800 bg-slate-900/80 px-2 py-1 text-[11px] text-slate-400">
           <input
             type="date"
@@ -223,6 +356,8 @@ export default function CaseMap({ geojson, onSelect }) {
           )}
         </div>
       </div>
+
+      {showTools && <SpatialToolsPanel {...spatialTools} />}
     </div>
   )
 }

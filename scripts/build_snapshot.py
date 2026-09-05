@@ -21,6 +21,7 @@ MASTER_LEDGER = REPO_ROOT / "data/master/master_cases.jsonl"
 CANDIDATE_LEDGER = REPO_ROOT / "data/candidates/candidate_cases.jsonl"
 RELEASES_DIR = REPO_ROOT / "releases"
 SNAPSHOT_OUT = REPO_ROOT / "dashboard/src/lib/snapshot.json"
+MUNICIPIOS_PATH = REPO_ROOT / "dashboard/public/geo/pr_municipios.geojson"
 
 
 def _read_jsonl(path: Path) -> list[dict[str, Any]]:
@@ -62,6 +63,48 @@ def _case_to_feature(case: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _municipios_features() -> list[dict[str, Any]]:
+    if not MUNICIPIOS_PATH.exists():
+        return []
+    return json.loads(MUNICIPIOS_PATH.read_text()).get("features", [])
+
+
+def _municipios_name_to_geoid(features: list[dict[str, Any]]) -> dict[str, str]:
+    mapping: dict[str, str] = {}
+    for feature in features:
+        props = feature.get("properties") or {}
+        name = props.get("name")
+        geoid = props.get("geoid")
+        if name and geoid:
+            mapping[name] = str(geoid)
+    return mapping
+
+
+def _point_in_ring(lon: float, lat: float, ring: list[list[float]]) -> bool:
+    """Mirrors server/backend/main.py's _point_in_ring so the offline export
+    snapshot matches what the live backend would compute."""
+    inside = False
+    j = len(ring) - 1
+    for i, (xi, yi) in enumerate(ring):
+        xj, yj = ring[j]
+        if (yi > lat) != (yj > lat) and lon < (xj - xi) * (lat - yi) / (yj - yi) + xi:
+            inside = not inside
+        j = i
+    return inside
+
+
+def _point_in_geometry(lon: float, lat: float, geometry: dict[str, Any]) -> bool:
+    gtype = geometry.get("type")
+    coords = geometry.get("coordinates") or []
+    polygons = coords if gtype == "MultiPolygon" else [coords] if gtype == "Polygon" else []
+    for rings in polygons:
+        if not rings or not _point_in_ring(lon, lat, rings[0]):
+            continue
+        if not any(_point_in_ring(lon, lat, hole) for hole in rings[1:]):
+            return True
+    return False
+
+
 def main() -> int:
     master = [c for c in _read_jsonl(MASTER_LEDGER) if not _is_placeholder(c)]
     candidates = [c for c in _read_jsonl(CANDIDATE_LEDGER) if not _is_placeholder(c)]
@@ -76,6 +119,24 @@ def main() -> int:
         t = case.get("evidence_tier")
         if t:
             by_tier[t] = by_tier.get(t, 0) + 1
+
+    municipios_features = _municipios_features()
+    name_to_geoid = _municipios_name_to_geoid(municipios_features)
+    by_geoid: dict[str, int] = {}
+    unmatched = 0
+    for case in master:
+        name = case.get("municipality") or case.get("municipio")
+        geoid = name_to_geoid.get(name) if name else None
+        if geoid is None and _has_coords(case):
+            lon, lat = float(case["longitude"]), float(case["latitude"])
+            for feature in municipios_features:
+                if _point_in_geometry(lon, lat, feature["geometry"]):
+                    geoid = str((feature.get("properties") or {}).get("geoid"))
+                    break
+        if geoid is None:
+            unmatched += 1
+            continue
+        by_geoid[geoid] = by_geoid.get(geoid, 0) + 1
 
     geojson_path = _latest_geojson()
     if geojson_path:
@@ -99,6 +160,11 @@ def main() -> int:
             "unmapped": len(master) - len(mapped),
             "byDecade": by_decade,
             "byTier": by_tier,
+        },
+        "/municipios/case_density": {
+            "by_geoid": by_geoid,
+            "total_cases": len(master),
+            "unmatched": unmatched,
         },
     }
 
