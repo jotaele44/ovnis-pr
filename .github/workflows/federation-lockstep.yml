@@ -45,13 +45,14 @@ jobs:
       - name: Validate affected peer receipts
         run: python -m lockstep.peer_receipts
 
-      - name: Run positive and adversarial reference fixtures
+      - name: Run positive, adversarial, boundary, and recovery fixtures
         run: >-
           python -m unittest
           tests.test_lockstep_reference
           tests.test_lockstep_strict_gate
           tests.test_lockstep_contract_signatures
           tests.test_lockstep_deployment_boundary
+          tests.test_lockstep_recovery
           -v
 
       - name: Evaluate change under strict Lockstep policy
