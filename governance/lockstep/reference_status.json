@@ -49,14 +49,14 @@
     "frontend": "PASS npm ci + eslint + 109/109 vitest + vite build",
     "deployment_boundary": "Floot project 7fe42a06-1945-4b5b-ba78-55418ad90fbc version 1788626536638 remains bound to Git 68b87366207cb3fe249814ee6611a03b18d67a6b; lockstep-reference-v1 explicitly NOT_DEPLOYED",
     "recovery": "partial receipt, stale peer receipt, and corrupted baseline all fail closed; canonical rollback recovers; repeated validation is deterministic and byte-preserving",
-    "actions_admission": "latest observed jobs fail before runner assignment with runner_id=0, runner_name empty, steps=[]; GitHub Status reports Actions operational and no Sep 5 incident",
+    "actions_admission": "September 8 rerun attempts accepted by GitHub API but again terminated before runner assignment with steps/logs absent",
     "branch_protection": "main protected=false; required_status_checks enforcement_level=off; contexts=[]; checks=[]",
     "evidence_checkpoint": "governance/lockstep/reference_evidence_checkpoint.json"
   },
   "blocking_conditions": [
-    "GitHub-hosted Actions jobs are not receiving a runner: runner_id=0, runner_name empty, steps=[] across unrelated workflows. GitHub Status reports Actions operational, so repository/account Actions admission, policy, billing, or budget must be resolved outside the available repository write surface.",
-    "Browser GUI reachability E2E is not yet closed. The isolated runtime collected all four Playwright tests but cannot launch Chromium because required Linux libraries cannot be installed in the sandbox; GitHub runner execution can close this once Actions admission is restored.",
-    "PR #122 has not yet produced GitHub-native causal semantic BREAKING failure because no runner starts.",
+    "GitHub-hosted Actions jobs are still not receiving a runner on September 8: rerun requests are accepted, then jobs complete failure without steps/logs. Repository/account Actions admission, policy, billing, or budget remains outside the connected repository write surface.",
+    "Browser GUI reachability E2E remains dependent on a functioning GitHub runner because the isolated runtime cannot install Chromium Linux host libraries.",
+    "PR #122 must be active and produce a GitHub-native causal semantic BREAKING failure after runner admission is restored.",
     "PR #123 has not yet produced GitHub-native compatible PASS because no runner starts.",
     "OVNIS main remains unprotected and federation-lockstep is not a required status check. The available GitHub connector exposes branch-protection reads but no administration write action.",
     "Actual merge blocking therefore cannot yet be proven without first enabling a required federation-lockstep check through GitHub repository/ruleset administration."
