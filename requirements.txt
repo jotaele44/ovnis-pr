@@ -1,7 +1,5 @@
 # Runtime + hub-callable dependencies for ovnis-pr. federation.json's
-# `setup` command and the CI workflows install from this file.
-pytest
-pytest-cov
+# `setup` command and production workflows install from this file.
 jsonschema
 # Shared federation packages pinned to an immutable TheHub commit.
 prii-maintenance @ git+https://github.com/jotaele44/thehub-pr.git@f2b81769924689b4d959554928810b1d7b7ef3d6#subdirectory=packages/prii_maintenance

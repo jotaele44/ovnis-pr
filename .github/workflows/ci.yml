@@ -23,6 +23,8 @@ jobs:
           cache: pip
       - name: Assert isolated checkout
         run: test ! -e "$GITHUB_WORKSPACE/../thehub-pr"
+      - name: Validate dependency planes before installation
+        run: python3 scripts/validate_dependency_planes.py
       - name: Compile scripts
         run: python -m py_compile scripts/*.py
       - name: Case schema is well-formed JSON
@@ -31,7 +33,7 @@ jobs:
         run: python3 scripts/validate_case_ledgers.py
       - name: Install test dependencies
         run: |
-          python -m pip install -r requirements.txt httpx -r server/backend/requirements.txt
+          python -m pip install -r requirements-dev.lock httpx -r server/backend/requirements.txt
           test ! -e "$GITHUB_WORKSPACE/../thehub-pr"
       - name: Run unit tests
         run: python -m pytest -q --cov --cov-report=term-missing:skip-covered
@@ -52,14 +54,16 @@ jobs:
       - name: Assert isolated checkout
         run: test ! -e "$GITHUB_WORKSPACE/../thehub-pr"
       - uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d
-      - name: Recompile the lockfile
+      - name: Recompile runtime and development lockfiles
         run: |
           uv pip compile requirements.txt --universal --python-version 3.12 -o requirements.lock
+          uv pip compile requirements-dev.txt --universal --python-version 3.12 -o requirements-dev.lock
+          python3 scripts/validate_dependency_planes.py
           test ! -e "$GITHUB_WORKSPACE/../thehub-pr"
       - name: Assert no drift
         run: |
-          if ! git diff --exit-code requirements.lock; then
-            echo "::error::requirements.lock is out of date with requirements.txt. Run: uv pip compile requirements.txt --universal --python-version 3.12 -o requirements.lock"
+          if ! git diff --exit-code requirements.lock requirements-dev.lock; then
+            echo "::error::dependency locks are out of date. Recompile requirements.lock and requirements-dev.lock with Python 3.12."
             exit 1
           fi
 
@@ -73,9 +77,11 @@ jobs:
           cache: pip
       - name: Assert isolated checkout
         run: test ! -e "$GITHUB_WORKSPACE/../thehub-pr"
+      - name: Validate dependency planes before installation
+        run: python3 scripts/validate_dependency_planes.py
       - name: Install lint deps
         run: |
-          python -m pip install ruff mypy -r requirements.txt
+          python -m pip install ruff mypy -r requirements.lock
           test ! -e "$GITHUB_WORKSPACE/../thehub-pr"
       - name: Ruff
         run: ruff check .

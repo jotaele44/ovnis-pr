@@ -23,7 +23,8 @@
     "intake_doctrine": "Automated ingestion writes only to the candidate ledger; master promotion occurs through reviewed PRs."
   },
   "hub_callable_commands": {
-    "setup": "python -m pip install -r requirements.txt",
+    "setup": "python -m pip install -r requirements-dev.lock",
+    "runtime_setup": "python -m pip install -r requirements.lock",
     "validate_ledgers": "python3 scripts/validate_case_ledgers.py",
     "dedupe": "python3 scripts/dedupe_candidates.py",
     "score": "python3 scripts/score_candidates.py",

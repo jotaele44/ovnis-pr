@@ -3,8 +3,10 @@
 # Config-only, with no [project] table, matching moneysweep-pr and skywatcher-pr.
 # This repo is a script and service collection (scripts/, server/, maintenance/,
 # desktop/), not an importable package — there is nothing to build a wheel from,
-# and inventing a package here would misrepresent the layout. Runtime
-# dependencies stay in requirements.txt and are pinned in requirements.lock.
+# and inventing a package here would misrepresent the layout. Production runtime
+# dependencies live in requirements.txt/requirements.lock. Test tooling lives in
+# requirements-dev.txt/requirements-dev.lock and must not be reintroduced into
+# the Hub-callable runtime plane.
 
 [tool.pytest.ini_options]
 minversion = "8.0"

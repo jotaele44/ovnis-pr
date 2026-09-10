@@ -29,9 +29,11 @@ jobs:
           cache: pip
       - name: Assert isolated checkout
         run: test ! -e "$GITHUB_WORKSPACE/../thehub-pr"
+      - name: Validate dependency planes before installation
+        run: python3 scripts/validate_dependency_planes.py
       - name: Install validation dependencies
         run: |
-          python -m pip install -r requirements.txt
+          python -m pip install -r requirements-dev.lock
           test ! -e "$GITHUB_WORKSPACE/../thehub-pr"
       - name: Federation manifest gate
         run: |

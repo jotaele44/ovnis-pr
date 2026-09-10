@@ -35,7 +35,13 @@ See [`desktop/README.md`](desktop/README.md) for details.
 
 Requires **Python 3.10+** (CI's `validate` job tests 3.10–3.12; the `OVNIS CI`
 job runs on 3.12). This repo is a flat-layout application — modules run in place,
-there is no package install — so setup is just the runtime/test dependencies.
+there is no package install.
+
+The dependency planes are deliberately separate:
+
+- `requirements.txt` / `requirements.lock`: production and Hub-callable runtime.
+- `requirements-dev.txt` / `requirements-dev.lock`: runtime closure plus pytest and coverage tooling.
+- `requirements-desktop.txt` / `constraints-desktop.txt`: double-click desktop wrapper.
 
 ```bash
 git clone https://github.com/jotaele44/ovnis-pr.git
@@ -43,24 +49,40 @@ cd ovnis-pr
 python3 -m venv .venv
 source .venv/bin/activate
 
-# requirements.txt pins the shared prii-* packages to an immutable TheHub git
-# SHA, fetched straight from GitHub — no sibling ../thehub-pr checkout needed
-# (CI asserts one is absent). CI also needs the backend deps to run the suite:
-python -m pip install -r requirements.txt httpx -r server/backend/requirements.txt
+# Runtime or Hub execution only:
+python -m pip install -r requirements.lock
+
+# Development and tests:
+python -m pip install -r requirements-dev.lock httpx -r server/backend/requirements.txt
 ```
+
+Before installing, `python3 scripts/validate_dependency_planes.py` verifies that
+pytest has not leaked into the runtime files, the development lock conserves the
+entire runtime closure, and desktop constraints contain only runtime packages.
 
 > `requirements.txt` pins the shared federation packages (`prii-maintenance`,
 > `prii-export-utils`) to an immutable git SHA in `thehub-pr`
 > (`git+...@f2b8176...`), not a live local path. Picking up a change made in
-> the hub requires bumping that pinned SHA here and regenerating
-> `requirements.lock` — it does not propagate automatically.
+> the hub requires bumping that pinned SHA here and regenerating both applicable
+> locks — it does not propagate automatically. A Git SHA still does not retain
+> package bytes for a disconnected rebuild; that remains a separate Federation
+> freedom gate.
 
 Run the checks CI runs:
 
 ```bash
-python3 scripts/validate_case_ledgers.py            # ledger integrity
-python -m pytest -q                                 # unit tests
-python3 scripts/federation_export.py --mode test    # canonical export smoke
+python3 scripts/validate_dependency_planes.py         # dependency-plane integrity
+python3 scripts/validate_case_ledgers.py              # ledger integrity
+python -m pytest -q                                   # unit tests
+python3 scripts/federation_export.py --mode test      # canonical export smoke
+```
+
+Regenerate locks with the same Python baseline as CI:
+
+```bash
+uv pip compile requirements.txt --universal --python-version 3.12 -o requirements.lock
+uv pip compile requirements-dev.txt --universal --python-version 3.12 -o requirements-dev.lock
+python3 scripts/validate_dependency_planes.py
 ```
 
 ## Operating doctrine
