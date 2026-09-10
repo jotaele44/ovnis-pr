@@ -14,5 +14,9 @@
     "centinelas-pr",
     "ovnis-pr",
     "thehub-pr"
-  ]
+  ],
+  "canary": {
+    "id": "compatible-schema-v2",
+    "expected": "ADDITIVE_COMPATIBLE_PASS"
+  }
 }
