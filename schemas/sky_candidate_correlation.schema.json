@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovnis-pr.local/schemas/sky_candidate_correlation.schema.json",
+  "title": "OVNIS Sky Candidate Correlation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["correlation_id","case_id","sky_event_id","classification","gate_results","source_manifestations"],
+  "properties": {
+    "correlation_id": {"type": "string", "minLength": 1},
+    "case_id": {"type": "string", "minLength": 1},
+    "sky_event_id": {"type": "string", "minLength": 1},
+    "classification": {"enum": ["MATCHED","PARTIAL","CONTRADICTED","UNRESOLVED"]},
+    "gate_results": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["time","visibility","location","azimuth","elevation","trajectory","duration","appearance","upstream_identity"],
+      "properties": {
+        "time": {"$ref": "#/$defs/gate"},
+        "visibility": {"$ref": "#/$defs/gate"},
+        "location": {"$ref": "#/$defs/gate"},
+        "azimuth": {"$ref": "#/$defs/gate"},
+        "elevation": {"$ref": "#/$defs/gate"},
+        "trajectory": {"$ref": "#/$defs/gate"},
+        "duration": {"$ref": "#/$defs/gate"},
+        "appearance": {"$ref": "#/$defs/gate"},
+        "upstream_identity": {"$ref": "#/$defs/gate"}
+      }
+    },
+    "contradictions": {"type": "array", "items": {"type": "string"}},
+    "unresolved_fields": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "source_manifestations": {"type": "array", "minItems": 1, "items": {"type": "string"}, "uniqueItems": true},
+    "skywatcher_artifact_version": {"type": ["string","null"]},
+    "adjudicated_utc": {"type": ["string","null"], "format": "date-time"}
+  },
+  "$defs": {
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state"],
+      "properties": {
+        "state": {"enum": ["PASS","FAIL","UNKNOWN","NOT_APPLICABLE"]},
+        "evidence": {"type": "array", "items": {"type": "string"}},
+        "notes": {"type": ["string","null"]}
+      }
+    }
+  }
+}
