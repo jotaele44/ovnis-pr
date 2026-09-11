@@ -1,4 +1,8 @@
-from scripts.correlate_sky_events import build_ledger, calendar_overlap
+from pathlib import Path
+
+from scripts.correlate_sky_events import build_ledger, calendar_overlap, read_jsonl, validate_unique
+
+ROOT = Path(__file__).resolve().parents[1]
 
 
 def _case(case_id: str, date_local: str) -> dict:
@@ -11,6 +15,14 @@ def _event(event_id: str, start_utc: str) -> dict:
         "start_utc": start_utc,
         "source_url_canonical": f"https://example.test/{event_id}",
     }
+
+
+def test_current_master_denominator_is_470_unique_cases() -> None:
+    cases = read_jsonl(ROOT / "data" / "master" / "master_cases.jsonl")
+    assert len(cases) == 470
+    validate_unique(cases, "case_id", "cases")
+    validate_unique(cases, "record_id", "cases")
+    assert all(row.get("record_type") == "master" for row in cases)
 
 
 def test_calendar_overlap_is_precision_aware_discovery_only() -> None:
