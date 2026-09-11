@@ -1,0 +1,56 @@
+{
+  "report_id": "sac-sky-seed-correlation-2026-09-11",
+  "status": "PROVISIONAL",
+  "scope": "Four bounded SAC discovery fixtures only; not the SAC archive denominator",
+  "frozen_inputs": {
+    "ovnis_repository_baseline": "d70adbb49b562717001834957f85fdba88365c36",
+    "ovnis_master_blob_sha": "428990a32070295f1efe7a7779e4b0e9f7200e82",
+    "ovnis_case_count": 470,
+    "skywatcher_repository_baseline": "0521581cae5d7a46b04450322682a81a03d47149",
+    "sac_seed_event_count": 4,
+    "sac_seed_snapshot_date": "2026-09-11"
+  },
+  "discovery_method": "calendar component overlap only; incomplete dates retain candidates",
+  "identity_semantics": "CANDIDATE_NOT_IDENTITY",
+  "exact_day_matches": 0,
+  "partial_date_candidate_cases": 8,
+  "candidate_edges": 15,
+  "case_disposition": {
+    "MATCHED": 0,
+    "PARTIAL": 0,
+    "CONTRADICTED_ONLY": 0,
+    "UNRESOLVED": 8,
+    "NO_ELIGIBLE_SKY_DATA_IN_CURRENT_SEED": 462
+  },
+  "arithmetic": {
+    "case_total": 470,
+    "disposition_sum": 470,
+    "closed": true,
+    "edge_count_is_not_case_count": true
+  },
+  "candidate_case_ids": [
+    "PRUAP-0457",
+    "PRUAP-0458",
+    "PRUAP-0459",
+    "PRUAP-0460",
+    "PRUAP-0461",
+    "PRUAP-0462",
+    "PRUAP-0463",
+    "PRUAP-0466"
+  ],
+  "candidate_edge_basis": {
+    "PRUAP-0457_to_PRUAP-0463": "year-only 2025 date overlaps both 2025 SAC seed events",
+    "PRUAP-0466": "month-only 2025-01 date overlaps the 2025-01-25 SAC meteor seed event"
+  },
+  "certification_blockers": [
+    "SAC archive/tag/sitemap denominator not closed",
+    "raw SAC source bytes and SHA-256 not frozen in current execution surface",
+    "authoritative upstream object/mission identifiers not yet bound for all applicable seed events",
+    "observer-centric ephemeris/visibility/azimuth/trajectory gates not yet computed",
+    "candidate edges not individually adjudicated",
+    "production GUI parity not implemented",
+    "full regression and CI status not yet closed"
+  ],
+  "certification_state": "BLOCKED",
+  "training_state": "DEFERRED_UNTIL_BOUNDED_PIPELINE_PASSES"
+}
