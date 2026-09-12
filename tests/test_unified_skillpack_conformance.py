@@ -45,6 +45,15 @@ class UnifiedSkillpackConformanceTests(unittest.TestCase):
             target = entry["unified_target"].split("#", 1)[1]
             self.assertIn(f'<a id="{target}"></a>', skill, entry["capability_id"])
 
+    def test_spatial_scope_remains_exact(self) -> None:
+        manifest = json.loads((ROOT / ".claude/skillpacks/MANIFEST.json").read_text())
+        allowed = manifest["allowed_change_paths"]
+        self.assertTrue(MODULE.is_allowed_path("federation/spatial/grid_manifest.json", allowed))
+        self.assertTrue(MODULE.is_allowed_path("tests/test_federation_contract_compat.py", allowed))
+        self.assertFalse(MODULE.is_allowed_path("federation/spatial/unreviewed.json", allowed))
+        self.assertFalse(MODULE.is_allowed_path("tests/test_unreviewed.py", allowed))
+        self.assertFalse(MODULE.is_allowed_path("governance/unreviewed.json", allowed))
+
 
 if __name__ == "__main__":
     unittest.main()

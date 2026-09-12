@@ -18,14 +18,27 @@ from federation_export import build_streams, write_package
 
 REPO = Path(__file__).resolve().parents[1]
 SCHEMA_PATH = REPO / "schemas" / "federation_export_manifest.schema.json"
+COMPATIBILITY_RECEIPT = REPO / "governance" / "federation_compatibility.json"
 
 FIXED_NOW = "2026-01-01T00:00:00Z"
 MODE = "test"
 
 EXPECTED_MANIFEST_KEYS = {
-    "package_id", "producer", "export_contract_version", "mode",
-    "created_at", "extracted_at", "federation", "files",
+    "package_id",
+    "producer",
+    "export_contract_version",
+    "mode",
+    "created_at",
+    "extracted_at",
+    "federation",
+    "files",
 }
+
+
+def test_spatial_attestation_preserves_repository_compatibility():
+    receipt = json.loads(COMPATIBILITY_RECEIPT.read_text())
+    assert receipt["disposition"] == "COMPATIBLE"
+    assert receipt["spatial_disposition"] == "ATTESTED"
 
 
 def _manifest(master_case, tmp_path):
