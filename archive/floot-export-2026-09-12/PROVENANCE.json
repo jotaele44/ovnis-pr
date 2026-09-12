@@ -1,0 +1,12 @@
+{
+  "schema": "floot-archive-provenance/1.0",
+  "app": "OVNIS PR",
+  "source_archive": "Ovnis PR.zip",
+  "retrieved_context_date": "2026-09-12",
+  "sha256": "a433d6b99c705894776a91281b14fd4d422fab0feaad0511ce99dd529190ba49",
+  "byte_size": 780292,
+  "zip_member_count": 328,
+  "archive_role": "HISTORICAL_DONOR_SNAPSHOT",
+  "canonicality": "NONCANONICAL",
+  "rules": {"overwrite_current_main": false, "schema_is_canonical_by_age": false, "infer_database_contents_from_schema": false, "preserve_raw_before_normalization": true}
+}
