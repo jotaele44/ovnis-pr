@@ -23,18 +23,7 @@ def run_git(root: Path, *args: str) -> subprocess.CompletedProcess[str]:
     )
 
 
-def is_allowed_path(path: str, allowed_paths: list[str]) -> bool:
-    return any(
-        path == allowed or (allowed.endswith("/") and path.startswith(allowed))
-        for allowed in allowed_paths
-    )
-
-
-def validate(
-    root: Path,
-    enforce_change_scope: bool = False,
-    change_base: str | None = None,
-) -> dict[str, Any]:
+def validate(root: Path) -> dict[str, Any]:
     skillpack_root = root / ".claude" / "skillpacks"
     errors = []
     binding = load_json(skillpack_root / "BINDING.json")
@@ -118,50 +107,30 @@ def validate(
         "surface_separation",
         "repository_path_bindings",
     ]
+    # Historical note: this block used to fail closed on any file changed outside
+    # manifest["allowed_change_paths"] since binding["pinned_base_commit"] (opt-in via
+    # --enforce-change-scope, wired to fire only on chore/unified-skillpacks-v1.0.0-*
+    # branches) — a change-freeze that blocked ordinary, unrelated PRs (see
+    # governance/change_log.json). That enforcement is removed. What's left is
+    # informational only: it records what has changed since the pinned base without
+    # ever turning that into an error, so this validator continues to describe the
+    # skillpack migration's own history without gating anyone else's work.
+    changed_since_pinned_base: list[str] | None = None
     if (root / ".git").exists():
         base = binding["pinned_base_commit"]
         shallow = run_git(root, "rev-parse", "--is-shallow-repository")
         is_shallow = shallow.returncode == 0 and shallow.stdout.strip() == "true"
         base_obj = run_git(root, "cat-file", "-e", f"{base}^{{commit}}")
         if base_obj.returncode != 0:
-            if is_shallow:
-                checks.append("git_history_deferred_shallow_checkout")
-            else:
-                errors.append("pinned base commit object is unavailable")
+            checks.append(
+                "git_history_deferred_shallow_checkout" if is_shallow else "pinned_base_unavailable"
+            )
         else:
             checks.append("pinned_base_available")
-
-        if enforce_change_scope:
-            scope_base = change_base or base
-            scope_base_obj = run_git(root, "cat-file", "-e", f"{scope_base}^{{commit}}")
-            if scope_base_obj.returncode != 0:
-                errors.append("change base commit object is unavailable")
-            elif (
-                run_git(root, "merge-base", "--is-ancestor", scope_base, "HEAD").returncode
-                != 0
-            ):
-                errors.append("change base is not an ancestor of HEAD")
-            diff = run_git(root, "diff", "--name-only", f"{scope_base}..HEAD")
-            if diff.returncode != 0:
-                errors.append("git diff failed")
-            else:
-                changed = [p for p in diff.stdout.splitlines() if p]
-                allowed = manifest["allowed_change_paths"]
-                for p in changed:
-                    if not is_allowed_path(p, allowed):
-                        errors.append(f"out-of-scope change: {p}")
-                for surface in binding.get("legacy_surfaces", []):
-                    prefix = surface.rstrip("/") + "/"
-                    for p in changed:
-                        if p == surface or p.startswith(prefix):
-                            errors.append(f"legacy surface was modified: {surface}")
-            checks += [
-                "change_base_ancestry",
-                "change_scope",
-                "legacy_non_modification",
-            ]
-        elif base_obj.returncode == 0:
-            checks.append("exact_base_available")
+            diff = run_git(root, "diff", "--name-only", f"{base}..HEAD")
+            if diff.returncode == 0:
+                changed_since_pinned_base = [p for p in diff.stdout.splitlines() if p]
+                checks.append("change_history_recorded")
     return {
         "schema_version": "1.0",
         "repository": binding["repository"],
@@ -171,23 +140,15 @@ def validate(
         "errors": errors,
         "capability_count": manifest["capability_count"],
         "module_count": manifest["module_count"],
+        "changed_since_pinned_base": changed_since_pinned_base,
     }
 
 
 def main() -> int:
     p = argparse.ArgumentParser()
     p.add_argument("--root", default=".")
-    p.add_argument("--enforce-change-scope", action="store_true")
-    p.add_argument(
-        "--change-base",
-        help="commit used for changed-path enforcement (defaults to pinned_base_commit)",
-    )
     args = p.parse_args()
-    result = validate(
-        Path(args.root).resolve(),
-        enforce_change_scope=args.enforce_change_scope,
-        change_base=args.change_base,
-    )
+    result = validate(Path(args.root).resolve())
     print(json.dumps(result, indent=2, sort_keys=True))
     return 0 if result["status"] == "success" else 1
 

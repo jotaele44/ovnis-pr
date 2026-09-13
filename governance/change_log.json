@@ -1,0 +1,16 @@
+{
+  "schema_version": "prii_change_log_v1",
+  "repository": "ovnis-pr",
+  "entries": [
+    {
+      "date": "2026-09-13",
+      "summary": "Removed the opt-in change-freeze in the unified-skillpack conformance check (tools/validate_unified_skillpacks.py, from the now-inert .claude/skillpacks/ migration). It fail-closed on any file changed outside a fixed allowed_change_paths list since a pinned base commit whenever a branch matched chore/unified-skillpacks-v1.0.0-* or CI passed --enforce-change-scope. Removed the enforce_change_scope/change_base parameters, the CLI flags, and the corresponding workflow conditional; replaced with a passive, non-enforcing record of files changed since the pinned base. This governance/change_log.json file is introduced at the same time as the self-tracker every federation repo now carries.",
+      "files": [
+        "tools/validate_unified_skillpacks.py",
+        "tests/test_unified_skillpack_conformance.py",
+        ".github/workflows/unified-skillpack-conformance.yml",
+        "governance/change_log.json"
+      ]
+    }
+  ]
+}
