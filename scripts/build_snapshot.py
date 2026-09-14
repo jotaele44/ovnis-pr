@@ -13,10 +13,16 @@ from __future__ import annotations
 
 import json
 import math
+import sys
 from pathlib import Path
 from typing import Any
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from server.backend.main import data_status  # noqa: E402
+
 MASTER_LEDGER = REPO_ROOT / "data/master/master_cases.jsonl"
 CANDIDATE_LEDGER = REPO_ROOT / "data/candidates/candidate_cases.jsonl"
 RELEASES_DIR = REPO_ROOT / "releases"
@@ -28,10 +34,6 @@ def _read_jsonl(path: Path) -> list[dict[str, Any]]:
     if not path.exists():
         return []
     return [json.loads(ln) for ln in path.read_text().splitlines() if ln.strip()]
-
-
-def _is_placeholder(case: dict[str, Any]) -> bool:
-    return case.get("source_family") == "placeholder" or case.get("record_id", "").endswith("-0000")
 
 
 def _has_coords(case: dict[str, Any]) -> bool:
@@ -106,8 +108,11 @@ def _point_in_geometry(lon: float, lat: float, geometry: dict[str, Any]) -> bool
 
 
 def main() -> int:
-    master = [c for c in _read_jsonl(MASTER_LEDGER) if not _is_placeholder(c)]
-    candidates = [c for c in _read_jsonl(CANDIDATE_LEDGER) if not _is_placeholder(c)]
+    # Mirrors server/backend/main.py's stats_payload()/health(): is_placeholder()
+    # labels dataStatus, it never filters rows out of the served data — a
+    # placeholder-only ledger is still reported honestly, not hidden.
+    master = _read_jsonl(MASTER_LEDGER)
+    candidates = _read_jsonl(CANDIDATE_LEDGER)
 
     mapped = [c for c in master if _has_coords(c)]
     by_decade: dict[str, int] = {}
@@ -143,6 +148,9 @@ def main() -> int:
         geojson = json.loads(geojson_path.read_text())
     else:
         geojson = {"type": "FeatureCollection", "features": [_case_to_feature(c) for c in mapped]}
+    geojson_source = str(geojson_path.relative_to(REPO_ROOT)) if geojson_path else "derived_from_master_ledger"
+    status = data_status(master, candidates)
+    matched_count = sum(by_geoid.values())
 
     snapshot = {
         "/health": {
@@ -150,6 +158,13 @@ def main() -> int:
             "master": len(master),
             "mapped": len(mapped),
             "unmapped": len(master) - len(mapped),
+            "candidates": len(candidates),
+            "data_status": status,
+            "source_files": {
+                "master": str(MASTER_LEDGER.relative_to(REPO_ROOT)),
+                "candidates": str(CANDIDATE_LEDGER.relative_to(REPO_ROOT)),
+                "geojson": geojson_source,
+            },
         },
         "/cases": master,
         "/candidates": candidates,
@@ -158,13 +173,24 @@ def main() -> int:
             "total": len(master),
             "mapped": len(mapped),
             "unmapped": len(master) - len(mapped),
+            "candidates": len(candidates),
             "byDecade": by_decade,
             "byTier": by_tier,
+            "dataStatus": status,
+            "geojsonSource": geojson_source,
         },
         "/municipios/case_density": {
             "by_geoid": by_geoid,
+            "matched_count": matched_count,
             "total_cases": len(master),
             "unmatched": unmatched,
+            # Mirrors the live endpoint's scope shape — parseCaseDensity() in
+            # CaseMap.jsx requires scope.identity_effect to render the fill.
+            "scope": {
+                "identity_effect": "NONE",
+                "binding_effect": "AGGREGATION_ONLY",
+                "state": "CANDIDATE_NOT_IDENTITY" if unmatched else "PASS",
+            },
         },
     }
 
