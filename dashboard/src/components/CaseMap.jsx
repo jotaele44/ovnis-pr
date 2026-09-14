@@ -49,8 +49,8 @@ const DENSITY_FILL_COLOR = [
   ],
 ]
 const DENSITY_FILL_OPACITY = [
-  'case', ['==', ['feature-state', 'case_count'], null], 0.9,
-  0.7,
+  'case', ['==', ['feature-state', 'case_count'], null], 0.08,
+  0.55,
 ]
 
 function objectValue(value, field) {
@@ -172,6 +172,7 @@ export default function CaseMap({ geojson, onSelect }) {
 
       map.addSource('terrain-dem', {
         type: 'raster-dem', tiles: [TERRAIN_DEM_URL], tileSize: 256, encoding: 'terrarium',
+        attribution: 'Terrain: AWS Terrarium (Mapzen/Joerd)',
       })
       map.addLayer({
         id: 'hillshade', type: 'hillshade', source: 'terrain-dem',
@@ -269,7 +270,7 @@ export default function CaseMap({ geojson, onSelect }) {
     if (!mapReady || !mapRef.current) return
     const map = mapRef.current
     map.setPaintProperty('municipios-fill', 'fill-color', densityMode === 'density' ? DENSITY_FILL_COLOR : NO_DENSITY_FILL)
-    map.setPaintProperty('municipios-fill', 'fill-opacity', densityMode === 'density' ? DENSITY_FILL_OPACITY : 0.9)
+    map.setPaintProperty('municipios-fill', 'fill-opacity', densityMode === 'density' ? DENSITY_FILL_OPACITY : 0.08)
   }, [densityMode, mapReady])
 
   const toggleDensity = () => {

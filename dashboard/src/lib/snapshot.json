@@ -1,5 +1,45 @@
 {
-  "/candidates": [],
+  "/candidates": [
+    {
+      "candidate_id": "CAND-0000",
+      "case_confidence": null,
+      "case_id": null,
+      "chronology_confidence": null,
+      "contradiction_note": null,
+      "created_at": null,
+      "date_local": "1900",
+      "dedupe_confidence": null,
+      "dedupe_status": "not_checked",
+      "description": "Placeholder candidate row used only to keep schema validation wired before real candidate intake is loaded.",
+      "environment": "unknown",
+      "evidence_tier": "T4",
+      "gap_note": "placeholder row; do not promote",
+      "language": "unknown",
+      "latitude": null,
+      "location_confidence": null,
+      "location_name": "example location - replace before production",
+      "longitude": null,
+      "matched_case_id": null,
+      "municipality": null,
+      "nearest_feature": null,
+      "object_type": null,
+      "record_id": "CAND-0000",
+      "record_type": "candidate",
+      "retrieved_at": null,
+      "review_action": "pending",
+      "source_citation": "placeholder only",
+      "source_family": "placeholder",
+      "source_hash": null,
+      "source_reliability": null,
+      "source_url": "offline-placeholder",
+      "time_local": null,
+      "timezone": "America/Puerto_Rico",
+      "translation_status": null,
+      "updated_at": null,
+      "witness_count": null,
+      "witness_type": null
+    }
+  ],
   "/cases": [
     {
       "candidate_id": null,
@@ -40381,8 +40421,15 @@
     "type": "FeatureCollection"
   },
   "/health": {
+    "candidates": 1,
+    "data_status": "loaded",
     "mapped": 469,
     "master": 470,
+    "source_files": {
+      "candidates": "data/candidates/candidate_cases.jsonl",
+      "geojson": "releases/2026-06-23/ovnis_cases_master.geojson",
+      "master": "data/master/master_cases.jsonl"
+    },
     "status": "ok",
     "unmapped": 1
   },
@@ -40448,6 +40495,12 @@
       "72151": 1,
       "72153": 4
     },
+    "matched_count": 436,
+    "scope": {
+      "binding_effect": "AGGREGATION_ONLY",
+      "identity_effect": "NONE",
+      "state": "CANDIDATE_NOT_IDENTITY"
+    },
     "total_cases": 470,
     "unmatched": 34
   },
@@ -40471,6 +40524,9 @@
       "T3": 435,
       "T4": 13
     },
+    "candidates": 1,
+    "dataStatus": "loaded",
+    "geojsonSource": "releases/2026-06-23/ovnis_cases_master.geojson",
     "mapped": 469,
     "total": 470,
     "unmapped": 1
