@@ -111,3 +111,9 @@ def test_write_package_manifest(master_case, now, tmp_path):
     # per-file sha256 + record_count present
     for f in manifest["files"]:
         assert f["sha256"] and f["record_count"] >= 1
+
+def test_unknown_or_non_string_evidence_tier_uses_default_confidence(master_case, now):
+    for tier in ("UNKNOWN", None, 7, ["T1"]):
+        s = build_streams([master_case(evidence_tier=tier)], now)
+        case = next(e for e in s["entities"] if e["entity_type"] == "uap_case")
+        assert case["confidence"] == 0.3
