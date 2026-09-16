@@ -69,3 +69,54 @@ test("Candidates tab renders the real review queue", async ({ page }) => {
     await expect(page.getByText(candidates[0].candidate_id, { exact: true })).toBeVisible();
   }
 });
+
+test("map density failure can retry into evidence and spatial tools are discoverable", async ({ page }) => {
+  const consoleErrors = [];
+  page.on("console", (message) => {
+    if (message.type() === "error") consoleErrors.push(message.text());
+  });
+  let attempts = 0;
+  await page.route("**/municipios/case_density", async (route) => {
+    attempts += 1;
+    if (attempts === 1) {
+      await route.fulfill({
+        status: 503,
+        contentType: "application/json",
+        headers: { "access-control-allow-origin": "*" },
+        body: JSON.stringify({ detail: "test outage" }),
+      });
+      return;
+    }
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      headers: { "access-control-allow-origin": "*" },
+      body: JSON.stringify({
+        by_geoid: { "72127": 1 },
+        matched_count: 1,
+        matched_by_method: { point_in_polygon: 1 },
+        unmatched: 1,
+        unresolved_by_reason: { NO_COORDINATES: 1 },
+        total_cases: 2,
+        scope: { identity_effect: "NONE", state: "CANDIDATE_NOT_IDENTITY" },
+      }),
+    });
+  });
+
+  await page.goto("/", { waitUntil: "domcontentloaded" });
+  await page.getByRole("button", { name: /^Density/ }).click();
+  await expect(page.getByText("Density unavailable; no zero-case inference was made.")).toBeVisible();
+  expect(consoleErrors).toEqual([
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+  ]);
+  consoleErrors.length = 0;
+  await page.getByRole("button", { name: "Retry density" }).click();
+  await expect(page.getByText(/1 matched · 1 unresolved · 2 total/)).toBeVisible();
+
+  await page.getByRole("button", { name: "Spatial tools" }).click();
+  await page.getByRole("button", { name: "Buffer" }).click();
+  await expect(page.getByLabel("Spatial tool target")).toBeVisible();
+  await page.getByRole("button", { name: "10 km" }).click();
+  await expect(page.getByRole("button", { name: "10 km" })).toHaveAttribute("aria-pressed", "true");
+  expect(consoleErrors).toEqual([]);
+});

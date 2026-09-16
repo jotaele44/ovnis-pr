@@ -60,7 +60,8 @@
           "GET /candidates",
           "GET /geojson",
           "GET /stats",
-          "GET /search"
+          "GET /search",
+          "GET /municipios/case_density"
         ],
         "symbols": [
           "server/backend/main.py:all_candidates",
@@ -77,6 +78,7 @@
           "server/backend/main.py:is_placeholder",
           "server/backend/main.py:latest_geojson_path",
           "server/backend/main.py:location_string",
+          "server/backend/main.py:municipios_case_density",
           "server/backend/main.py:matches_query",
           "server/backend/main.py:normalize_candidate",
           "server/backend/main.py:normalize_case",
@@ -102,6 +104,7 @@
           "dashboard/src/components/CaseDetail.jsx",
           "dashboard/src/components/CaseGrid.jsx",
           "dashboard/src/components/CaseMap.jsx",
+          "dashboard/src/components/SpatialToolsPanel.jsx",
           "dashboard/src/components/ErrorBoundary.jsx",
           "dashboard/src/components/QueryState.jsx",
           "dashboard/src/components/StatsPanel.jsx",
@@ -115,12 +118,17 @@
       },
       "tests": {
         "backend": [
+          "tests/test_municipios_case_density.py",
           "tests/test_validate_case_ledgers.py",
           "tests/test_import_candidates.py",
           "tests/test_promote_candidate.py"
         ],
         "contract": [
           "tests/test_gui_parity.py"
+        ],
+        "unit": [
+          "dashboard/src/components/CaseMap.test.jsx",
+          "dashboard/src/components/SpatialToolsPanel.test.jsx"
         ],
         "e2e": [
           "dashboard/tests/gui-parity.spec.mjs"

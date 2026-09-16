@@ -66,4 +66,13 @@ export const getCase = (id) => getJSON(`/cases/${encodeURIComponent(id)}`)
 export const getCandidates = () => getJSON('/candidates')
 export const getGeojson = () => getJSON('/geojson')
 export const getStats = () => getJSON('/stats')
-export const search = (q) => getJSON(`/search${qs({ q })}`)
+// /search has no offline snapshot entry — a client-side full corpus search
+// is future work. Degrade to an explicit "unavailable offline" result
+// instead of getJSON's generic "missing snapshot key" throw, since this is
+// a known gap, not a build defect. (No current caller relies on the return
+// shape; if one is added, it must handle offlineUnavailable.)
+export const search = (q) => {
+  if (OFFLINE) return Promise.resolve({ results: [], offlineUnavailable: true })
+  return getJSON(`/search${qs({ q })}`).then((results) => ({ results, offlineUnavailable: false }))
+}
+export const getMunicipiosCaseDensity = () => getJSON('/municipios/case_density')
