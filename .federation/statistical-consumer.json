@@ -1,0 +1,9 @@
+{
+  "contract_version":"1.0.0",
+  "registry_authority":"thehub-pr/.federation/statistical-routing-manifest.json",
+  "repo":"ovnis-pr",
+  "primary_domains":[],
+  "secondary_domains":["Geografia","Transportacion","Ambiente y Energia","Demografia y Poblacion"],
+  "ingest_policy":"contextual case-relevant consumption only; no bulk mirroring of the statistical catalog",
+  "guardrails":["context != case evidence","correlation != causation","source taxonomy != canonical identity","statistical anomaly != UAP attribution"]
+}
