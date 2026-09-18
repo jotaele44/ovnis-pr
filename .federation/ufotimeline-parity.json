@@ -1,0 +1,93 @@
+{
+  "contract": "ufotimeline-parity/1.0",
+  "reference": {
+    "url": "https://ufotimeline.com/",
+    "snapshot_date": "2026-09-07",
+    "scope": "bounded observable public surface",
+    "observed_counts": {
+      "timeline_items": 401,
+      "people": 57,
+      "websites": 26,
+      "categories": {
+        "news": 107,
+        "documentaries": 32,
+        "famous_cases": 47,
+        "sightings": 40,
+        "books_documents": 36,
+        "spotlight": 72,
+        "quotes": 67
+      }
+    }
+  },
+  "status_enum": [
+    "PRESENT",
+    "PARTIAL",
+    "ADD",
+    "EXCLUDE_WITH_REASON",
+    "NOT_APPLICABLE",
+    "UNRESOLVED"
+  ],
+  "features": [
+    {"id":"timeline.chronological","status":"ADD","target":"public","notes":"Current Cases table is not a first-class chronological timeline."},
+    {"id":"timeline.year_navigation","status":"PARTIAL","target":"public","notes":"Current decade filter is useful but does not provide reference-style year navigation."},
+    {"id":"filter.category","status":"ADD","target":"public","notes":"Add public taxonomy separately from analytical classes."},
+    {"id":"category.news","status":"ADD","target":"public"},
+    {"id":"category.documentaries","status":"ADD","target":"public"},
+    {"id":"category.famous_cases","status":"ADD","target":"public"},
+    {"id":"category.sightings","status":"PARTIAL","target":"public","notes":"Existing corpus/map supplies sightings/cases but not reference-style public category navigation."},
+    {"id":"category.books_documents","status":"ADD","target":"public"},
+    {"id":"category.spotlight","status":"ADD","target":"public","notes":"Use featured/highlight semantics, not necessarily identical editorial label."},
+    {"id":"category.quotes","status":"ADD","target":"public"},
+    {"id":"directory.people","status":"ADD","target":"public"},
+    {"id":"directory.websites_resources","status":"ADD","target":"public","notes":"Curated resource directory; must preserve source taxonomy vs canonical identity."},
+    {"id":"page.about","status":"ADD","target":"public"},
+    {"id":"contribute","status":"ADD","target":"public","notes":"Contribution intake must land in candidate/review workflow, never directly mutate canonical corpus."},
+    {"id":"report_broken_link","status":"ADD","target":"public","notes":"Creates review item; no direct source deletion."},
+    {"id":"share","status":"ADD","target":"public","notes":"Share deep-linked deterministic view state."},
+    {"id":"entry.deep_link","status":"ADD","target":"public"},
+    {"id":"map.interactive","status":"PRESENT","target":"public","notes":"Existing MapLibre CaseMap; requires documented layout regression fix before product certification."},
+    {"id":"map.timeline_sync","status":"ADD","target":"public"},
+    {"id":"map.clustering","status":"ADD","target":"public"},
+    {"id":"map.precision_semantics","status":"ADD","target":"public"},
+    {"id":"map.uncertainty_geometry","status":"ADD","target":"public"},
+    {"id":"map.track_geometry","status":"ADD","target":"public"},
+    {"id":"map.deep_link_state","status":"ADD","target":"public"},
+    {"id":"research.temporal_playback","status":"ADD","target":"research"},
+    {"id":"research.spatial_query","status":"ADD","target":"research"},
+    {"id":"research.evidence_graph","status":"ADD","target":"research"},
+    {"id":"research.contradiction_ledger","status":"ADD","target":"research"},
+    {"id":"research.falsification_ledger","status":"ADD","target":"research"},
+    {"id":"research.foia_plane","status":"PARTIAL","target":"research","notes":"Repo already has FOIA intake workflows; public/research presentation remains to be added."},
+    {"id":"provenance.source_manifestation","status":"ADD","target":"data"},
+    {"id":"model.event_observation_claim_source_decomposition","status":"ADD","target":"data"},
+    {"id":"federation.geometry_authority_spiderweb","status":"PARTIAL","target":"federation","notes":"Federation controls exist; exact public/research geometry binding contract must be wired and tested."}
+  ],
+  "set_algebra": {
+    "intersection": [
+      "case/sighting corpus",
+      "chronological/date metadata",
+      "filtering",
+      "deep research material concept"
+    ],
+    "reference_only_before_upgrade": [
+      "first-class timeline",
+      "year navigation",
+      "public editorial category pages",
+      "people directory",
+      "websites/resources directory",
+      "contribute/broken-link/share affordances"
+    ],
+    "ovnis_only_or_stronger": [
+      "interactive Puerto Rico map",
+      "federation bindings",
+      "candidate intake",
+      "FOIA intake workflows",
+      "evidence tiers",
+      "offline/desktop packaging",
+      "planned claim/source manifestation model",
+      "planned contradiction/falsification ledgers",
+      "planned research GIS"
+    ]
+  },
+  "certification_rule": "Parity PASS requires every bounded observable reference feature to have a non-UNRESOLVED disposition and all ADD/PARTIAL items required by the approved target scope to pass regression gates."
+}
