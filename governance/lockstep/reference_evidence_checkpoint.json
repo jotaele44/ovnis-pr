@@ -1,0 +1,75 @@
+{
+  "schema_version": "ovnis_lockstep_reference_evidence_checkpoint_v1",
+  "certifying": false,
+  "reference_branch": "lockstep-reference-v1",
+  "reference_head": "fc9015790ba42b5ac61c9c72531b68f30e1f10da",
+  "reference_tree": "d7684e5cd89bf05d8b0d372395fc500eabab1cea",
+  "generation": 1,
+  "baseline_id": "sha256:44a190b6cc9451c86e2abbc39c447bcfe6fe642bea7d3636b0aae0f2a03e7f63",
+  "deterministic_tests": {
+    "lockstep_tests_passed": 36,
+    "lockstep_tests_failed": 0,
+    "ruff": "PASS",
+    "template_drift": "PASS_EXACT_PINNED_RENDERER",
+    "gui_capability_contract": "PASS_214_OF_214",
+    "frontend_vitest": "PASS_109_OF_109",
+    "rollback_recovery": "PASS",
+    "crash_safe_restart": "PASS"
+  },
+  "peer_receipts": {
+    "centinelas-pr": {
+      "receipt_commit_sha": "ee65fb36f5e3668623ef55e2f1023997df64d540",
+      "receipt_blob_sha": "09fc76bc959bc135fd760ee1ca85feb0ac2665c5"
+    },
+    "thehub-pr": {
+      "receipt_commit_sha": "2c8a6d511e53513039cb4f37b33f5dd3fe6719dd",
+      "receipt_blob_sha": "f47edd73b2b514ab463a91c0759e5387aefcfd12"
+    }
+  },
+  "floot_boundary": {
+    "project_id": "7fe42a06-1945-4b5b-ba78-55418ad90fbc",
+    "floot_version": 1788626536638,
+    "production_source_sha": "68b87366207cb3fe249814ee6611a03b18d67a6b",
+    "reference_deployed": false
+  },
+  "canaries": {
+    "breaking": {
+      "pr": 122,
+      "head_sha": "54611ea7252fe46d8f14c42d8a9561ea77652fe7",
+      "expected": "SEMANTIC_BREAKING_FAIL"
+    },
+    "compatible": {
+      "pr": 123,
+      "head_sha": "ec9e09cb39277fc68831a630830520c4cad3f687",
+      "expected": "ADDITIVE_COMPATIBLE_PASS"
+    }
+  },
+  "artifact_sha256": {
+    "governance/lockstep/reference_baseline.json": "e1e6f5ac580c1cb6cd299cb5997d0c741660ca9cabdf29411316b29090869fdd",
+    "governance/lockstep/reference_criteria.json": "7324b99a6aa24e3b46b6912167ea0d771ae633001cda6c9d9e8158ad02ed75a5",
+    "governance/lockstep/contracts.json": "77743e568154d73a4fedb57f3f403d8827f20e949526e8488e66b7bb7c5796e4",
+    "governance/lockstep/dependencies.json": "2355233627187bc71c60a85af4584cf3324756bb51265980e30d82c2623aedde",
+    "governance/lockstep/receipt.json": "5cd839a1eac130613d0d03e1ff0eaf6d370b20e76b98b6ceb6e6956e254ae701",
+    "governance/lockstep/peer_receipts.json": "d103ee2977e7fa063877ff7017e44f04ead71c1f1a3d5e72786d5777d1bec77e",
+    "governance/lockstep/deployment_boundary.json": "93a21bb292a106f345024153b61c09c122ecf1d356becdac8f2c4e5691dc6d0d",
+    "governance/lockstep/signatures/federation_export_manifest.contract.json": "ae84a0c9877bee05134c0a7ac8c081ba101734e11d48588b557d44890bec26d4",
+    "governance/lockstep/signatures/centinelas_ovnis_signal.contract.json": "d6625bc7b1ff1579806612c40e70c0964f8d20a23aacaeecd33abd1c2333cdf4",
+    "lockstep/engine.py": "4775408731b6ea3fcf89779da07b3de39dd978ee50538da10993e70c92391618",
+    "lockstep/strict_gate.py": "94b0985708fe6cb0940545d0f9c6cd5082b1cd1a478d8fff4e62f11a95082973",
+    "lockstep/peer_receipts.py": "2949cbac2139757cec14a0f331ef2abf1faa22b733a9092acc9eae7898d77e2e",
+    ".github/workflows/federation-lockstep.yml": "729e2841c6e41f8ed144397a666a7aae10858c48b17a2d371dfd3a513f78b011",
+    "tests/test_lockstep_reference.py": "f2fadcdedc29f6e98015cbc81ac18330977c1343dde3fd47bb2cffe4c2adaa0f",
+    "tests/test_lockstep_strict_gate.py": "1f68a9ed799174232fc05c0671c42777e98878948dd747bfdb39adcdf450e384",
+    "tests/test_lockstep_contract_signatures.py": "7fbda5faaf473d1356e549bb7f02fe6876b7147c9d5e67faba9d8802e2b49731",
+    "tests/test_lockstep_deployment_boundary.py": "41e0de6a443dfe47660eb7400b2c1a927a2b12e611d507580b266c41527c4709",
+    "tests/test_lockstep_recovery.py": "f0919ddef81f1dc178efabb1280cd5c9ecae44b45bd12b9107b183798d0f4b9c"
+  },
+  "unresolved": [
+    "GUI_REACHABILITY_E2E_BROWSER_HOST_UNAVAILABLE",
+    "GITHUB_ACTIONS_RUNNER_ADMISSION_RUNNER_ID_0",
+    "BREAKING_CANARY_GITHUB_NATIVE_CAUSAL_PROOF",
+    "COMPATIBLE_CANARY_GITHUB_NATIVE_PASS",
+    "REQUIRED_FEDERATION_LOCKSTEP_STATUS_CHECK",
+    "ACTUAL_MERGE_BLOCKING_PROOF"
+  ]
+}

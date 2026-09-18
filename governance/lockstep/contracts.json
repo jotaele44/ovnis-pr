@@ -1,0 +1,47 @@
+{
+  "schema_version": "federation_lockstep_contract_registry_v1",
+  "contracts": [
+    {
+      "id": "repo_federation_manifest@1",
+      "owner": "ovnis-pr",
+      "type": "json_manifest",
+      "paths": ["federation.json"],
+      "consumers": ["thehub-pr"]
+    },
+    {
+      "id": "federation_export_manifest@1",
+      "owner": "ovnis-pr",
+      "type": "export_contract",
+      "paths": [
+        "scripts/federation_export.py",
+        "exports/federation/**",
+        "schemas/federation_export_manifest.schema.json",
+        "governance/lockstep/signatures/federation_export_manifest.contract.json",
+        "tests/test_federation_contract_compat.py",
+        "tests/test_lockstep_contract_signatures.py"
+      ],
+      "semantic_path": "governance/lockstep/signatures/federation_export_manifest.contract.json",
+      "consumers": ["thehub-pr"]
+    },
+    {
+      "id": "ovnis_case_schema@1",
+      "owner": "ovnis-pr",
+      "type": "json_schema",
+      "paths": ["data/schemas/case.schema.json"],
+      "consumers": ["thehub-pr"]
+    },
+    {
+      "id": "centinelas_ovnis_signal@1",
+      "owner": "centinelas-pr",
+      "type": "event_contract",
+      "paths": [
+        "scripts/ingest_centinelas_dispatch.py",
+        "tests/test_ingest_centinelas_dispatch.py",
+        "governance/lockstep/signatures/centinelas_ovnis_signal.contract.json",
+        "tests/test_lockstep_contract_signatures.py"
+      ],
+      "semantic_path": "governance/lockstep/signatures/centinelas_ovnis_signal.contract.json",
+      "consumers": ["ovnis-pr"]
+    }
+  ]
+}

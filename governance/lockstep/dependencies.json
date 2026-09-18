@@ -1,0 +1,37 @@
+{
+  "schema_version": "federation_lockstep_dependency_multigraph_v1",
+  "edges": [
+    {
+      "from": "centinelas-pr",
+      "to": "ovnis-pr",
+      "relationship": "EMITS",
+      "contract": "centinelas_ovnis_signal@1",
+      "cardinality": "1:N",
+      "required": true
+    },
+    {
+      "from": "ovnis-pr",
+      "to": "thehub-pr",
+      "relationship": "PRODUCES",
+      "contract": "repo_federation_manifest@1",
+      "cardinality": "1:N",
+      "required": true
+    },
+    {
+      "from": "ovnis-pr",
+      "to": "thehub-pr",
+      "relationship": "PRODUCES",
+      "contract": "federation_export_manifest@1",
+      "cardinality": "1:N",
+      "required": true
+    },
+    {
+      "from": "ovnis-pr",
+      "to": "thehub-pr",
+      "relationship": "PRODUCES",
+      "contract": "ovnis_case_schema@1",
+      "cardinality": "1:N",
+      "required": true
+    }
+  ]
+}

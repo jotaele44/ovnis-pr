@@ -1,0 +1,30 @@
+{
+  "schema_version": "federation_lockstep_export_signature_v1",
+  "contract_version": "1.0.0",
+  "producer": "ovnis-pr",
+  "hub_parent": "thehub-pr",
+  "modes": ["production", "test"],
+  "streams": {
+    "entities": "federation_entity.schema.json",
+    "observations": "federation_observation.schema.json",
+    "relationships": "federation_relationship.schema.json",
+    "sources": "federation_source.schema.json"
+  },
+  "manifest_keys": [
+    "created_at",
+    "export_contract_version",
+    "extracted_at",
+    "federation",
+    "files",
+    "mode",
+    "package_id",
+    "producer"
+  ],
+  "file_entry_required": [
+    "filename",
+    "record_count",
+    "schema_id",
+    "sha256",
+    "stream"
+  ]
+}
