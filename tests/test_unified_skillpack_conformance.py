@@ -33,6 +33,26 @@ class UnifiedSkillpackConformanceTests(unittest.TestCase):
             target = entry["unified_target"].split("#", 1)[1]
             self.assertIn(f'<a id="{target}"></a>', skill, entry["capability_id"])
 
+    def test_spatial_scope_remains_exact(self) -> None:
+        # main removed the opt-in change-freeze this test used to exercise
+        # (see governance/change_log.json): is_allowed_path is gone and
+        # allowed_change_paths is now a passive record. Do not reinstate that
+        # enforcement here. The property this attestation still owns is that the
+        # entries it added are exact files, not a widened directory or a glob.
+        manifest = json.loads((ROOT / ".claude/skillpacks/MANIFEST.json").read_text())
+        allowed = manifest["allowed_change_paths"]
+        for spatial_path in (
+            "federation/spatial/grid_manifest.json",
+            "federation/spatial/geometry_manifest.json",
+            "federation/spatial/registry_version.json",
+        ):
+            self.assertIn(spatial_path, allowed)
+        self.assertNotIn("federation/spatial/", allowed)
+        for entry in allowed:
+            self.assertNotIn("*", entry, entry)
+            if entry.endswith("/"):
+                self.assertEqual(entry, ".claude/skillpacks/", entry)
+
 
 if __name__ == "__main__":
     unittest.main()
