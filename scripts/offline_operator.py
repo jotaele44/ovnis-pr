@@ -86,7 +86,7 @@ def out(argv: list[str] | None) -> Path:
 
 
 def make_readiness(name: str, stamp: str) -> dict[str, Any]:
-    dims = []
+    dims: list[dict[str, Any]] = []
     for d in DIMS:
         c = (
             50

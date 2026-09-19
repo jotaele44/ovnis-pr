@@ -89,7 +89,8 @@ def build_streams(cases: list[dict[str, Any]], now: str) -> dict[str, list[dict[
         case_key = case.get("case_id") or case.get("record_id")
         synthetic = (case.get("source_family") == "placeholder")
         created = _iso(case.get("created_at"), now)
-        confidence = TIER_CONFIDENCE.get(case.get("evidence_tier"), 0.3)
+        evidence_tier = case.get("evidence_tier")
+        confidence = TIER_CONFIDENCE.get(evidence_tier, 0.3) if isinstance(evidence_tier, str) else 0.3
 
         # --- source ---
         source_url = case.get("source_url") or ""

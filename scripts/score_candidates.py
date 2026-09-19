@@ -25,7 +25,8 @@ def iter_jsonl(path: Path) -> list[dict[str, Any]]:
 
 
 def score_row(row: dict[str, Any]) -> dict[str, Any]:
-    evidence = EVIDENCE_BASE.get(row.get("evidence_tier"), 0.0)
+    evidence_tier = row.get("evidence_tier")
+    evidence = EVIDENCE_BASE.get(evidence_tier, 0.0) if isinstance(evidence_tier, str) else 0.0
     source_family = str(row.get("source_family") or "").lower()
     source = SOURCE_DEFAULT.get(source_family, 0.50)
     location = row.get("location_confidence")
