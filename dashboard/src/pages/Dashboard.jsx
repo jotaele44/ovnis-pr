@@ -6,7 +6,16 @@ import CaseGrid from '@/components/CaseGrid'
 import CaseDetail from '@/components/CaseDetail'
 import StatsPanel from '@/components/StatsPanel'
 import CandidateReview from '@/components/CandidateReview'
+import ProgramTimeline from '@/components/ProgramTimeline'
 import brandMark from "@/assets/icon-64.png?inline";
+
+const PROGRAM_TIMELINE = [
+  { id:'ovnis-sweep', phase:'NOW', title:'Primary-source case sweep', detail:'Search government, archival, maritime, aviation, and local records for new Puerto Rico UAP/USO evidence.', category:'Discovery' },
+  { id:'ovnis-intake', phase:'NEXT', title:'Evidence intake', detail:'Freeze source manifestations, transcribe records, and preserve exact provenance before interpretation.', category:'Evidence' },
+  { id:'ovnis-dedupe', phase:'NEXT', title:'Identity and duplicate adjudication', detail:'Separate candidate events, aliases, and source manifestations without merging on name/date proximity.', category:'Review' },
+  { id:'ovnis-timeline', phase:'QUEUED', title:'Chronology reconciliation', detail:'Bind validated events into the historical timeline while preserving unresolved contradictions.', category:'Timeline' },
+  { id:'ovnis-cert', phase:'BLOCKED', title:'Corpus certification', detail:'Final promotion waits on source closure, duplicate/edge adjudication, and zero unresolved residue in scope.', category:'Certification' },
+]
 
 export default function Dashboard() {
   const { data: geojson } = useGeojson()
@@ -51,10 +60,11 @@ export default function Dashboard() {
 
         <aside className="w-[440px] shrink-0 border-l border-slate-800 bg-slate-950 flex flex-col min-h-0">
           <Tabs defaultValue="cases" className="flex flex-col flex-1 min-h-0">
-            <TabsList className="grid grid-cols-3 mx-2 mt-2 bg-slate-900">
+            <TabsList className="grid grid-cols-4 mx-2 mt-2 bg-slate-900">
               <TabsTrigger value="cases" className="text-xs">Cases</TabsTrigger>
               <TabsTrigger value="stats" className="text-xs">Statistics</TabsTrigger>
               <TabsTrigger value="candidates" className="text-xs">Candidates</TabsTrigger>
+              <TabsTrigger value="activity" className="text-xs">Activity</TabsTrigger>
             </TabsList>
             <TabsContent value="cases" className="flex-1 min-h-0 mt-2">
               <CaseGrid cases={cases} selectedId={selected?.case_id} onSelect={setSelected} />
@@ -64,6 +74,9 @@ export default function Dashboard() {
             </TabsContent>
             <TabsContent value="candidates" className="flex-1 min-h-0 mt-2">
               <CandidateReview />
+            </TabsContent>
+            <TabsContent value="activity" className="flex-1 min-h-0 mt-2 overflow-y-auto p-2">
+              <ProgramTimeline items={PROGRAM_TIMELINE} />
             </TabsContent>
           </Tabs>
         </aside>
