@@ -76,7 +76,7 @@ export default function Dashboard() {
               <CandidateReview />
             </TabsContent>
             <TabsContent value="activity" className="flex-1 min-h-0 mt-2 overflow-y-auto p-2">
-              <ProgramTimeline items={PROGRAM_TIMELINE} />
+              <ProgramTimeline items={PROGRAM_TIMELINE} compact />
             </TabsContent>
           </Tabs>
         </aside>
