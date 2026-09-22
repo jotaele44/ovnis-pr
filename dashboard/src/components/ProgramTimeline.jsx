@@ -14,7 +14,7 @@ function PhaseBadge({ phase }) {
   return <span className={`inline-flex min-w-16 justify-center rounded-full border px-2 py-1 text-[10px] font-bold tracking-wide ${tone}`}>{phase}</span>;
 }
 
-export default function ProgramTimeline({ items, title = "Timeline", queueTitle = "Upcoming work" }) {
+export default function ProgramTimeline({ items, title = "Timeline", queueTitle = "Upcoming work", compact = false }) {
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState("ALL");
   const [sort, setSort] = useState("priority");
@@ -29,7 +29,7 @@ export default function ProgramTimeline({ items, title = "Timeline", queueTitle 
   const upcoming = items.filter((item) => ["NEXT", "QUEUED", "BLOCKED"].includes(item.phase)).slice(0, 5);
 
   return (
-    <section className="grid gap-4 lg:grid-cols-[minmax(0,1.6fr)_minmax(18rem,.8fr)]" aria-label="Program timeline and upcoming work">
+    <section className={compact ? "grid gap-4" : "grid gap-4 lg:grid-cols-[minmax(0,1.6fr)_minmax(18rem,.8fr)]"} aria-label="Program timeline and upcoming work">
       <div className="overflow-hidden rounded-xl border border-border bg-card">
         <div className="flex items-center justify-between gap-4 border-b border-border p-4">
           <div><p className="font-mono text-[10px] font-bold tracking-[0.12em] text-muted-foreground">PROGRAM ACTIVITY</p><h2 className="mt-1 text-lg font-semibold">{title}</h2></div>
