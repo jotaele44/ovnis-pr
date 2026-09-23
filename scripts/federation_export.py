@@ -195,6 +195,14 @@ def build_streams(cases: list[dict[str, Any]], now: str) -> dict[str, list[dict[
             "municipality": case.get("municipality"),
             "latitude": case.get("latitude"),
             "longitude": case.get("longitude"),
+            # Nested for the Hub's correlate_observations() municipality
+            # co-location join (row["location"]["municipality"], etc.),
+            # which the flat top-level fields above don't satisfy.
+            "location": {
+                "municipality": case.get("municipality"),
+                "lat": case.get("latitude"),
+                "lon": case.get("longitude"),
+            },
             "environment": case.get("environment"),
             "object_type": case.get("object_type"),
             "witness_type": case.get("witness_type"),
