@@ -110,7 +110,8 @@
           "dashboard/src/components/StatsPanel.jsx",
           "dashboard/src/lib/PageNotFound.jsx",
           "dashboard/src/lib/api.js",
-          "dashboard/src/pages/Dashboard.jsx"
+          "dashboard/src/pages/Dashboard.jsx",
+          "dashboard/src/components/ProgramTimeline.jsx"
         ],
         "discoverability": [
           "dashboard/src/pages/Dashboard.jsx"
