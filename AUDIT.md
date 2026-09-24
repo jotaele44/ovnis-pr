@@ -20,12 +20,18 @@
 
 ## This Repo: ovnis-pr
 
-**Backend: Minimal** — Single `main.py` (17KB) only. No domain-specific API modules. Uses `requirements.lock` instead of `uv.lock`.
+**Backend: Minimal** — Single `main.py` (17KB) only. No domain-specific API modules beyond it. Uses `requirements.lock` instead of `uv.lock`.
+
+**Correction (2026-09-23):** an earlier version of this section claimed CaseMap/SpatialToolsPanel
+have no backend counterpart and that there were no backend test files — both were wrong.
+`server/backend/main.py` implements a `/municipios/case_density` endpoint that does
+point-in-polygon geometry against municipio boundaries — exactly the kind of spatial data
+CaseMap.jsx and SpatialToolsPanel.jsx would consume — and it is directly exercised by
+`tests/test_server_smoke.py` and `tests/test_municipios_case_density.py`. Other frontend
+pages/components may still lack backend coverage; that was not re-verified here.
 
 **Critical gaps:**
-- No API modules — CaseMap (19.5KB) and SpatialToolsPanel (13.5KB) in frontend have no backend counterpart
 - `requirements.lock` diverges from fleet toolchain (uv) — should migrate to uv
-- No visible backend test files
 
 **Frontend: Component-rich, page-sparse** — 1 page (`Dashboard.jsx`) despite rich spatial components.
 
@@ -40,7 +46,7 @@ Components: `CaseMap.jsx` (19.5KB), `SpatialToolsPanel.jsx` (13.5KB), `CaseDetai
 1. **HIGH** — Implement domain API modules for Case management and Spatial endpoints
 2. **HIGH** — Migrate from `requirements.lock` to `uv.lock` (align with fleet)
 3. **MEDIUM** — Add page routing: wire CandidateReview, CaseDetail, CaseGrid to dedicated pages
-4. **MEDIUM** — Add backend test coverage
+4. **MEDIUM** — Extend backend test coverage beyond `/municipios/case_density` (see correction above; `test_server_smoke.py` and `test_municipios_case_density.py` already cover that endpoint)
 
 ---
 
