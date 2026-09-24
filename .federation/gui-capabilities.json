@@ -82,6 +82,8 @@
           "server/backend/main.py:matches_query",
           "server/backend/main.py:normalize_candidate",
           "server/backend/main.py:normalize_case",
+          "server/backend/main.py:partition_candidates",
+          "server/backend/main.py:raw_candidates",
           "server/backend/main.py:read_jsonl",
           "server/backend/main.py:release_geojson",
           "server/backend/main.py:search",
@@ -108,6 +110,7 @@
           "dashboard/src/components/ErrorBoundary.jsx",
           "dashboard/src/components/QueryState.jsx",
           "dashboard/src/components/StatsPanel.jsx",
+          "dashboard/src/components/ProgramTimeline.jsx",
           "dashboard/src/lib/PageNotFound.jsx",
           "dashboard/src/lib/api.js",
           "dashboard/src/pages/Dashboard.jsx"
