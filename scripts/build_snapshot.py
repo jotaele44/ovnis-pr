@@ -21,7 +21,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from server.backend.main import data_status  # noqa: E402
+from server.backend.main import data_status, is_placeholder  # noqa: E402
 
 MASTER_LEDGER = REPO_ROOT / "data/master/master_cases.jsonl"
 CANDIDATE_LEDGER = REPO_ROOT / "data/candidates/candidate_cases.jsonl"
@@ -108,11 +108,13 @@ def _point_in_geometry(lon: float, lat: float, geometry: dict[str, Any]) -> bool
 
 
 def main() -> int:
-    # Mirrors server/backend/main.py's stats_payload()/health(): is_placeholder()
-    # labels dataStatus, it never filters rows out of the served data — a
-    # placeholder-only ledger is still reported honestly, not hidden.
+    # Preserve the raw candidate ledger, but exclude explicit placeholders from
+    # the retained candidate API/snapshot universe. Source/retained/excluded
+    # arithmetic stays visible in /health and /stats.
     master = _read_jsonl(MASTER_LEDGER)
-    candidates = _read_jsonl(CANDIDATE_LEDGER)
+    candidate_source_rows = _read_jsonl(CANDIDATE_LEDGER)
+    candidates = [row for row in candidate_source_rows if not is_placeholder(row)]
+    candidate_excluded_placeholders = [row for row in candidate_source_rows if is_placeholder(row)]
 
     mapped = [c for c in master if _has_coords(c)]
     by_decade: dict[str, int] = {}
@@ -149,7 +151,7 @@ def main() -> int:
     else:
         geojson = {"type": "FeatureCollection", "features": [_case_to_feature(c) for c in mapped]}
     geojson_source = str(geojson_path.relative_to(REPO_ROOT)) if geojson_path else "derived_from_master_ledger"
-    status = data_status(master, candidates)
+    status = data_status(master, candidate_source_rows)
     matched_count = sum(by_geoid.values())
 
     snapshot = {
@@ -159,6 +161,8 @@ def main() -> int:
             "mapped": len(mapped),
             "unmapped": len(master) - len(mapped),
             "candidates": len(candidates),
+            "candidate_source_rows": len(candidate_source_rows),
+            "candidate_excluded_placeholders": len(candidate_excluded_placeholders),
             "data_status": status,
             "source_files": {
                 "master": str(MASTER_LEDGER.relative_to(REPO_ROOT)),
@@ -174,6 +178,8 @@ def main() -> int:
             "mapped": len(mapped),
             "unmapped": len(master) - len(mapped),
             "candidates": len(candidates),
+            "candidateSourceRows": len(candidate_source_rows),
+            "candidateExcludedPlaceholders": len(candidate_excluded_placeholders),
             "byDecade": by_decade,
             "byTier": by_tier,
             "dataStatus": status,
@@ -195,7 +201,11 @@ def main() -> int:
     }
 
     SNAPSHOT_OUT.write_text(json.dumps(snapshot, indent=2, sort_keys=True))
-    print(f"wrote {SNAPSHOT_OUT} — {len(master)} master cases, {len(candidates)} candidates")
+    print(
+        f"wrote {SNAPSHOT_OUT} — {len(master)} master cases, "
+        f"{len(candidate_source_rows)} candidate source rows = {len(candidates)} retained + "
+        f"{len(candidate_excluded_placeholders)} placeholder-excluded"
+    )
     return 0
 
 
