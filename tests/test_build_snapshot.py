@@ -1,11 +1,9 @@
 """scripts/build_snapshot.py — the VITE_OFFLINE=1 export must match live shapes.
 
-Regression guard for a confirmed drift: the snapshot builder used to have its
-own placeholder predicate (different from server/backend/main.py's) and
-filtered matching rows out, while the live backend never filters — it only
-labels dataStatus. It also omitted fields the live /stats and /health
-endpoints return. Both are fixed by importing main.py's own is_placeholder()/
-data_status() rather than reimplementing them.
+Master rows remain source-preserved. Candidate ledgers keep source rows intact,
+but explicit placeholders are excluded from the retained /candidates universe.
+Both live and offline surfaces expose source/retained/excluded arithmetic and
+share main.py's is_placeholder()/data_status() semantics.
 """
 from __future__ import annotations
 
@@ -67,6 +65,49 @@ def test_placeholder_row_is_labeled_not_filtered(tmp_path: Path, monkeypatch: py
     assert snapshot["/health"]["candidates"] == 0
     assert snapshot["/health"]["data_status"] == "placeholder_only"
     assert snapshot["/health"]["source_files"]["master"] == "master_cases.jsonl"
+
+
+def test_candidate_placeholder_is_preserved_as_source_but_excluded_from_retained_universe(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    master_path = tmp_path / "master_cases.jsonl"
+    master_path.write_text("", encoding="utf-8")
+    candidate_path = tmp_path / "candidate_cases.jsonl"
+    candidate_path.write_text(
+        json.dumps(
+            {
+                "record_id": "CAND-0000",
+                "candidate_id": "CAND-0000",
+                "record_type": "candidate",
+                "description": "Placeholder candidate row used only to keep schema validation wired.",
+                "source_url": "offline-placeholder",
+                "source_citation": "placeholder only",
+                "gap_note": "placeholder row; do not promote",
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    snapshot_out = tmp_path / "snapshot.json"
+
+    monkeypatch.setattr(build_snapshot, "REPO_ROOT", tmp_path)
+    monkeypatch.setattr(build_snapshot, "MASTER_LEDGER", master_path)
+    monkeypatch.setattr(build_snapshot, "CANDIDATE_LEDGER", candidate_path)
+    monkeypatch.setattr(build_snapshot, "RELEASES_DIR", tmp_path / "releases")
+    monkeypatch.setattr(build_snapshot, "SNAPSHOT_OUT", snapshot_out)
+    monkeypatch.setattr(build_snapshot, "MUNICIPIOS_PATH", tmp_path / "no-municipios.geojson")
+
+    assert build_snapshot.main() == 0
+    snapshot = json.loads(snapshot_out.read_text())
+
+    assert snapshot["/candidates"] == []
+    assert snapshot["/health"]["candidates"] == 0
+    assert snapshot["/health"]["candidate_source_rows"] == 1
+    assert snapshot["/health"]["candidate_excluded_placeholders"] == 1
+    assert snapshot["/health"]["data_status"] == "placeholder_only"
+    assert snapshot["/stats"]["candidates"] == 0
+    assert snapshot["/stats"]["candidateSourceRows"] == 1
+    assert snapshot["/stats"]["candidateExcludedPlaceholders"] == 1
 
 
 def test_case_density_snapshot_matches_live_response_shape(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
