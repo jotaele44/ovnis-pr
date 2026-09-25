@@ -110,3 +110,13 @@ manifest.json
 ```
 
 Do not treat exported cases as conclusions. Treat them as structured historical records available for correlation and review.
+
+<!-- PROJECT-OPERATING-CONTRACT:START -->
+## Current development and certification contract
+
+OVNIS is the Puerto Rico UAP/USO historical case-corpus producer and evidence-analysis system. Research completeness, case/source identity, provenance, chronology, spatial precision, contradictions, and source manifestations take priority over speculative interface growth.
+
+**Evidence rules:** preserve atomic claims and their source/time/page context; record successful, zero-result, blocked, stale, and failed acquisition attempts; source taxonomy is not canonical identity; never merge cases from name/date/proximity/normalization/count equality alone. Preserve full candidate sets and unresolved ties. Spatial outputs must distinguish FULLY_WITHIN, PARTIAL, TOUCH_ONLY, OUTSIDE, NULL_EMPTY, and UNRESOLVED where applicable.
+
+**Certification:** corpus, runtime, federation package, rendered desktop+iPhone, and native claims are separate gates. Historical or local PASS receipts do not prove current production state. Certify only a bounded declared universe with frozen inputs/hashes, explicit inclusion/exclusion, closed arithmetic, adjudicated duplicates/edges, validated IDs, positive/negative regressions, and zero material unresolved residue inside the claim.
+<!-- PROJECT-OPERATING-CONTRACT:END -->
