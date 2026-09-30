@@ -1,46 +1,56 @@
 {
   "schema_version": "federation_lockstep_peer_receipt_bindings_v1",
-  "generation": 1,
-  "baseline_id": "sha256:44a190b6cc9451c86e2abbc39c447bcfe6fe642bea7d3636b0aae0f2a03e7f63",
+  "generation": 2,
+  "baseline_id": "sha256:ce6f5c188af93b13bf4c99d4b6e70fb8adfcf376c2a07de8d5d34e3c002bf26a",
   "receipts": [
     {
       "repo": "centinelas-pr",
-      "remote_branch": "lockstep-reference-v1-receipt",
+      "remote_branch": "lockstep-reference-v2-receipt",
       "remote_path": ".federation/lockstep-receipt.json",
-      "receipt_commit_sha": "ee65fb36f5e3668623ef55e2f1023997df64d540",
-      "receipt_blob_sha": "09fc76bc959bc135fd760ee1ca85feb0ac2665c5",
+      "receipt_commit_sha": "0d2727558b64f6a97280144cbb9c4ef395b18f5d",
+      "receipt_blob_sha": "45547c9f50608121240659d8534504b0176414f4",
       "payload": {
         "schema_version": "federation_lockstep_peer_receipt_v1",
         "repo": "centinelas-pr",
         "reference_repo": "ovnis-pr",
-        "generation": 1,
-        "baseline_id": "sha256:44a190b6cc9451c86e2abbc39c447bcfe6fe642bea7d3636b0aae0f2a03e7f63",
-        "source_sha": "caf086598a4f99e2eb0ca4aac6d51e2d9bd46321",
+        "generation": 2,
+        "baseline_id": "sha256:ce6f5c188af93b13bf4c99d4b6e70fb8adfcf376c2a07de8d5d34e3c002bf26a",
+        "source_sha": "86adddafb346a3613eb227c86f828febb9140398",
         "disposition": "COMPATIBLE_UNCHANGED",
-        "contracts": ["centinelas_ovnis_signal@1"],
-        "impact_set": ["centinelas-pr", "ovnis-pr", "thehub-pr"]
+        "contracts": [
+          "centinelas_ovnis_signal@1"
+        ],
+        "impact_set": [
+          "centinelas-pr",
+          "ovnis-pr",
+          "thehub-pr"
+        ]
       }
     },
     {
       "repo": "thehub-pr",
-      "remote_branch": "lockstep-reference-v1-receipt",
+      "remote_branch": "lockstep-reference-v2-receipt",
       "remote_path": ".federation/lockstep-receipt.json",
-      "receipt_commit_sha": "2c8a6d511e53513039cb4f37b33f5dd3fe6719dd",
-      "receipt_blob_sha": "f47edd73b2b514ab463a91c0759e5387aefcfd12",
+      "receipt_commit_sha": "0e31b42512e4d53250e1bc0f9ee149f90d41e6fd",
+      "receipt_blob_sha": "c78fd069dc2fa6a9333d5736a0c7fc41ea03f230",
       "payload": {
         "schema_version": "federation_lockstep_peer_receipt_v1",
         "repo": "thehub-pr",
         "reference_repo": "ovnis-pr",
-        "generation": 1,
-        "baseline_id": "sha256:44a190b6cc9451c86e2abbc39c447bcfe6fe642bea7d3636b0aae0f2a03e7f63",
-        "source_sha": "94e000b5e0f21a5d1acaed42e79e73523c86ab56",
+        "generation": 2,
+        "baseline_id": "sha256:ce6f5c188af93b13bf4c99d4b6e70fb8adfcf376c2a07de8d5d34e3c002bf26a",
+        "source_sha": "9d62f46bf7432013f14a9f48b657c53d6cfea556",
         "disposition": "COMPATIBLE_UNCHANGED",
         "contracts": [
           "federation_export_manifest@1",
           "ovnis_case_schema@1",
           "repo_federation_manifest@1"
         ],
-        "impact_set": ["centinelas-pr", "ovnis-pr", "thehub-pr"]
+        "impact_set": [
+          "centinelas-pr",
+          "ovnis-pr",
+          "thehub-pr"
+        ]
       }
     }
   ]
