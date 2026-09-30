@@ -2,22 +2,19 @@
   "schema_version": "ovnis_lockstep_deployment_boundary_v1",
   "production": {
     "floot_project_id": "7fe42a06-1945-4b5b-ba78-55418ad90fbc",
-    "floot_version": 1788626536638,
+    "floot_version": 1790564888706,
     "mobile_app_id": "app.floot.u7fe42a0619454b5bba7855418ad90fbc",
     "git_repository": "jotaele44/ovnis-pr",
     "frozen_git_source_sha": "68b87366207cb3fe249814ee6611a03b18d67a6b",
-    "deployment_state": "DEPLOYED_NATIVE_MOBILE",
-    "production_runtime_gate": "PASS",
-    "application_certification_state": "OPEN",
-    "application_unresolved": [
-      "native-package",
-      "physical-device-verification"
-    ]
+    "current_git_main_sha": "6ac7d9df4270fa5262c23825c4b3f1ac20b65321",
+    "source_alignment": "DRIFTED_NOT_PROMOTED",
+    "deployment_state": "DEPLOYED_WEB_AND_NATIVE_PROJECT",
+    "application_certification_state": "OPEN"
   },
   "lockstep_reference": {
     "git_branch": "lockstep-reference-v1",
-    "baseline_generation": 1,
-    "baseline_id": "sha256:44a190b6cc9451c86e2abbc39c447bcfe6fe642bea7d3636b0aae0f2a03e7f63",
+    "baseline_generation": 2,
+    "baseline_id": "sha256:ce6f5c188af93b13bf4c99d4b6e70fb8adfcf376c2a07de8d5d34e3c002bf26a",
     "deployment_state": "NOT_DEPLOYED",
     "production_authority": false,
     "deployment_evidence_eligible": false,
