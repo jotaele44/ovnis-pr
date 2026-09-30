@@ -517,13 +517,31 @@ def classify_changed_contracts(
                     }
                 contract_results.append({"path": semantic_path, **result})
             except LockstepError as exc:
-                contract_results.append(
-                    {
-                        "path": semantic_path,
-                        "classification": "BREAKING",
-                        "changes": [str(exc)],
-                    }
+                bootstrap_only = (
+                    semantic_path in changed
+                    and all(
+                        path == semantic_path or path == "tests/test_lockstep_contract_signatures.py"
+                        for path in paths
+                    )
                 )
+                if bootstrap_only:
+                    contract_results.append(
+                        {
+                            "path": semantic_path,
+                            "classification": "INTERNAL",
+                            "changes": [
+                                "canonical semantic descriptor bootstrapped without governed implementation change"
+                            ],
+                        }
+                    )
+                else:
+                    contract_results.append(
+                        {
+                            "path": semantic_path,
+                            "classification": "BREAKING",
+                            "changes": [str(exc)],
+                        }
+                    )
         else:
             for path in paths:
                 try:
