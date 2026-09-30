@@ -1,0 +1,11 @@
+{
+  "schema_version": "federation_lockstep_legacy_disposition_v1",
+  "artifact": ".federation/haf_contract.json",
+  "legacy_authority": "HAF v0.5",
+  "disposition": "SUPERSEDED_NONCANONICAL",
+  "superseded_by": "FEDERATION_LOCKSTEP/1.0",
+  "historical_evidence": "PRESERVE",
+  "active_lockstep_authority": false,
+  "removal_authorized": false,
+  "notes": "HAF remains preserved while the OVNIS reference implementation is proven. Its existing workflow may remain red during the reference branch; no HAF artifact is deleted until the replacement passes the complete reference criteria."
+}
