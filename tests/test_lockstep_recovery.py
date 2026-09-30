@@ -79,7 +79,7 @@ class LockstepRecoveryTests(unittest.TestCase):
                 self.assertRaises(engine.LockstepError),
             ):
                 engine.validate_all()
-        self.assertEqual(engine.validate_all()[0]["generation"], 1)
+        self.assertEqual(engine.validate_all()[0]["generation"], 2)
 
 
 if __name__ == "__main__":
