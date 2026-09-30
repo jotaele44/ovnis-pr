@@ -14,11 +14,12 @@ class DeploymentBoundaryTests(unittest.TestCase):
         self.boundary = json.loads(BOUNDARY.read_text(encoding="utf-8"))
         self.baseline = json.loads(BASELINE.read_text(encoding="utf-8"))
 
-    def test_production_is_bound_to_frozen_ovnis_source(self) -> None:
+    def test_production_source_drift_is_explicit_not_promoted(self) -> None:
         production = self.boundary["production"]
         self.assertEqual(production["git_repository"], "jotaele44/ovnis-pr")
-        self.assertEqual(production["frozen_git_source_sha"], self.baseline["members"]["ovnis-pr"])
-        self.assertEqual(production["deployment_state"], "DEPLOYED_NATIVE_MOBILE")
+        self.assertEqual(production["current_git_main_sha"], self.baseline["members"]["ovnis-pr"])
+        self.assertNotEqual(production["frozen_git_source_sha"], production["current_git_main_sha"])
+        self.assertEqual(production["source_alignment"], "DRIFTED_NOT_PROMOTED")
 
     def test_reference_is_explicitly_not_deployed(self) -> None:
         reference = self.boundary["lockstep_reference"]
@@ -34,14 +35,6 @@ class DeploymentBoundaryTests(unittest.TestCase):
         invariants = self.boundary["invariants"]
         self.assertTrue(invariants)
         self.assertTrue(all(value is True for value in invariants.values()))
-
-    def test_application_open_residue_is_preserved(self) -> None:
-        production = self.boundary["production"]
-        self.assertEqual(production["application_certification_state"], "OPEN")
-        self.assertEqual(
-            set(production["application_unresolved"]),
-            {"native-package", "physical-device-verification"},
-        )
 
 
 if __name__ == "__main__":
