@@ -77,7 +77,7 @@
       "type": ["string", "null"]
     },
     "description": {
-      "type": "string",
+      "type": "integer",
       "minLength": 20
     },
     "language": {
