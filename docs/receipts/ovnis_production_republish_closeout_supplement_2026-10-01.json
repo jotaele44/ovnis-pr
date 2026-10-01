@@ -1,0 +1,85 @@
+{
+  "schema": "ovnis.production-republish-closeout-supplement/v1",
+  "recorded_date": "2026-10-01",
+  "base_receipt": {
+    "path": "docs/receipts/ovnis_production_republish_closeout_2026-10-01.json",
+    "commit": "48cbcbeddd617a149b68e084628ab551bc9f4d4d",
+    "blob_sha1": "53cc8cdaa0dc71cfc4e3bf05080976392a51665f"
+  },
+  "reason": "A concurrent federation evidence-state commit landed after the primary 76-path drift scope was selected and before the production receipt was frozen. This supplement preserves that delta instead of silently inheriting the earlier adjudication.",
+  "concurrent_commit": {
+    "sha": "df0e2c40eab32b41b6428cc450c4cdff59a690ab",
+    "subject": "declare evidence_state on every OVNIS federation export row",
+    "effect": "Adds candidate federation epistemic-state schema and explicit additive evidence_state declarations to federation export rows."
+  },
+  "drift_layers": {
+    "primary": {
+      "scope_head": "8d2175c02e413bcbf31318d895c1e46aaa0ce3a3",
+      "path": "data/reference/source_head_drift_adjudication_2026-10-01.csv",
+      "commit": "7e0f8277db9d7c65d71bdba3a436311f0bb78080",
+      "blob_sha1": "983954eb87709b5b8e20594c53d9c961b2765bd1",
+      "rows": 76,
+      "unclassified": 0
+    },
+    "post_scope": {
+      "base": "8d2175c02e413bcbf31318d895c1e46aaa0ce3a3",
+      "scope_head": "48cbcbeddd617a149b68e084628ab551bc9f4d4d",
+      "path": "data/reference/source_head_drift_supplement_2026-10-01.csv",
+      "commit": "90c47f190b513fd32781ff9b21284c6bfe455069",
+      "blob_sha1": "b10861d44a062b1750d850dbe8a33e038fbc12a8",
+      "rows": 6,
+      "unclassified": 0
+    }
+  },
+  "receipt_scope_head": {
+    "sha": "90c47f190b513fd32781ff9b21284c6bfe455069",
+    "commits_ahead_of_frozen_floot_git_source": 58,
+    "commits_behind": 0,
+    "changed_file_count": 81,
+    "note": "This supplement receipt is written after the declared scope head and is itself append-only provenance, not an application-equivalence-bearing change."
+  },
+  "federation_evidence_state": {
+    "schema_path": "schemas/federation_epistemic_state.v1.schema.json",
+    "schema_blob_sha1": "45d91a510a3fc077664134b53cb924d7f6e1f3b9",
+    "schema_status": "CANDIDATE",
+    "export_semantics": "ADDITIVE_EXPLICIT_EVIDENCE_STATE",
+    "positive_negative_test_path": "tests/test_federation_evidence_state.py",
+    "test_blob_sha1": "d4bd20cc3e54ec62c7a4bd50c5551db4cdea8a41",
+    "production_consumer_effect": "OPEN_FRESH_EXPORT_AND_HUB_INGEST_RECEIPT_REQUIRED",
+    "rule": "The candidate vocabulary is evidence-preserving and fail-closed, but does not itself establish current production package equivalence or a TheHub production consumer receipt."
+  },
+  "lockstep": {
+    "receipt_blob_sha1": "1d90228abecf91adf6241423b0bcf51d292352b5",
+    "disposition": "COMPATIBLE_UNCHANGED",
+    "reference_plane": "BOUNDED",
+    "production_authority": false
+  },
+  "canonical_source_registry": {
+    "current_blob_sha1": "4a5a2900202df82fc4b48608ddb16970adf1d55f",
+    "rows": 14,
+    "database_rows": 14,
+    "promotion_attempt": "REVERTED_PENDING_GOVERNED_AUTHENTICATED_SYNC"
+  },
+  "production_runtime": {
+    "republish": "PASS",
+    "endpoint_manifestation": "27_OF_27_PRESENT",
+    "safe_unauthenticated_denial": "PASS_BOUNDED",
+    "database_nonmutation": "PASS",
+    "frontend_route_manifestation": "15_OF_15_HTTP_200",
+    "desktop_preview": "PARTIAL_PASS_NO_HORIZONTAL_OVERFLOW_AT_1514",
+    "iphone": "OPEN",
+    "native": "OPEN",
+    "physical_device": "OPEN"
+  },
+  "tooling_blocker": {
+    "floot_daily_action_limit": 1000,
+    "reset_at_utc": "2026-10-02T00:00:00Z",
+    "application_defect": false,
+    "effect": "Further Floot checkpointing, browser QA, log pagination and native-build actions were unavailable after the ceiling was reached."
+  },
+  "certification": {
+    "state": "OPEN",
+    "zero_material_residue": false,
+    "reason": "Authenticated authority writes, source manifestation/artifact verification, W8 transform verification, current production TheHub ingest receipt, full rendered/mobile/native/device proof and Git↔Floot source equivalence remain open."
+  }
+}
