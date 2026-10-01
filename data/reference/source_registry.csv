@@ -13,3 +13,15 @@ SRC-0010,National UFO Reporting Center (NUFORC),en,reporting_archive,T4,api,yes,
 SRC-0011,NICAP archive,en,reporting_archive,T4,manual,yes,annual,respect,Historical investigative archive; secondary provenance for mid-century cases.
 SRC-0012,Inexplicata / Institute of Hispanic Ufology,bilingual,reporting_archive,T4,manual,yes,annual,respect,Scott Corrales / Hispanic ufology archive; Spanish-language case lineage.
 SRC-0013,PRUFON legacy filesystem corpus,bilingual,legacy_filesystem_corpus,T4,manual,yes,on_legacy_consolidation,not_applicable,Local PRUFON/OVNIS folders inventoried from preserved filesystem sources; folder names are discovery taxonomy only, not canonical case identity.
+SRC-0014,ThinkAboutItDocs,en,reporting_archive,T4,manual,yes,annual,respect,Verified distinct secondary archive; no public automation contract established.
+SRC-0015,Project 1947,en,historical_research_archive,T4,manual,yes,annual,respect,Verified distinct historical research archive.
+SRC-0016,UFO Casebook,en,reporting_archive,T4,manual,yes,annual,respect,Verified distinct secondary archive.
+SRC-0017,The UFO Chronicles,en,reporting_archive,T4,manual,yes,annual,respect,Verified distinct secondary publication.
+SRC-0018,Phantoms and Monsters,en,reporting_archive,T4,manual,yes,annual,respect,Verified distinct secondary publication.
+SRC-0019,National Archives and Records Administration (NARA),en,government_archive,T1,manual,yes,quarterly,api_terms,Official archive; API credentials remain deferred until the credential-last stage.
+SRC-0020,CIA FOIA Reading Room,en,government_archive,T1,manual,yes,quarterly,respect,Official CIA FOIA archive; exact released-document manifestations remain separate.
+SRC-0021,SETI Institute,en,research_organization,T2,manual,yes,annual,respect,Verified research organization; exact cited article/report manifestations remain separate.
+SRC-0022,The Black Vault,en,document_archive,T4,manual,yes,quarterly,respect,Canonical locator selected while observed blackvault.com alias remains preserved.
+SRC-0023,Primera Hora,es,news_media,T4,manual,yes,annual,respect,Verified Puerto Rico news publication; quoted sources remain distinct.
+SRC-0024,Telemundo Puerto Rico,es,news_media,T4,manual,yes,annual,respect,Verified Puerto Rico news/broadcast source; quoted sources remain distinct.
+SRC-0025,NOAA Ocean Exploration,en,government_science_source,T1,manual,yes,quarterly,respect,Official NOAA program source; exact expedition/log manifestations remain separate.
