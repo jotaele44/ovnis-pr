@@ -587,7 +587,12 @@ def gate(base_sha: str, head_sha: str, event_name: str) -> dict[str, Any]:
 
     declared = set(receipt.get("impact_set") or [])
     computed = set(impact["union"])
-    if declared:
+    # The receipt declares the impact of the change that last updated it, so it
+    # only describes this diff when this diff updates it. Governed and Lockstep
+    # changes must update it (enforced above); a change touching neither
+    # computes an empty impact set and would otherwise always mismatch the
+    # standing declaration.
+    if declared and receipt_changed:
         symmetric_difference = sorted(declared ^ computed)
         if symmetric_difference:
             raise LockstepError(
