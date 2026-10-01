@@ -54,6 +54,28 @@ def _lineage(phase: str, inputs: list[str]) -> dict[str, Any]:
     }
 
 
+# Additive FEDERATION_EPISTEMIC_STATE_CONTRACT_V1 declaration (thehub-pr,
+# candidate; vendored at schemas/federation_epistemic_state.v1.schema.json).
+# Only what OVNIS can truthfully assert is declared: case records and their
+# sources are CURATED documentary evidence. Geometry precision is deliberately
+# NOT declared — the ledger does not record how case coordinates were derived
+# (docs/ROAD_TO_100.md item 5), so the Hub fails closed to UNKNOWN.
+EVIDENCE_STATE_CONTRACT = "federation-evidence-state-v1"
+_TEMPORAL_PRECISION = {"year": "YEAR_ONLY", "month": "MONTH_YEAR", "day": "DATE_ONLY", "unknown": "UNKNOWN"}
+
+
+def _evidence_state(**fields: Any) -> dict[str, Any]:
+    return {"contract": EVIDENCE_STATE_CONTRACT, "data_stage": "CANONICAL", "epistemic_class": "CURATED", **fields}
+
+
+def _temporal_precision(case: dict[str, Any], date_precision: str) -> str:
+    """Resolution of what the source reports: a full date with a reported
+    local time is minute-resolved; everything else keeps its date precision."""
+    if date_precision == "day" and case.get("time_local"):
+        return "EXACT_TIMESTAMP"
+    return _TEMPORAL_PRECISION.get(date_precision, "UNKNOWN")
+
+
 def _observed_at(case: dict[str, Any], fallback: str) -> tuple:
     """Hub-required tz-aware observed_at from date_local/time_local.
 
@@ -103,6 +125,7 @@ def build_streams(cases: list[dict[str, Any]], now: str) -> dict[str, list[dict[
                 "source_name": case.get("source_citation") or source_url or "unknown",
                 "confidence": confidence,
                 "lineage": _lineage("SOURCE_REGISTRY", src_inputs),
+                "evidence_state": _evidence_state(),
                 "synthetic": synthetic,
                 "created_at": created,
                 "extracted_at": now,
@@ -125,6 +148,7 @@ def build_streams(cases: list[dict[str, Any]], now: str) -> dict[str, list[dict[
             "jurisdiction": "PR",
             "confidence": confidence,
             "lineage": _lineage("CASE_ENTITY", src_inputs),
+            "evidence_state": _evidence_state(),
             "synthetic": synthetic,
             "created_at": created,
             "extracted_at": now,
@@ -143,6 +167,7 @@ def build_streams(cases: list[dict[str, Any]], now: str) -> dict[str, list[dict[
                 "jurisdiction": "PR",
                 "confidence": 0.95,
                 "lineage": _lineage("MUNICIPALITY_ENTITY", src_inputs),
+                "evidence_state": _evidence_state(),
                 "synthetic": synthetic,
                 "created_at": created,
                 "extracted_at": now,
@@ -163,6 +188,7 @@ def build_streams(cases: list[dict[str, Any]], now: str) -> dict[str, list[dict[
             "jurisdiction": "PR",
             "confidence": confidence,
             "lineage": _lineage("SOURCE_ENTITY", src_inputs),
+            "evidence_state": _evidence_state(),
             "synthetic": synthetic,
             "created_at": created,
             "extracted_at": now,
@@ -210,6 +236,13 @@ def build_streams(cases: list[dict[str, Any]], now: str) -> dict[str, list[dict[
             "evidence_tier": case.get("evidence_tier"),
             "confidence": confidence,
             "lineage": _lineage("OBSERVATION", src_inputs),
+            # A case record documents a source-reported sighting: the phenomenon
+            # was reported present. That is not instrument verification; the
+            # CURATED class and the source state carry that distinction.
+            "evidence_state": _evidence_state(
+                observation_state="OBSERVED_PRESENT",
+                temporal_precision=_temporal_precision(case, date_precision),
+            ),
             "synthetic": synthetic,
             "created_at": created,
             "extracted_at": now,
@@ -233,6 +266,7 @@ def _relationship(rel_id, source_id, src_ent, tgt_ent, rtype, confidence, synthe
         "evidence_source_id": source_id,
         "confidence": confidence,
         "lineage": _lineage("RELATIONSHIP", ["data/master/master_cases.jsonl"]),
+        "evidence_state": _evidence_state(),
         "synthetic": synthetic,
         "created_at": created,
         "extracted_at": now,
