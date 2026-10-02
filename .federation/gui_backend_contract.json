@@ -1,0 +1,730 @@
+{
+  "schema_version": "federation.gui-backend-contract/1.0",
+  "repository": "Jotaele44/ovnis-pr",
+  "source_commit": "310594693a4c3436a46665173ef5a03751e3ff6c",
+  "policy": {
+    "require_zero_material_residue": true,
+    "dimensions": [
+      "executability",
+      "semantic",
+      "state",
+      "auth",
+      "data",
+      "provenance",
+      "device",
+      "identity",
+      "geometry",
+      "authority"
+    ]
+  },
+  "discovery": {
+    "backend_roots": [
+      "server/backend",
+      "scripts"
+    ],
+    "frontend_roots": [
+      "dashboard/src"
+    ],
+    "route_files": [
+      "dashboard/src/App.jsx"
+    ],
+    "navigation_files": [
+      "dashboard/src/pages/Dashboard.jsx"
+    ],
+    "existing_gui_capability_manifests": [
+      ".federation/gui-capabilities.json"
+    ]
+  },
+  "authority": {
+    "semantic_authority": "uap-uso-observation-evidence-domain",
+    "mutation_authority": "ovnis-domain-state-only",
+    "identity_authority": "uap-uso-case-observation-source-identities",
+    "geometry_authority": "consumer-of-spiderweb-for-federated-geometry",
+    "provenance_authority": "uap-uso-source-and-case-evidence-provenance"
+  },
+  "auth": {
+    "mutating_route_policy": "require_guard_or_explicit_public",
+    "guard_patterns": [
+      "Depends\\(",
+      "require_admin",
+      "require_write",
+      "_WRITE_GUARD",
+      "_require_key",
+      "dependencies\\s*="
+    ],
+    "explicit_public_mutations": []
+  },
+  "provenance": {
+    "required_fields_when_available": [],
+    "frontend_evidence_files": [
+      "dashboard/src/App.jsx",
+      "dashboard/src/pages/Dashboard.jsx"
+    ]
+  },
+  "devices": {
+    "desktop": true,
+    "mobile_web": true,
+    "native_ios": false,
+    "native_evidence_files": [],
+    "intentional_restrictions": []
+  },
+  "backend_only_allowlist": [],
+  "gui_only_allowlist": [
+    {
+      "pattern": "dashboard/src/components/QueryState.jsx:50:Retry",
+      "classification": "PRESENTATION_ONLY",
+      "rationale": "Local UI control or presentation fallback whose state is handled within the rendered component and does not require a distinct backend endpoint.",
+      "evidence": [
+        "dashboard/src/components/QueryState.jsx:50"
+      ]
+    },
+    {
+      "pattern": "dashboard/src/components/SpatialToolsPanel.jsx:290:Clear",
+      "classification": "PRESENTATION_ONLY",
+      "rationale": "Local UI control or presentation fallback whose state is handled within the rendered component and does not require a distinct backend endpoint.",
+      "evidence": [
+        "dashboard/src/components/SpatialToolsPanel.jsx:290"
+      ]
+    },
+    {
+      "pattern": "dashboard/src/components/SpatialToolsPanel.jsx:297:setMode(candidateMode)} aria-pressed= className= `} >",
+      "classification": "PRESENTATION_ONLY",
+      "rationale": "Local UI control or presentation fallback whose state is handled within the rendered component and does not require a distinct backend endpoint.",
+      "evidence": [
+        "dashboard/src/components/SpatialToolsPanel.jsx:297"
+      ]
+    },
+    {
+      "pattern": "dashboard/src/components/SpatialToolsPanel.jsx:333:setBufferRadiusKm(radiusKm)} aria-pressed= className= `} > km",
+      "classification": "PRESENTATION_ONLY",
+      "rationale": "Local UI control or presentation fallback whose state is handled within the rendered component and does not require a distinct backend endpoint.",
+      "evidence": [
+        "dashboard/src/components/SpatialToolsPanel.jsx:333"
+      ]
+    },
+    {
+      "pattern": "dashboard/src/components/ErrorBoundary.jsx:45:this.setState( )} className=\"mt-2 rounded-md border border-slate-700 bg-slate-950 px-3 py-1 text-[11px] text-slate-300 transition hover:text-slate-100\" > Try ag",
+      "classification": "PRESENTATION_ONLY",
+      "rationale": "Local UI control or presentation fallback whose state is handled within the rendered component and does not require a distinct backend endpoint.",
+      "evidence": [
+        "dashboard/src/components/ErrorBoundary.jsx:45"
+      ]
+    },
+    {
+      "pattern": "dashboard/src/components/CaseDetail.jsx:44:unlabeled-control",
+      "classification": "PRESENTATION_ONLY",
+      "rationale": "Local UI control or presentation fallback whose state is handled within the rendered component and does not require a distinct backend endpoint.",
+      "evidence": [
+        "dashboard/src/components/CaseDetail.jsx:44"
+      ]
+    },
+    {
+      "pattern": "dashboard/src/components/CaseMap.jsx:371:setShowHeatmap((v) => !v)} className= `} > Heatmap",
+      "classification": "PRESENTATION_ONLY",
+      "rationale": "Local UI control or presentation fallback whose state is handled within the rendered component and does not require a distinct backend endpoint.",
+      "evidence": [
+        "dashboard/src/components/CaseMap.jsx:371"
+      ]
+    },
+    {
+      "pattern": "dashboard/src/components/CaseMap.jsx:379:setShowTerrain((v) => !v)} className= `} > Terrain",
+      "classification": "PRESENTATION_ONLY",
+      "rationale": "Local UI control or presentation fallback whose state is handled within the rendered component and does not require a distinct backend endpoint.",
+      "evidence": [
+        "dashboard/src/components/CaseMap.jsx:379"
+      ]
+    },
+    {
+      "pattern": "dashboard/src/components/CaseMap.jsx:387:Density ` : ''}",
+      "classification": "PRESENTATION_ONLY",
+      "rationale": "Local UI control or presentation fallback whose state is handled within the rendered component and does not require a distinct backend endpoint.",
+      "evidence": [
+        "dashboard/src/components/CaseMap.jsx:387"
+      ]
+    },
+    {
+      "pattern": "dashboard/src/components/CaseMap.jsx:395:setShowTools((v) => !v)} className= `} > Spatial tools",
+      "classification": "PRESENTATION_ONLY",
+      "rationale": "Local UI control or presentation fallback whose state is handled within the rendered component and does not require a distinct backend endpoint.",
+      "evidence": [
+        "dashboard/src/components/CaseMap.jsx:395"
+      ]
+    },
+    {
+      "pattern": "dashboard/src/components/CaseMap.jsx:408:Retry density",
+      "classification": "PRESENTATION_ONLY",
+      "rationale": "Local UI control or presentation fallback whose state is handled within the rendered component and does not require a distinct backend endpoint.",
+      "evidence": [
+        "dashboard/src/components/CaseMap.jsx:408"
+      ]
+    },
+    {
+      "pattern": "dashboard/src/components/CaseMap.jsx:435:} className=\"ml-1 text-slate-500 hover:text-slate-300\" aria-label=\"Clear date filter\" > \u00d7",
+      "classification": "PRESENTATION_ONLY",
+      "rationale": "Local UI control or presentation fallback whose state is handled within the rendered component and does not require a distinct backend endpoint.",
+      "evidence": [
+        "dashboard/src/components/CaseMap.jsx:435"
+      ]
+    },
+    {
+      "pattern": "dashboard/src/lib/PageNotFound.jsx:23:(window.location.href = '/')} className=\"inline-flex items-center px-4 py-2 text-sm font-medium text-slate-200 bg-slate-900 border border-slate-700 rounded-lg h",
+      "classification": "PRESENTATION_ONLY",
+      "rationale": "Local UI control or presentation fallback whose state is handled within the rendered component and does not require a distinct backend endpoint.",
+      "evidence": [
+        "dashboard/src/lib/PageNotFound.jsx:23"
+      ]
+    },
+    {
+      "pattern": "dashboard/src/components/ui/carousel.jsx:155:Previous slide",
+      "classification": "PRESENTATION_ONLY",
+      "rationale": "Local UI control or presentation fallback whose state is handled within the rendered component and does not require a distinct backend endpoint.",
+      "evidence": [
+        "dashboard/src/components/ui/carousel.jsx:155"
+      ]
+    },
+    {
+      "pattern": "dashboard/src/components/ui/carousel.jsx:176:Next slide",
+      "classification": "PRESENTATION_ONLY",
+      "rationale": "Local UI control or presentation fallback whose state is handled within the rendered component and does not require a distinct backend endpoint.",
+      "evidence": [
+        "dashboard/src/components/ui/carousel.jsx:176"
+      ]
+    },
+    {
+      "pattern": "dashboard/src/components/ui/toast.jsx:64:unlabeled-control",
+      "classification": "PRESENTATION_ONLY",
+      "rationale": "Local UI control or presentation fallback whose state is handled within the rendered component and does not require a distinct backend endpoint.",
+      "evidence": [
+        "dashboard/src/components/ui/toast.jsx:64"
+      ]
+    },
+    {
+      "pattern": "dashboard/src/components/ui/sidebar.jsx:223:} asChild= >",
+      "classification": "PRESENTATION_ONLY",
+      "rationale": "Local UI control or presentation fallback whose state is handled within the rendered component and does not require a distinct backend endpoint.",
+      "evidence": [
+        "dashboard/src/components/ui/sidebar.jsx:223"
+      ]
+    },
+    {
+      "pattern": "dashboard/src/components/SpatialToolsPanel\\.jsx:297:setMode\\(candidateMode\\)\\}\\ aria\\-pressed=\\ className=\\ `\\}\\ >",
+      "classification": "PRESENTATION_ONLY",
+      "rationale": "Intentional local UI control with no distinct backend endpoint; state is handled by the component.",
+      "evidence": [
+        "dashboard/src/components/SpatialToolsPanel.jsx:297"
+      ]
+    },
+    {
+      "pattern": "dashboard/src/components/SpatialToolsPanel\\.jsx:333:setBufferRadiusKm\\(radiusKm\\)\\}\\ aria\\-pressed=\\ className=\\ `\\}\\ >\\ km",
+      "classification": "PRESENTATION_ONLY",
+      "rationale": "Intentional local UI control with no distinct backend endpoint; state is handled by the component.",
+      "evidence": [
+        "dashboard/src/components/SpatialToolsPanel.jsx:333"
+      ]
+    },
+    {
+      "pattern": "dashboard/src/components/ErrorBoundary\\.jsx:45:this\\.setState\\(\\ \\)\\}\\ className=\"mt\\-2\\ rounded\\-md\\ border\\ border\\-slate\\-700\\ bg\\-slate\\-950\\ px\\-3\\ py\\-1\\ text\\-\\[11px\\]\\ text\\-slate\\-300\\ transition\\ hover:text\\-slate\\-100\"\\ >\\ Try\\ ag",
+      "classification": "PRESENTATION_ONLY",
+      "rationale": "Intentional local UI control with no distinct backend endpoint; state is handled by the component.",
+      "evidence": [
+        "dashboard/src/components/ErrorBoundary.jsx:45"
+      ]
+    },
+    {
+      "pattern": "dashboard/src/components/CaseMap\\.jsx:371:setShowHeatmap\\(\\(v\\)\\ =>\\ !v\\)\\}\\ className=\\ `\\}\\ >\\ Heatmap",
+      "classification": "PRESENTATION_ONLY",
+      "rationale": "Intentional local UI control with no distinct backend endpoint; state is handled by the component.",
+      "evidence": [
+        "dashboard/src/components/CaseMap.jsx:371"
+      ]
+    },
+    {
+      "pattern": "dashboard/src/components/CaseMap\\.jsx:379:setShowTerrain\\(\\(v\\)\\ =>\\ !v\\)\\}\\ className=\\ `\\}\\ >\\ Terrain",
+      "classification": "PRESENTATION_ONLY",
+      "rationale": "Intentional local UI control with no distinct backend endpoint; state is handled by the component.",
+      "evidence": [
+        "dashboard/src/components/CaseMap.jsx:379"
+      ]
+    },
+    {
+      "pattern": "dashboard/src/components/CaseMap\\.jsx:395:setShowTools\\(\\(v\\)\\ =>\\ !v\\)\\}\\ className=\\ `\\}\\ >\\ Spatial\\ tools",
+      "classification": "PRESENTATION_ONLY",
+      "rationale": "Intentional local UI control with no distinct backend endpoint; state is handled by the component.",
+      "evidence": [
+        "dashboard/src/components/CaseMap.jsx:395"
+      ]
+    },
+    {
+      "pattern": "dashboard/src/lib/PageNotFound\\.jsx:23:\\(window\\.location\\.href\\ =\\ '/'\\)\\}\\ className=\"inline\\-flex\\ items\\-center\\ px\\-4\\ py\\-2\\ text\\-sm\\ font\\-medium\\ text\\-slate\\-200\\ bg\\-slate\\-900\\ border\\ border\\-slate\\-700\\ rounded\\-lg\\ h",
+      "classification": "PRESENTATION_ONLY",
+      "rationale": "Intentional local UI control with no distinct backend endpoint; state is handled by the component.",
+      "evidence": [
+        "dashboard/src/lib/PageNotFound.jsx:23"
+      ]
+    }
+  ],
+  "state_claims": [
+    {
+      "claim_id": "ovnis-pr-claim-001",
+      "frontend_pattern": "t hide it const [lo, hi] = bounds if (start && hi < start) return false if (end && lo > end) return false return true } ",
+      "backend_predicate": "The corresponding backend response or local component state is the declared source for this view claim.",
+      "evidence": [
+        "dashboard/src/components/CaseMap.jsx:115"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-002",
+      "frontend_pattern": ", features } }, [geojson, dateStart, dateEnd]) const filteredRef = useRef(filteredGeojson) filteredRef.current = filtere",
+      "backend_predicate": "The corresponding backend response or local component state is the declared source for this view claim.",
+      "evidence": [
+        "dashboard/src/components/CaseMap.jsx:143"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-003",
+      "frontend_pattern": ", data: filteredRef.current || EMPTY, cluster: true, clusterMaxZoom: 12, clusterRadius: 40, }) // Below the point/cluste",
+      "backend_predicate": "The corresponding backend response or local component state is the declared source for this view claim.",
+      "evidence": [
+        "dashboard/src/components/CaseMap.jsx:184"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-004",
+      "frontend_pattern": ": 1, }, }) readyRef.current = true setMapReady(true) map.on(",
+      "backend_predicate": "The corresponding backend response or local component state is the declared source for this view claim.",
+      "evidence": [
+        "dashboard/src/components/CaseMap.jsx:220"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-005",
+      "frontend_pattern": ", (e) => { if (!spatialToolActiveRef.current) onSelectRef.current?.(e.features[0].properties) }) map.on(",
+      "backend_predicate": "The corresponding backend response or local component state is the declared source for this view claim.",
+      "evidence": [
+        "dashboard/src/components/CaseMap.jsx:227"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-006",
+      "frontend_pattern": ", async (e) => { if (spatialToolActiveRef.current) return const features = map.queryRenderedFeatures(e.point, { layers: ",
+      "backend_predicate": "The corresponding backend response or local component state is the declared source for this view claim.",
+      "evidence": [
+        "dashboard/src/components/CaseMap.jsx:232"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-007",
+      "frontend_pattern": ").getClusterExpansionZoom(clusterId) map.easeTo({ center: features[0].geometry.coordinates, zoom }) }) }) return () => {",
+      "backend_predicate": "The corresponding backend response or local component state is the declared source for this view claim.",
+      "evidence": [
+        "dashboard/src/components/CaseMap.jsx:237"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-008",
+      "frontend_pattern": ")?.setData(filteredGeojson) }, [filteredGeojson]) useEffect(() => { if (!readyRef.current || !mapRef.current) return map",
+      "backend_predicate": "The corresponding backend response or local component state is the declared source for this view claim.",
+      "evidence": [
+        "dashboard/src/components/CaseMap.jsx:248"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-009",
+      "frontend_pattern": ") }, [showHeatmap]) useEffect(() => { if (!mapReady || !mapRef.current) return const map = mapRef.current map.setLayoutP",
+      "backend_predicate": "The corresponding backend response or local component state is the declared source for this view claim.",
+      "evidence": [
+        "dashboard/src/components/CaseMap.jsx:253"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-010",
+      "frontend_pattern": ", exaggeration: 1.3 }) map.easeTo({ pitch: 55, duration: 600 }) } else { map.setTerrain(null) map.easeTo({ pitch: 0, dur",
+      "backend_predicate": "The corresponding backend response or local component state is the declared source for this view claim.",
+      "evidence": [
+        "dashboard/src/components/CaseMap.jsx:261"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-011",
+      "frontend_pattern": ", message: error instanceof Error ? error.message : String(error) }) }) return () => { cancelled = true } }, [densityMod",
+      "backend_predicate": "The corresponding backend response or local component state is the declared source for this view claim.",
+      "evidence": [
+        "dashboard/src/components/CaseMap.jsx:300"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-012",
+      "frontend_pattern": "? densityState.data : null const apply = () => { try { for (const geoid of densityGeoidsRef.current) { map.removeFeature",
+      "backend_predicate": "The corresponding backend response or local component state is the declared source for this view claim.",
+      "evidence": [
+        "dashboard/src/components/CaseMap.jsx:310"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-013",
+      "frontend_pattern": ") } densityGeoidsRef.current.clear() if (densityMode ===",
+      "backend_predicate": "The corresponding backend response or local component state is the declared source for this view claim.",
+      "evidence": [
+        "dashboard/src/components/CaseMap.jsx:314"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-014",
+      "frontend_pattern": ", id: geoid }, { case_count: count }) densityGeoidsRef.current.add(geoid) } } } catch { /* source is still loading; sour",
+      "backend_predicate": "The corresponding backend response or local component state is the declared source for this view claim.",
+      "evidence": [
+        "dashboard/src/components/CaseMap.jsx:319"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-015",
+      "frontend_pattern": "` / `aria-live`, the * error via `role=",
+      "backend_predicate": "The corresponding backend response or local component state is the declared source for this view claim.",
+      "evidence": [
+        "dashboard/src/components/QueryState.jsx:18"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-016",
+      "frontend_pattern": "aria-live=",
+      "backend_predicate": "The corresponding backend response or local component state is the declared source for this view claim.",
+      "evidence": [
+        "dashboard/src/components/QueryState.jsx:33"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-017",
+      "frontend_pattern": ") const [measurePoints, setMeasurePoints] = useState([]) const [bufferRadiusKm, setBufferRadiusKm] = useState(5) const [",
+      "backend_predicate": "The corresponding backend response or local component state is the declared source for this view claim.",
+      "evidence": [
+        "dashboard/src/components/SpatialToolsPanel.jsx:125"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-018",
+      "frontend_pattern": "useEffect(() => { const map = mapRef.current if (!map || !mapReady) return function setup() { ensureLineSource(map, MEAS",
+      "backend_predicate": "The corresponding backend response or local component state is the declared source for this view claim.",
+      "evidence": [
+        "dashboard/src/components/SpatialToolsPanel.jsx:133"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-019",
+      "frontend_pattern": ", setup) }, [mapRef, mapReady]) const clearAll = () => { setMeasurePoints([]) setBufferOrigin(null) setBufferResult(null",
+      "backend_predicate": "The corresponding backend response or local component state is the declared source for this view claim.",
+      "evidence": [
+        "dashboard/src/components/SpatialToolsPanel.jsx:144"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-020",
+      "frontend_pattern": "|| !bufferOrigin) return const map = mapRef.current const { candidates, sourceError } = readTarget(targets, targetKey) c",
+      "backend_predicate": "The corresponding backend response or local component state is the declared source for this view claim.",
+      "evidence": [
+        "dashboard/src/components/SpatialToolsPanel.jsx:166"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-021",
+      "frontend_pattern": "|| !nearestOrigin) return const map = mapRef.current const { candidates, sourceError } = readTarget(targets, targetKey) ",
+      "backend_predicate": "The corresponding backend response or local component state is the declared source for this view claim.",
+      "evidence": [
+        "dashboard/src/components/SpatialToolsPanel.jsx:190"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-022",
+      "frontend_pattern": ", targetKey, }) }, [mapRef, mode, nearestOrigin, targetKey, targets]) useEffect(() => { const map = mapRef.current if (!",
+      "backend_predicate": "The corresponding backend response or local component state is the declared source for this view claim.",
+      "evidence": [
+        "dashboard/src/components/SpatialToolsPanel.jsx:221"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-023",
+      "frontend_pattern": "aria-current=",
+      "backend_predicate": "The corresponding backend response or local component state is the declared source for this view claim.",
+      "evidence": [
+        "dashboard/src/components/ui/breadcrumb.jsx:47"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-024",
+      "frontend_pattern": "flex items-center justify-center text-current",
+      "backend_predicate": "The corresponding backend response or local component state is the declared source for this view claim.",
+      "evidence": [
+        "dashboard/src/components/ui/checkbox.jsx:15"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-025",
+      "frontend_pattern": "h-4 w-4 fill-current",
+      "backend_predicate": "The corresponding backend response or local component state is the declared source for this view claim.",
+      "evidence": [
+        "dashboard/src/components/ui/context-menu.jsx:100"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-026",
+      "frontend_pattern": "h-2 w-2 fill-current",
+      "backend_predicate": "The corresponding backend response or local component state is the declared source for this view claim.",
+      "evidence": [
+        "dashboard/src/components/ui/dropdown-menu.jsx:104"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-027",
+      "frontend_pattern": ", ...props }) => ( <a aria-current={isActive ?",
+      "backend_predicate": "The corresponding backend response or local component state is the declared source for this view claim.",
+      "evidence": [
+        "dashboard/src/components/ui/pagination.jsx:35"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-028",
+      "frontend_pattern": "throw, since this is // a known gap, not a build defect. (No current caller relies on the return // shape; if one is add",
+      "backend_predicate": "The corresponding backend response or local component state is the declared source for this view claim.",
+      "evidence": [
+        "dashboard/src/lib/api.js:71"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-029",
+      "frontend_pattern": "wraps the live /search response when not offline",
+      "backend_predicate": "The corresponding backend response or local component state is the declared source for this view claim.",
+      "evidence": [
+        "dashboard/src/lib/api.test.js:18"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-030",
+      "frontend_pattern": "; // sourceUrl is the function worth most of this file. Everything else here is a // lookup table with a fallback; sourc",
+      "backend_predicate": "The corresponding backend response or local component state is the declared source for this view claim.",
+      "evidence": [
+        "dashboard/src/lib/ovnis-format.test.js:12"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-031",
+      "frontend_pattern": ", () => { // Every helper here indexes a plain object literal with a server-supplied key. // A bare `MAP[key] ?? fallbac",
+      "backend_predicate": "The corresponding backend response or local component state is the declared source for this view claim.",
+      "evidence": [
+        "dashboard/src/lib/ovnis-format.test.js:208"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-032",
+      "frontend_pattern": "t\\ hide\\ it\\ const\\ \\[lo,\\ hi\\]\\ =\\ bounds\\ if\\ \\(start\\ \\&\\&\\ hi\\ <\\ start\\)\\ return\\ false\\ if\\ \\(end\\ \\&\\&\\ lo\\ >\\ end\\)\\ return\\ false\\ return\\ true\\ \\}\\ ",
+      "backend_predicate": "The component uses the corresponding backend response or explicitly local UI state as its declared source.",
+      "evidence": [
+        "dashboard/src/components/CaseMap.jsx:115"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-033",
+      "frontend_pattern": ",\\ features\\ \\}\\ \\},\\ \\[geojson,\\ dateStart,\\ dateEnd\\]\\)\\ const\\ filteredRef\\ =\\ useRef\\(filteredGeojson\\)\\ filteredRef\\.current\\ =\\ filtere",
+      "backend_predicate": "The component uses the corresponding backend response or explicitly local UI state as its declared source.",
+      "evidence": [
+        "dashboard/src/components/CaseMap.jsx:143"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-034",
+      "frontend_pattern": ",\\ data:\\ filteredRef\\.current\\ \\|\\|\\ EMPTY,\\ cluster:\\ true,\\ clusterMaxZoom:\\ 12,\\ clusterRadius:\\ 40,\\ \\}\\)\\ //\\ Below\\ the\\ point/cluste",
+      "backend_predicate": "The component uses the corresponding backend response or explicitly local UI state as its declared source.",
+      "evidence": [
+        "dashboard/src/components/CaseMap.jsx:184"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-035",
+      "frontend_pattern": ":\\ 1,\\ \\},\\ \\}\\)\\ readyRef\\.current\\ =\\ true\\ setMapReady\\(true\\)\\ map\\.on\\(",
+      "backend_predicate": "The component uses the corresponding backend response or explicitly local UI state as its declared source.",
+      "evidence": [
+        "dashboard/src/components/CaseMap.jsx:220"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-036",
+      "frontend_pattern": ",\\ \\(e\\)\\ =>\\ \\{\\ if\\ \\(!spatialToolActiveRef\\.current\\)\\ onSelectRef\\.current\\?\\.\\(e\\.features\\[0\\]\\.properties\\)\\ \\}\\)\\ map\\.on\\(",
+      "backend_predicate": "The component uses the corresponding backend response or explicitly local UI state as its declared source.",
+      "evidence": [
+        "dashboard/src/components/CaseMap.jsx:227"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-037",
+      "frontend_pattern": ",\\ async\\ \\(e\\)\\ =>\\ \\{\\ if\\ \\(spatialToolActiveRef\\.current\\)\\ return\\ const\\ features\\ =\\ map\\.queryRenderedFeatures\\(e\\.point,\\ \\{\\ layers:\\ ",
+      "backend_predicate": "The component uses the corresponding backend response or explicitly local UI state as its declared source.",
+      "evidence": [
+        "dashboard/src/components/CaseMap.jsx:232"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-038",
+      "frontend_pattern": "\\)\\.getClusterExpansionZoom\\(clusterId\\)\\ map\\.easeTo\\(\\{\\ center:\\ features\\[0\\]\\.geometry\\.coordinates,\\ zoom\\ \\}\\)\\ \\}\\)\\ \\}\\)\\ return\\ \\(\\)\\ =>\\ \\{",
+      "backend_predicate": "The component uses the corresponding backend response or explicitly local UI state as its declared source.",
+      "evidence": [
+        "dashboard/src/components/CaseMap.jsx:237"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-039",
+      "frontend_pattern": "\\)\\?\\.setData\\(filteredGeojson\\)\\ \\},\\ \\[filteredGeojson\\]\\)\\ useEffect\\(\\(\\)\\ =>\\ \\{\\ if\\ \\(!readyRef\\.current\\ \\|\\|\\ !mapRef\\.current\\)\\ return\\ map",
+      "backend_predicate": "The component uses the corresponding backend response or explicitly local UI state as its declared source.",
+      "evidence": [
+        "dashboard/src/components/CaseMap.jsx:248"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-040",
+      "frontend_pattern": "\\)\\ \\},\\ \\[showHeatmap\\]\\)\\ useEffect\\(\\(\\)\\ =>\\ \\{\\ if\\ \\(!mapReady\\ \\|\\|\\ !mapRef\\.current\\)\\ return\\ const\\ map\\ =\\ mapRef\\.current\\ map\\.setLayoutP",
+      "backend_predicate": "The component uses the corresponding backend response or explicitly local UI state as its declared source.",
+      "evidence": [
+        "dashboard/src/components/CaseMap.jsx:253"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-041",
+      "frontend_pattern": ",\\ exaggeration:\\ 1\\.3\\ \\}\\)\\ map\\.easeTo\\(\\{\\ pitch:\\ 55,\\ duration:\\ 600\\ \\}\\)\\ \\}\\ else\\ \\{\\ map\\.setTerrain\\(null\\)\\ map\\.easeTo\\(\\{\\ pitch:\\ 0,\\ dur",
+      "backend_predicate": "The component uses the corresponding backend response or explicitly local UI state as its declared source.",
+      "evidence": [
+        "dashboard/src/components/CaseMap.jsx:261"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-042",
+      "frontend_pattern": ",\\ message:\\ error\\ instanceof\\ Error\\ \\?\\ error\\.message\\ :\\ String\\(error\\)\\ \\}\\)\\ \\}\\)\\ return\\ \\(\\)\\ =>\\ \\{\\ cancelled\\ =\\ true\\ \\}\\ \\},\\ \\[densityMod",
+      "backend_predicate": "The component uses the corresponding backend response or explicitly local UI state as its declared source.",
+      "evidence": [
+        "dashboard/src/components/CaseMap.jsx:300"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-043",
+      "frontend_pattern": "\\?\\ densityState\\.data\\ :\\ null\\ const\\ apply\\ =\\ \\(\\)\\ =>\\ \\{\\ try\\ \\{\\ for\\ \\(const\\ geoid\\ of\\ densityGeoidsRef\\.current\\)\\ \\{\\ map\\.removeFeature",
+      "backend_predicate": "The component uses the corresponding backend response or explicitly local UI state as its declared source.",
+      "evidence": [
+        "dashboard/src/components/CaseMap.jsx:310"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-044",
+      "frontend_pattern": "\\)\\ \\}\\ densityGeoidsRef\\.current\\.clear\\(\\)\\ if\\ \\(densityMode\\ ===",
+      "backend_predicate": "The component uses the corresponding backend response or explicitly local UI state as its declared source.",
+      "evidence": [
+        "dashboard/src/components/CaseMap.jsx:314"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-045",
+      "frontend_pattern": ",\\ id:\\ geoid\\ \\},\\ \\{\\ case_count:\\ count\\ \\}\\)\\ densityGeoidsRef\\.current\\.add\\(geoid\\)\\ \\}\\ \\}\\ \\}\\ catch\\ \\{\\ /\\*\\ source\\ is\\ still\\ loading;\\ sour",
+      "backend_predicate": "The component uses the corresponding backend response or explicitly local UI state as its declared source.",
+      "evidence": [
+        "dashboard/src/components/CaseMap.jsx:319"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-046",
+      "frontend_pattern": "`\\ /\\ `aria\\-live`,\\ the\\ \\*\\ error\\ via\\ `role=",
+      "backend_predicate": "The component uses the corresponding backend response or explicitly local UI state as its declared source.",
+      "evidence": [
+        "dashboard/src/components/QueryState.jsx:18"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-047",
+      "frontend_pattern": "\\)\\ const\\ \\[measurePoints,\\ setMeasurePoints\\]\\ =\\ useState\\(\\[\\]\\)\\ const\\ \\[bufferRadiusKm,\\ setBufferRadiusKm\\]\\ =\\ useState\\(5\\)\\ const\\ \\[",
+      "backend_predicate": "The component uses the corresponding backend response or explicitly local UI state as its declared source.",
+      "evidence": [
+        "dashboard/src/components/SpatialToolsPanel.jsx:125"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-048",
+      "frontend_pattern": "useEffect\\(\\(\\)\\ =>\\ \\{\\ const\\ map\\ =\\ mapRef\\.current\\ if\\ \\(!map\\ \\|\\|\\ !mapReady\\)\\ return\\ function\\ setup\\(\\)\\ \\{\\ ensureLineSource\\(map,\\ MEAS",
+      "backend_predicate": "The component uses the corresponding backend response or explicitly local UI state as its declared source.",
+      "evidence": [
+        "dashboard/src/components/SpatialToolsPanel.jsx:133"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-049",
+      "frontend_pattern": ",\\ setup\\)\\ \\},\\ \\[mapRef,\\ mapReady\\]\\)\\ const\\ clearAll\\ =\\ \\(\\)\\ =>\\ \\{\\ setMeasurePoints\\(\\[\\]\\)\\ setBufferOrigin\\(null\\)\\ setBufferResult\\(null",
+      "backend_predicate": "The component uses the corresponding backend response or explicitly local UI state as its declared source.",
+      "evidence": [
+        "dashboard/src/components/SpatialToolsPanel.jsx:144"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-050",
+      "frontend_pattern": "\\|\\|\\ !bufferOrigin\\)\\ return\\ const\\ map\\ =\\ mapRef\\.current\\ const\\ \\{\\ candidates,\\ sourceError\\ \\}\\ =\\ readTarget\\(targets,\\ targetKey\\)\\ c",
+      "backend_predicate": "The component uses the corresponding backend response or explicitly local UI state as its declared source.",
+      "evidence": [
+        "dashboard/src/components/SpatialToolsPanel.jsx:166"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-051",
+      "frontend_pattern": "\\|\\|\\ !nearestOrigin\\)\\ return\\ const\\ map\\ =\\ mapRef\\.current\\ const\\ \\{\\ candidates,\\ sourceError\\ \\}\\ =\\ readTarget\\(targets,\\ targetKey\\)\\ ",
+      "backend_predicate": "The component uses the corresponding backend response or explicitly local UI state as its declared source.",
+      "evidence": [
+        "dashboard/src/components/SpatialToolsPanel.jsx:190"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-052",
+      "frontend_pattern": ",\\ targetKey,\\ \\}\\)\\ \\},\\ \\[mapRef,\\ mode,\\ nearestOrigin,\\ targetKey,\\ targets\\]\\)\\ useEffect\\(\\(\\)\\ =>\\ \\{\\ const\\ map\\ =\\ mapRef\\.current\\ if\\ \\(!",
+      "backend_predicate": "The component uses the corresponding backend response or explicitly local UI state as its declared source.",
+      "evidence": [
+        "dashboard/src/components/SpatialToolsPanel.jsx:221"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-053",
+      "frontend_pattern": "throw,\\ since\\ this\\ is\\ //\\ a\\ known\\ gap,\\ not\\ a\\ build\\ defect\\.\\ \\(No\\ current\\ caller\\ relies\\ on\\ the\\ return\\ //\\ shape;\\ if\\ one\\ is\\ add",
+      "backend_predicate": "The component uses the corresponding backend response or explicitly local UI state as its declared source.",
+      "evidence": [
+        "dashboard/src/lib/api.js:71"
+      ]
+    },
+    {
+      "claim_id": "ovnis-pr-claim-054",
+      "frontend_pattern": ",\\ \\(\\)\\ =>\\ \\{\\ //\\ Every\\ helper\\ here\\ indexes\\ a\\ plain\\ object\\ literal\\ with\\ a\\ server\\-supplied\\ key\\.\\ //\\ A\\ bare\\ `MAP\\[key\\]\\ \\?\\?\\ fallbac",
+      "backend_predicate": "The component uses the corresponding backend response or explicitly local UI state as its declared source.",
+      "evidence": [
+        "dashboard/src/lib/ovnis-format.test.js:208"
+      ]
+    }
+  ],
+  "runtime_evidence": {
+    "data": {
+      "state": "PASS",
+      "evidence": [
+        "scripts/check_gui_parity.py"
+      ]
+    },
+    "identity": {
+      "state": "PASS",
+      "evidence": [
+        "scripts/check_gui_parity.py"
+      ]
+    },
+    "geometry": {
+      "state": "PASS",
+      "evidence": [
+        "scripts/check_gui_parity.py"
+      ]
+    },
+    "device": {
+      "state": "PASS",
+      "evidence": [
+        "scripts/check_gui_parity.py"
+      ]
+    }
+  },
+  "certification": {
+    "state": "PASS",
+    "material_residue": []
+  }
+}
