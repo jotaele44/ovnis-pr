@@ -76,6 +76,20 @@ def _temporal_precision(case: dict[str, Any], date_precision: str) -> str:
     return _TEMPORAL_PRECISION.get(date_precision, "UNKNOWN")
 
 
+def _case_narrative(case: dict[str, Any], case_key: str) -> dict[str, Any]:
+    """The case's own identifier and narrative, for timeline and case views.
+
+    Only what the ledger holds is copied: a missing description or citation is
+    omitted, never filled with a placeholder.
+    """
+    fields = {"case_id": case_key}
+    for key in ("description", "source_citation"):
+        value = case.get(key)
+        if isinstance(value, str) and value.strip():
+            fields[key] = value
+    return fields
+
+
 def _observed_at(case: dict[str, Any], fallback: str) -> tuple:
     """Hub-required tz-aware observed_at from date_local/time_local.
 
@@ -146,6 +160,14 @@ def build_streams(cases: list[dict[str, Any]], now: str) -> dict[str, list[dict[
             "normalized_name": _norm(case.get("location_name") or case_key),
             "entity_type": "uap_case",
             "jurisdiction": "PR",
+            "external_ids": {"ovnis_case_id": case_key},
+            # Read by the Hub's case ledger and timeline views.
+            "attributes": {
+                **_case_narrative(case, case_key),
+                **{k: v for k, v in (("object_type", case.get("object_type")),
+                                      ("event_date", case.get("date_local")),
+                                      ("evidence_tier", case.get("evidence_tier"))) if v},
+            },
             "confidence": confidence,
             "lineage": _lineage("CASE_ENTITY", src_inputs),
             "evidence_state": _evidence_state(),
@@ -234,6 +256,7 @@ def build_streams(cases: list[dict[str, Any]], now: str) -> dict[str, list[dict[
             "witness_type": case.get("witness_type"),
             "witness_count": case.get("witness_count"),
             "evidence_tier": case.get("evidence_tier"),
+            "attributes": _case_narrative(case, case_key),
             "confidence": confidence,
             "lineage": _lineage("OBSERVATION", src_inputs),
             # A case record documents a source-reported sighting: the phenomenon

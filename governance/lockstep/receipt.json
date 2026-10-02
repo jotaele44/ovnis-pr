@@ -5,10 +5,7 @@
   "baseline_id": "sha256:ce6f5c188af93b13bf4c99d4b6e70fb8adfcf376c2a07de8d5d34e3c002bf26a",
   "disposition": "COMPATIBLE_UNCHANGED",
   "contracts": [
-    "repo_federation_manifest@1",
-    "federation_export_manifest@1",
-    "ovnis_case_schema@1",
-    "centinelas_ovnis_signal@1"
+    "federation_export_manifest@1"
   ],
   "impact_set": [
     "centinelas-pr",
