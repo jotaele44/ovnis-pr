@@ -107,6 +107,8 @@ exports/federation/
 
 # generated federation maintenance report (audit artifact, not committed)
 reports/maintenance/
+# generated case reports (scripts/generate_case_report.py; reproducible from the ledgers)
+reports/cases/
 
 # Desktop wrapper (see desktop/README.md)
 .venv/
