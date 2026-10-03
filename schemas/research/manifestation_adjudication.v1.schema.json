@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:prii:ovnis:research:manifestation_adjudication:v1",
+  "title": "OVNIS manifestation adjudication",
+  "description": "Whether two cases record the same event. COMPUTED rows are CANDIDATE pairs from blocking signals and never anything else; a curator's decision (SAME_EVENT, DISTINCT, UNRESOLVABLE) is CURATED and needs a reviewer and rationale. No adjudication merges or edits a case.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "adjudication_id": {
+      "type": "string",
+      "pattern": "^ADJ-[A-Z0-9][A-Z0-9-]*$"
+    },
+    "case_a": {
+      "type": "string",
+      "minLength": 1
+    },
+    "case_b": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "enum": [
+        "CANDIDATE",
+        "SAME_EVENT",
+        "DISTINCT",
+        "UNRESOLVABLE"
+      ]
+    },
+    "origin": {
+      "enum": [
+        "COMPUTED",
+        "CURATED"
+      ]
+    },
+    "method": {
+      "type": "string",
+      "minLength": 1
+    },
+    "signals": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Why two cases were paired. Signals rank a review queue; they never decide identity.",
+      "properties": {
+        "date_relation": {
+          "enum": [
+            "IDENTICAL_RECORDED_DATE",
+            "COMPATIBLE_PRECISION"
+          ]
+        },
+        "place_basis": {
+          "enum": [
+            "MUNICIPALITY",
+            "LOCATION_TEXT"
+          ]
+        },
+        "narrative_similarity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "same_source": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "date_relation",
+        "place_basis",
+        "narrative_similarity",
+        "same_source"
+      ]
+    },
+    "reviewed_by": {
+      "type": "string",
+      "minLength": 1
+    },
+    "reviewed_at": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}(T\\d{2}:\\d{2}(:\\d{2})?(Z|[+-]\\d{2}:\\d{2}))?$"
+    },
+    "rationale": {
+      "type": "string",
+      "minLength": 1
+    },
+    "recorded_by": {
+      "type": "string",
+      "minLength": 1
+    },
+    "recorded_at": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}(T\\d{2}:\\d{2}(:\\d{2})?(Z|[+-]\\d{2}:\\d{2}))?$"
+    }
+  },
+  "required": [
+    "adjudication_id",
+    "case_a",
+    "case_b",
+    "status",
+    "origin"
+  ]
+}
