@@ -287,8 +287,10 @@
         "analysis_symbol:scripts/build_release.py:load_master",
         "analysis_symbol:scripts/build_release.py:main",
         "analysis_symbol:scripts/build_snapshot.py:main",
+        "analysis_symbol:scripts/federation_export.py:build_research_streams",
         "analysis_symbol:scripts/federation_export.py:build_streams",
         "analysis_symbol:scripts/federation_export.py:main",
+        "analysis_symbol:scripts/federation_export.py:merge_streams",
         "analysis_symbol:scripts/federation_export.py:write_package",
         "analysis_symbol:scripts/prii_export_utils.py:fid",
         "analysis_symbol:scripts/prii_export_utils.py:norm",
@@ -298,7 +300,8 @@
       ],
       "tests": {
         "backend": [
-          "tests/test_federation_export.py"
+          "tests/test_federation_export.py",
+          "tests/test_federation_research_export.py"
         ]
       }
     },
@@ -447,6 +450,47 @@
         "analysis_symbol:scripts/offline_operator.py:validate_cmd",
         "cli_surface:scripts/offline_operator.py"
       ]
+    },
+    {
+      "id": "research-ledger-pipeline",
+      "classification": "internal",
+      "status": "active",
+      "requires_terminal": false,
+      "rationale": "Curated research ledgers (topics, findings, hypotheses with falsification checks, contradictions, manifestation adjudications, research queue, media episodes) are recorded by curators editing the committed JSONL files under data/research/ and validated in CI; duplicate-manifestation CANDIDATE pairs and per-case reports are generated deterministically. None of it is an OVNIS user workflow: the federation export carries every record to TheHub, the federation's only product GUI (ADR 0001), which renders them in its Research Hub and case views.",
+      "candidate_ids": [
+        "analysis_module:scripts/generate_case_report.py",
+        "analysis_module:scripts/validate_research_ledgers.py",
+        "analysis_symbol:scripts/dedupe_candidates.py:date_relation",
+        "analysis_symbol:scripts/dedupe_candidates.py:master_pairs",
+        "analysis_symbol:scripts/dedupe_candidates.py:place_basis",
+        "analysis_symbol:scripts/dedupe_candidates.py:render_pairs",
+        "analysis_symbol:scripts/dedupe_candidates.py:write_master_pairs",
+        "analysis_symbol:scripts/generate_case_report.py:build_report",
+        "analysis_symbol:scripts/generate_case_report.py:build_reports",
+        "analysis_symbol:scripts/generate_case_report.py:case_key",
+        "analysis_symbol:scripts/generate_case_report.py:evidence_ids",
+        "analysis_symbol:scripts/generate_case_report.py:git_head",
+        "analysis_symbol:scripts/generate_case_report.py:input_hashes",
+        "analysis_symbol:scripts/generate_case_report.py:main",
+        "analysis_symbol:scripts/generate_case_report.py:render_markdown",
+        "analysis_symbol:scripts/generate_case_report.py:sha256_file",
+        "analysis_symbol:scripts/generate_case_report.py:temporal_precision",
+        "analysis_symbol:scripts/validate_research_ledgers.py:load_case_ids",
+        "analysis_symbol:scripts/validate_research_ledgers.py:load_registry_ids",
+        "analysis_symbol:scripts/validate_research_ledgers.py:load_research",
+        "analysis_symbol:scripts/validate_research_ledgers.py:main",
+        "analysis_symbol:scripts/validate_research_ledgers.py:read_ledger",
+        "analysis_symbol:scripts/validate_research_ledgers.py:validate",
+        "cli_surface:scripts/generate_case_report.py",
+        "cli_surface:scripts/validate_research_ledgers.py"
+      ],
+      "tests": {
+        "backend": [
+          "tests/test_research_ledgers.py",
+          "tests/test_manifestation_candidates.py",
+          "tests/test_case_reports.py"
+        ]
+      }
     }
   ],
   "exceptions": []
