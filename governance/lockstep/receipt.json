@@ -3,7 +3,7 @@
   "repo": "ovnis-pr",
   "generation": 2,
   "baseline_id": "sha256:ce6f5c188af93b13bf4c99d4b6e70fb8adfcf376c2a07de8d5d34e3c002bf26a",
-  "disposition": "COMPATIBLE_UNCHANGED",
+  "disposition": "UPDATED",
   "contracts": [
     "federation_export_manifest@1"
   ],
