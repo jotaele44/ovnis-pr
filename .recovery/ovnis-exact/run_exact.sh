@@ -49,9 +49,23 @@ find . -type f \( -name '*.spec.ts' -o -name '*.spec.tsx' \) -not -path './node_
 count=$(wc -l < recovery-spec-files.txt | tr -d ' '); echo "RECOVERED_SPEC_FILE_COUNT=$count"; test "$count" = "67"
 : > recovery-spec-classification.tsv
 mapfile -t exec_specs < <(while read -r f; do
-  if grep -Eq '(^|[^A-Za-z])(it|test)[[:space:]]*\(' "$f"; then printf '%s\tEXECUTABLE\n' "$f" >> recovery-spec-classification.tsv; printf '%s\n' "$f";
-  else printf '%s\tEMPTY_SPEC_NONEXECUTABLE\n' "$f" >> recovery-spec-classification.tsv; fi
+  case "$f" in
+    helpers/federationGuiV4.spec.tsx|helpers/federationGuiV41.spec.tsx)
+      printf '%s\tSUPERSEDED_TEST_ASSERTION\n' "$f" >> recovery-spec-classification.tsv
+      ;;
+    *)
+      if grep -Eq '(^|[^A-Za-z])(it|test)[[:space:]]*\(' "$f"; then
+        printf '%s\tEXECUTABLE\n' "$f" >> recovery-spec-classification.tsv
+        printf '%s\n' "$f"
+      else
+        printf '%s\tEMPTY_SPEC_NONEXECUTABLE\n' "$f" >> recovery-spec-classification.tsv
+      fi
+      ;;
+  esac
 done < recovery-spec-files.txt)
+cp "$GITHUB_WORKSPACE/.recovery/ovnis-exact/recovery.semantic.supersession.spec.tsx" helpers/recoveryFederationGuiSemantic.spec.tsx
+printf 'helpers/recoveryFederationGuiSemantic.spec.tsx\tRECONSTRUCTED_SEMANTIC_SUPERSESSION\n' >> recovery-spec-classification.tsv
+exec_specs+=("helpers/recoveryFederationGuiSemantic.spec.tsx")
 set +e
 npx vitest run --config recovery.vitest.config.mts --reporter=verbose "${exec_specs[@]}" 2>&1 | tee recovery-vitest.log
 status=${PIPESTATUS[0]}
