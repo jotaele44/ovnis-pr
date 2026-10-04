@@ -14,7 +14,18 @@ expect.extend({
     return {pass,message:()=>pass?"expected function not to throw matching error":`expected matching thrown error, received ${String(thrown)}`};
   },
 });
-function compat(spy){const api=spy;api.and={returnValue(v){spy.mockReturnValue(v);return api;},resolveTo(v){spy.mockResolvedValue(v);return api;},callFake(fn){spy.mockImplementation(fn);return api;}};api.calls={mostRecent(){return {args:spy.mock.calls.at(-1)??[]};},count(){return spy.mock.calls.length;}};return api;}
+function compat(spy){
+  const api=spy;
+  api.and={
+    returnValue(v){spy.mockReturnValue(v);return api;},
+    resolveTo(v){spy.mockResolvedValue(v);return api;},
+    rejectWith(v){spy.mockRejectedValue(v);return api;},
+    throwError(v){spy.mockImplementation(()=>{throw (v instanceof Error?v:new Error(String(v)))});return api;},
+    callFake(fn){spy.mockImplementation(fn);return api;}
+  };
+  api.calls={mostRecent(){return {args:spy.mock.calls.at(-1)??[]};},count(){return spy.mock.calls.length;}};
+  return api;
+}
 globalThis.spyOn=(target,key)=>compat(vi.spyOn(target,key));
 globalThis.jasmine={
  createSpy(name){return compat(vi.fn().mockName(name));},
@@ -22,4 +33,19 @@ globalThis.jasmine={
  objectContaining(obj){return expect.objectContaining(obj);},
  arrayContaining(items){return expect.arrayContaining(items);},
 };
-if(typeof window!=="undefined"){Object.defineProperty(window,"matchMedia",{configurable:true,writable:true,value:(query)=>({matches:false,media:query,onchange:null,addListener(){},removeListener(){},addEventListener(){},removeEventListener(){},dispatchEvent(){return false}})});}
+globalThis.expectAsync=(value)=>({
+  async toBeRejectedWithError(expected){
+    let thrown; try{await value;}catch(e){thrown=e;}
+    if(!thrown) throw new Error("expected promise to be rejected");
+    const msg=String(thrown?.message??thrown);
+    let pass=true;
+    if(expected instanceof RegExp) pass=expected.test(msg);
+    else if(typeof expected==="string") pass=msg.includes(expected);
+    else if(typeof expected==="function") pass=thrown instanceof expected;
+    else if(expected instanceof Error) pass=thrown.constructor===expected.constructor && msg.includes(expected.message);
+    if(!pass) throw new Error(`expected rejected error to match ${String(expected)}, received ${msg}`);
+  }
+});
+if(typeof window!=="undefined"){
+  Object.defineProperty(window,"matchMedia",{configurable:true,writable:true,value:(query)=>({matches:false,media:query,onchange:null,addListener(){},removeListener(){},addEventListener(){},removeEventListener(){},dispatchEvent(){return false}})});
+}
