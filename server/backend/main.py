@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import os
 from collections import Counter
 from pathlib import Path
@@ -94,7 +95,8 @@ def as_float(value: Any) -> float | None:
     if value in (None, ""):
         return None
     try:
-        return float(value)
+        number = float(value)
+        return number if math.isfinite(number) else None
     except (TypeError, ValueError):
         return None
 

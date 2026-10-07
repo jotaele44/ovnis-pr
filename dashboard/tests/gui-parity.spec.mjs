@@ -154,3 +154,15 @@ test("Activity tab program timeline filter, sort, and search controls work", asy
 
   expect(pageErrors).toEqual([]);
 });
+
+test("case coordinates are finite JSON numbers or null", async ({ page, request }) => {
+  await page.goto("/", { waitUntil: "domcontentloaded" });
+  await expect(page.locator("#root")).toBeVisible();
+  const response = await request.get("http://127.0.0.1:8000/cases");
+  expect(response.status()).toBe(200);
+  for (const item of await response.json()) {
+    for (const coordinate of [item.location.lat, item.location.lon]) {
+      expect(coordinate === null || Number.isFinite(coordinate)).toBe(true);
+    }
+  }
+});
