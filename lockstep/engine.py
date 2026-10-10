@@ -568,6 +568,27 @@ def classify_changed_contracts(
     return results
 
 
+def validate_declared_impact(receipt: dict[str, Any], impact: dict[str, list[str]]) -> None:
+    """Validate the receipt impact set only for the current federation-impacting change.
+
+    A receipt is retained across later unrelated provenance/documentation pushes.
+    Requiring that historical non-empty impact_set to equal an empty computed
+    impact would make every unrelated follow-up fail. Conversely, any current
+    non-empty computed impact must be declared exactly, including the case where
+    the receipt incorrectly declares an empty set.
+    """
+    computed = set(impact["union"])
+    if not computed:
+        return
+    declared = set(receipt.get("impact_set") or [])
+    symmetric_difference = sorted(declared ^ computed)
+    if symmetric_difference:
+        raise LockstepError(
+            f"LOCKSTEP_IMPACT_SET mismatch: declared={sorted(declared)} computed={sorted(computed)} "
+            f"symmetric_difference={symmetric_difference}"
+        )
+
+
 def gate(base_sha: str, head_sha: str, event_name: str) -> dict[str, Any]:
     base_sha, head_sha = normalize_event(event_name, base_sha, head_sha)
     baseline, contracts, edges, receipt = validate_all()
@@ -585,15 +606,7 @@ def gate(base_sha: str, head_sha: str, event_name: str) -> dict[str, Any]:
         if result["classification"] == "UNKNOWN":
             raise LockstepError(f"UNKNOWN semantic compatibility for {contract_id}; fail closed")
 
-    declared = set(receipt.get("impact_set") or [])
-    computed = set(impact["union"])
-    if declared:
-        symmetric_difference = sorted(declared ^ computed)
-        if symmetric_difference:
-            raise LockstepError(
-                f"LOCKSTEP_IMPACT_SET mismatch: declared={sorted(declared)} computed={sorted(computed)} "
-                f"symmetric_difference={symmetric_difference}"
-            )
+    validate_declared_impact(receipt, impact)
 
     return {
         "status": "PASS",

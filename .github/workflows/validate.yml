@@ -58,7 +58,9 @@ jobs:
           print("federation manifest gate passed")
           PY
       - name: Validate ledgers
-        run: python3 scripts/validate_case_ledgers.py
+        run: |
+          python3 scripts/validate_case_ledgers.py
+          python3 scripts/validate_research_ledgers.py
       - name: Export canonical package
         run: python3 scripts/federation_export.py --mode test --out /tmp/ovnis_federation
       - name: Tests

@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:prii:ovnis:research:research_topic:v1",
+  "title": "OVNIS research topic",
+  "description": "A curated research topic that groups findings. Topics organise; they assert nothing.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "topic_id": {
+      "type": "string",
+      "pattern": "^TOPIC-[A-Z0-9][A-Z0-9-]*$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scope": {
+      "type": "string",
+      "minLength": 1
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "status": {
+      "enum": [
+        "ACTIVE",
+        "ARCHIVED"
+      ]
+    },
+    "origin": {
+      "const": "CURATED",
+      "description": "Recorded by a curator editing this ledger. Search output is never promoted into a research record."
+    },
+    "recorded_by": {
+      "type": "string",
+      "minLength": 1
+    },
+    "recorded_at": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}(T\\d{2}:\\d{2}(:\\d{2})?(Z|[+-]\\d{2}:\\d{2}))?$"
+    }
+  },
+  "required": [
+    "topic_id",
+    "title",
+    "scope",
+    "status",
+    "origin",
+    "recorded_by",
+    "recorded_at"
+  ]
+}

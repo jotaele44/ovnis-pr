@@ -9,6 +9,7 @@ from lockstep.engine import (
     normalize_event,
     semantic_schema_diff,
     validate_all,
+    validate_declared_impact,
     validate_receipt,
 )
 
@@ -49,6 +50,25 @@ class GenerationTests(unittest.TestCase):
         wrong["baseline_id"] = "sha256:" + "0" * 64
         with self.assertRaisesRegex(LockstepError, "LOCKSTEP_DRIFT"):
             validate_receipt(wrong, contracts)
+
+
+class ImpactReceiptScopeTests(unittest.TestCase):
+    def test_unrelated_provenance_push_does_not_reapply_historical_impact_set(self) -> None:
+        validate_declared_impact(
+            {"impact_set": ["centinelas-pr", "ovnis-pr", "thehub-pr"]},
+            {"union": []},
+        )
+
+    def test_current_federation_impact_requires_an_exact_declared_set(self) -> None:
+        with self.assertRaisesRegex(LockstepError, "LOCKSTEP_IMPACT_SET mismatch"):
+            validate_declared_impact(
+                {"impact_set": []},
+                {"union": ["centinelas-pr", "ovnis-pr", "thehub-pr"]},
+            )
+
+    def test_current_federation_impact_accepts_exact_declared_set(self) -> None:
+        impact = ["centinelas-pr", "ovnis-pr", "thehub-pr"]
+        validate_declared_impact({"impact_set": impact}, {"union": impact})
 
 
 class SemanticSchemaDiffTests(unittest.TestCase):

@@ -111,6 +111,23 @@ manifest.json
 
 Do not treat exported cases as conclusions. Treat them as structured historical records available for correlation and review.
 
+The export also carries the research ledgers (`data/research/`) as typed `entities` and `relationships`
+rows, plus computed duplicate-manifestation CANDIDATE pairs and a deterministic report per case.
+
+## Research ledgers
+
+Curators record topics, findings, hypotheses and their falsification checks, contradictions,
+manifestation adjudications, research questions and media episodes in the JSONL ledgers under
+`data/research/`. They are committed empty and are filled only by real research.
+
+- `python3 scripts/validate_research_ledgers.py` checks them. A finding is never an established fact,
+  similarity never decides that two cases are one event, and no record is deleted.
+- `python3 scripts/dedupe_candidates.py --master-pairs` regenerates the CANDIDATE pairs.
+- `python3 scripts/generate_case_report.py --case <id>` writes a case report with a reproducibility
+  receipt.
+
+See [`docs/RESEARCH_LEDGERS.md`](docs/RESEARCH_LEDGERS.md).
+
 <!-- PROJECT-OPERATING-CONTRACT:START -->
 ## Current development and certification contract
 

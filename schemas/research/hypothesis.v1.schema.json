@@ -1,0 +1,339 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:prii:ovnis:research:hypothesis:v1",
+  "title": "OVNIS research hypothesis",
+  "description": "An interpretive hypothesis under falsification test. It carries all nine falsification checks (directive §41). SUPPORTED requires every check run and none FAILED; SUPERSEDED requires superseded_by.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "hypothesis_id": {
+      "type": "string",
+      "pattern": "^HYP-[A-Z0-9][A-Z0-9-]*$"
+    },
+    "statement": {
+      "type": "string",
+      "minLength": 10
+    },
+    "case_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "finding_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^FIND-[A-Z0-9][A-Z0-9-]*$"
+      },
+      "uniqueItems": true
+    },
+    "status": {
+      "enum": [
+        "OPEN",
+        "SUPPORTED",
+        "REJECTED",
+        "SUPERSEDED"
+      ]
+    },
+    "falsification": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "identity_errors": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "enum": [
+                "NOT_RUN",
+                "PASSED",
+                "FAILED",
+                "NOT_APPLICABLE"
+              ]
+            },
+            "note": {
+              "type": "string"
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "status"
+          ]
+        },
+        "duplicate_manifestations": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "enum": [
+                "NOT_RUN",
+                "PASSED",
+                "FAILED",
+                "NOT_APPLICABLE"
+              ]
+            },
+            "note": {
+              "type": "string"
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "status"
+          ]
+        },
+        "ordinary_explanations": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "enum": [
+                "NOT_RUN",
+                "PASSED",
+                "FAILED",
+                "NOT_APPLICABLE"
+              ]
+            },
+            "note": {
+              "type": "string"
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "status"
+          ]
+        },
+        "background_prevalence": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "enum": [
+                "NOT_RUN",
+                "PASSED",
+                "FAILED",
+                "NOT_APPLICABLE"
+              ]
+            },
+            "note": {
+              "type": "string"
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "status"
+          ]
+        },
+        "missing_data": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "enum": [
+                "NOT_RUN",
+                "PASSED",
+                "FAILED",
+                "NOT_APPLICABLE"
+              ]
+            },
+            "note": {
+              "type": "string"
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "status"
+          ]
+        },
+        "source_dependence": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "enum": [
+                "NOT_RUN",
+                "PASSED",
+                "FAILED",
+                "NOT_APPLICABLE"
+              ]
+            },
+            "note": {
+              "type": "string"
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "status"
+          ]
+        },
+        "temporal_mismatch": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "enum": [
+                "NOT_RUN",
+                "PASSED",
+                "FAILED",
+                "NOT_APPLICABLE"
+              ]
+            },
+            "note": {
+              "type": "string"
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "status"
+          ]
+        },
+        "geometry_uncertainty": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "enum": [
+                "NOT_RUN",
+                "PASSED",
+                "FAILED",
+                "NOT_APPLICABLE"
+              ]
+            },
+            "note": {
+              "type": "string"
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "status"
+          ]
+        },
+        "contradictions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "enum": [
+                "NOT_RUN",
+                "PASSED",
+                "FAILED",
+                "NOT_APPLICABLE"
+              ]
+            },
+            "note": {
+              "type": "string"
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "status"
+          ]
+        }
+      },
+      "required": [
+        "identity_errors",
+        "duplicate_manifestations",
+        "ordinary_explanations",
+        "background_prevalence",
+        "missing_data",
+        "source_dependence",
+        "temporal_mismatch",
+        "geometry_uncertainty",
+        "contradictions"
+      ]
+    },
+    "superseded_by": {
+      "type": "string",
+      "pattern": "^HYP-[A-Z0-9][A-Z0-9-]*$"
+    },
+    "origin": {
+      "const": "CURATED",
+      "description": "Recorded by a curator editing this ledger. Search output is never promoted into a research record."
+    },
+    "notes": {
+      "type": "string"
+    },
+    "recorded_by": {
+      "type": "string",
+      "minLength": 1
+    },
+    "recorded_at": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}(T\\d{2}:\\d{2}(:\\d{2})?(Z|[+-]\\d{2}:\\d{2}))?$"
+    }
+  },
+  "required": [
+    "hypothesis_id",
+    "statement",
+    "status",
+    "falsification",
+    "origin",
+    "recorded_by",
+    "recorded_at"
+  ]
+}
