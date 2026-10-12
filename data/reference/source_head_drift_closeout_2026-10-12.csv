@@ -1,0 +1,4 @@
+path,classification,materiality,adjudication_note,base_commit,head_commit
+"data/reference/source_head_drift_supplement_2026-10-12.csv","PROVENANCE_BOUNDED_PASS","NON_EQUIVALENCE_BEARING","Adjudicates the four-path Oct 12 material delta ending at the exact export head.","8793e4a097134db01dbeb75bc80653752f3a96f0","2c7c00c7be76837aa4b548172f5ea06b6958b24f"
+"docs/receipts/ovnis_execution_closeout_2026-10-12.json","PROVENANCE_BOUNDED_PASS","NON_EQUIVALENCE_BEARING","Immutable execution closeout receipt; records runtime/export state without changing application semantics.","8793e4a097134db01dbeb75bc80653752f3a96f0","2c7c00c7be76837aa4b548172f5ea06b6958b24f"
+"docs/receipts/ovnis_thehub_consumer_binding_2026-10-12.json","PROVENANCE_BOUNDED_PASS","NON_EQUIVALENCE_BEARING","Binds the byte-identical isolated TheHub consumer receipt; no producer application semantics changed.","8793e4a097134db01dbeb75bc80653752f3a96f0","2c7c00c7be76837aa4b548172f5ea06b6958b24f"
