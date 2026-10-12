@@ -1,0 +1,121 @@
+{
+  "schema": "ovnis.execution-closeout-git-mirror/v1",
+  "recorded_at": "2026-10-12T22:58:00Z",
+  "floot": {
+    "project_id": "7fe42a06-1945-4b5b-ba78-55418ad90fbc",
+    "version": 1791845851310,
+    "checkpoint_id": "48927a7d-119c-4556-b8c2-b2e7f96a6c2f",
+    "checkpoint_title": "Freeze Oct 12 OVNIS execution closeout",
+    "receipt_path": "static/__dev/docs/ovnis-execution-closeout-2026-10-12.json",
+    "published_url": "https://ovnis-pr.floot.app",
+    "published_visibility": "internal",
+    "web_republish_job": "60719a7c-0925-4c1e-a869-a5c805eb65d6",
+    "web_republish_state": "SUCCEEDED",
+    "native_build_state": "succeeded",
+    "native_build_completed_at": "2026-10-02T20:20:05.788Z",
+    "routes": 15,
+    "endpoints": 27,
+    "specs": 90,
+    "specs_passed": 90,
+    "typecheck": "PASS"
+  },
+  "artifact_reference_denominator": {
+    "case_links": 470,
+    "unique_references": 244,
+    "STRICT_BINDING_ELIGIBLE": 1,
+    "DISCOVERY_ONLY": 190,
+    "NON_BINDING_TERMINAL": 36,
+    "REVIEW_TIE": 14,
+    "UNRESOLVED": 3
+  },
+  "runtime_database": {
+    "source_registry_rows": 14,
+    "active_sources": 13,
+    "source_manifestations": 1,
+    "users": 0,
+    "workspace_members": 0,
+    "binding_receipts": 0,
+    "bound_artifacts": 0,
+    "claims": 0,
+    "chronology_comparisons": 0,
+    "contradictions": 0,
+    "audit_events": 0,
+    "handoff_packages": 0,
+    "delivered_handoffs": 0
+  },
+  "source_registry_v2": {
+    "git_commit": "9b6444928a688b0b3e6dcd0fbdd0370ed5ee6b7e",
+    "git_blob_sha1": "d4b80bae36273d6612dbc4b9e1332305dd4c40ee",
+    "sha256": "6429b7c56eae29c24f28b8e3d0e6756eaaac1325b230b90229a9012e7dd1d486",
+    "bytes": 4329,
+    "rows": 26,
+    "runtime_sync_state": "OPEN"
+  },
+  "fresh_production_export": {
+    "producer_git_head": "8793e4a097134db01dbeb75bc80653752f3a96f0",
+    "github_actions_ovnis_ci_run": 38194371329,
+    "github_actions_production_export_step": "PASS",
+    "package_id": "pkg_e9760640d4fa40be998a974186e7c519",
+    "manifest_sha256": "2fe039e675f98455f0af441cc33ca169d7ddacef6025285c85b3289cacf6accb",
+    "streams": {
+      "sources": {"rows": 280, "sha256": "a22f8ef58b20ee3a398e2dbc93d2c9893517da06d3db7dfaa9f5be795f67aeaf"},
+      "entities": {"rows": 1266, "sha256": "bb649d7f2d7193a5d5d8c1f1f76022888358cb4e0fc57080032a844ca92b64a8"},
+      "relationships": {"rows": 1147, "sha256": "ab5bf9888c3e6c01e282bd9dbe42dbdbc8c46e45ac653ae7ea8d6fea6ce5be9e"},
+      "observations": {"rows": 470, "sha256": "62845015c2edf6906d0e320a18db8a129af2c2b412933787dcb586784895184c"}
+    },
+    "evidence_state_rows": 3163,
+    "evidence_state_contract_rows": 3163,
+    "observed_absent_rows": 0,
+    "geometry_precision_declared_rows": 0,
+    "observation_locations_present": 469,
+    "observation_locations_incomplete": 0
+  },
+  "production_logs": {
+    "declared_window_start": "2026-10-01T15:58:00Z",
+    "pages": 2,
+    "events": 278,
+    "requests": 54,
+    "has_more": false,
+    "runtime_fatal_or_500_signatures": 0,
+    "error_lines": 2,
+    "error_classification": "INTENTIONAL_MALFORMED_REGISTRATION_ZOD_VALIDATION_ONLY"
+  },
+  "git_drift": {
+    "frozen_floot_git_source": "68b87366207cb3fe249814ee6611a03b18d67a6b",
+    "material_export_head": "8793e4a097134db01dbeb75bc80653752f3a96f0",
+    "oct12_supplement_path": "data/reference/source_head_drift_supplement_2026-10-12.csv",
+    "oct12_supplement_commit": "0f1d64ae23506376673696f549304d15c94430a3",
+    "semantic_equivalence": "NOT_CERTIFIED"
+  },
+  "thehub": {
+    "current_head": "dd735668478046b9ce8ee7d3ab5802daf0c389c5",
+    "latest_completion_gate_run": 38295174045,
+    "latest_completion_gate_state": "FAIL_ACTIONABLE_RESIDUE",
+    "open_pr_denominator": 112,
+    "rebase_required": 23,
+    "stacked": 2,
+    "current_ovnis_consumer_receipt": "OPEN",
+    "note": "Global completion-gate failure is open-PR governance residue, not an OVNIS package-validation failure."
+  },
+  "spatial": {
+    "v2_runtime": "REFERENCE_ONLY_FAIL_CLOSED",
+    "v1_w8": "PROVISIONAL",
+    "v1_independent_validation": "FAIL_KILL_CRITERIA",
+    "exact_cell_claims_permitted": false
+  },
+  "open_gates": [
+    "legitimate authenticated operator/publisher runtime",
+    "26-row Git source registry synchronization to runtime database",
+    "real FAA binding plus idempotency/snapshot/locator/tie runtime falsification",
+    "policy-permitted external source/artifact materialization and hashing",
+    "provenance-backed Claims/chronology/contradiction positive runtime",
+    "W8 V1 authoritative transform verification",
+    "current TheHub ingest/consumer receipt",
+    "Git source to Floot semantic equivalence",
+    "current desktop/430/393 rendered proof",
+    "custom web offline service worker / offline shell",
+    "physical iPhone/offline/recovery proof"
+  ],
+  "certification": "OPEN_NOT_ISSUED",
+  "reusable_workflow_promotion": "DEFERRED_UNTIL_PASSED_BEHAVIOR_AND_ZERO_MATERIAL_RESIDUE"
+}
