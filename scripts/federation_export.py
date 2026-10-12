@@ -241,7 +241,7 @@ def build_streams(cases: list[dict[str, Any]], now: str) -> dict[str, list[dict[
         # --- observation ---
         obs_id = _fid("obs", "case", case_key)
         observed_at, date_precision = _observed_at(case, created)
-        observations[obs_id] = {
+        observation = {
             "observation_id": obs_id,
             "entity_id": ent_id,
             "source_id": source_id,
@@ -254,14 +254,6 @@ def build_streams(cases: list[dict[str, Any]], now: str) -> dict[str, list[dict[
             "municipality": case.get("municipality"),
             "latitude": case.get("latitude"),
             "longitude": case.get("longitude"),
-            # Nested for the Hub's correlate_observations() municipality
-            # co-location join (row["location"]["municipality"], etc.),
-            # which the flat top-level fields above don't satisfy.
-            "location": {
-                "municipality": case.get("municipality"),
-                "lat": case.get("latitude"),
-                "lon": case.get("longitude"),
-            },
             "environment": case.get("environment"),
             "object_type": case.get("object_type"),
             "witness_type": case.get("witness_type"),
@@ -281,6 +273,18 @@ def build_streams(cases: list[dict[str, Any]], now: str) -> dict[str, list[dict[
             "created_at": created,
             "extracted_at": now,
         }
+        # Hub canonical location is optional, but once present it is a WGS84
+        # point and therefore requires both numeric coordinates. Missing
+        # municipality/coordinates stay missing; they are never promoted to
+        # null geometry or a placeholder value.
+        lat, lon = case.get("latitude"), case.get("longitude")
+        if isinstance(lat, (int, float)) and not isinstance(lat, bool) and isinstance(lon, (int, float)) and not isinstance(lon, bool):
+            location = {"lat": lat, "lon": lon}
+            municipality = case.get("municipality")
+            if isinstance(municipality, str) and municipality.strip():
+                location["municipality"] = municipality
+            observation["location"] = location
+        observations[obs_id] = observation
 
     return {
         "sources": list(sources.values()),
