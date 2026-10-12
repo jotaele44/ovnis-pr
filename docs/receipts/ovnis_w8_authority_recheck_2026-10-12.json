@@ -1,0 +1,31 @@
+{
+  "schema": "ovnis.w8-authority-recheck/v1",
+  "recorded_at": "2026-10-12T23:52:00Z",
+  "spiderweb": {
+    "repository": "jotaele44/spiderweb-pr",
+    "current_head": "504506594ed4e7f6bc15e03ba54f7fbc5ad1bbeb",
+    "v1_transform_path": "registry/spatial/geometry/pr_grid_transform.json",
+    "v1_transform_blob_sha1": "af1390e28109bd4f0ce448527bd9c5d1b7ff0cbc",
+    "v1_certification_state": "PROVISIONAL",
+    "v1_exact_cell_claims_permitted": false,
+    "v1_cell_set_required": true,
+    "v1_independent_validation_state": "FAIL_KILL_CRITERIA",
+    "authoritative_parameters_recovered": false,
+    "v2_manifest_path": "registry/spatial/v2/pr_grid_geographic_v2.manifest.json",
+    "v2_manifest_blob_sha1": "ab64f33462e68f245ee89f2a8f5b1f0368e29644",
+    "v2_grid_id": "PR_GRID_GEOGRAPHIC_V2",
+    "v2_grid_version": "2.0.0-rc1",
+    "v2_crs": "EPSG:6566",
+    "v2_release_state": "RC1_CANDIDATE",
+    "v2_grid_manifest_sha256": "8902af188ad449955119016f5747fe2393c582d9ed552fb03bcaecd9ab510aa4",
+    "v2_binding_schema_sha256": "dabc461e47134b3b150be9aeb23b3d0097563493b33b3187538255e06b16a022",
+    "v2_exact_point_materializer_terminal_ready_blob_sha1": "26d5de2d2e381c9730a9a0d719122a31e970d6cd"
+  },
+  "ovnis_disposition": {
+    "w8": "OPEN",
+    "v1_transform": "PROVISIONAL_FAIL_KILL_CRITERIA",
+    "v2_exact_point_binding": "PASS_AUTHORITY_CAPABILITY_BUT_SEPARATE_FROM_V1_TRANSFORM",
+    "exact_v1_cell_claims_permitted": false,
+    "rule": "V2 exact-point binding capability does not retroactively certify the historical V1 fitted transform. Preserve full candidate Cell_Set for V1 until authoritative parameters or independent validation closes the georeference."
+  }
+}
