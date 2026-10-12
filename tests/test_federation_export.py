@@ -84,10 +84,10 @@ def test_no_municipality_means_no_located_in(master_case, now):
 
 
 def test_nested_location_omits_unknown_municipality_but_preserves_point(master_case, now):
-    case = master_case()
+    case = master_case(latitude=18.087, longitude=-67.146)
     case.pop("municipality")
     obs = build_streams([case], now)["observations"][0]
-    assert obs["location"] == {"lat": case["latitude"], "lon": case["longitude"]}
+    assert obs["location"] == {"lat": 18.087, "lon": -67.146}
     assert "municipality" not in obs["location"]
 
 
