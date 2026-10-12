@@ -83,6 +83,27 @@ def test_no_municipality_means_no_located_in(master_case, now):
     assert _rel_types(s) == {"reported_by"}
 
 
+def test_nested_location_omits_unknown_municipality_but_preserves_point(master_case, now):
+    case = master_case()
+    case.pop("municipality")
+    obs = build_streams([case], now)["observations"][0]
+    assert obs["location"] == {"lat": case["latitude"], "lon": case["longitude"]}
+    assert "municipality" not in obs["location"]
+
+
+def test_nested_location_is_absent_without_complete_numeric_point(master_case, now):
+    for patch in (
+        {"latitude": None, "longitude": None},
+        {"latitude": None},
+        {"longitude": None},
+        {"latitude": "18.0"},
+        {"longitude": "-67.0"},
+        {"latitude": True},
+    ):
+        obs = build_streams([master_case(**patch)], now)["observations"][0]
+        assert "location" not in obs
+
+
 def test_duplicate_of_requires_dedupe_status_duplicate(master_case, now):
     dup = master_case(record_id="PRUFON-3", case_id="PRUFON-3",
                       matched_case_id="PRUFON-0001", dedupe_status="duplicate")
