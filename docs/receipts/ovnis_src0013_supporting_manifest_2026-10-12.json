@@ -1,0 +1,38 @@
+{
+  "schema": "ovnis.src0013-supporting-manifest/v1",
+  "recorded_at": "2026-10-12T23:54:00Z",
+  "source_id": "SRC-0013",
+  "source_identity": "PRUFON legacy filesystem corpus",
+  "repository": "jotaele44/ovnis-pr",
+  "source_commit": "68b87366207cb3fe249814ee6611a03b18d67a6b",
+  "primary_manifest": {
+    "path": "data/legacy_prufon/manifest.json",
+    "git_blob_sha1": "627150e95f2df28fb529f30cddbc8a6f52f7b83e",
+    "bytes": 4707,
+    "sha256": "39759310252f6f580020b992b7256d800ecd5299e181e9b2775bb5ed6d55218b"
+  },
+  "supporting_file_manifest": {
+    "path": "data/legacy_prufon/file_manifest.jsonl",
+    "git_blob_sha1": "0716c1525fe0630ff2fd5d4a8c472b3e198ce9dd",
+    "bytes": 2160673,
+    "declared_rows": 3131,
+    "sha256": "NOT_COMPUTED_CONNECTOR_BODY_NOT_RETURNED_INLINE"
+  },
+  "declared_inventory": {
+    "files": 3131,
+    "source_buckets": 22,
+    "logical_bytes": 33981935989,
+    "allocated_bytes": 733437952,
+    "hash_status": {
+      "HASH_DEFERRED": 3131
+    },
+    "copy_status": {
+      "EXISTS_SAME_SIZE": 2642,
+      "COPY_SKIPPED_SPARSE_OR_PLACEHOLDER": 489
+    },
+    "over_100mb": 49
+  },
+  "identity_boundary": "Filesystem source folder taxonomy and member count are provenance, not canonical case identity.",
+  "byte_boundary": "The Git manifests are immutable supporting artifacts. The 33.98 GB underlying filesystem source bytes are not present/frozen by this receipt; all 3,131 source-member hashes remain explicitly deferred.",
+  "state": "SUPPORTING_GIT_MANIFEST_FROZEN_RAW_SOURCE_BYTES_OPEN"
+}
