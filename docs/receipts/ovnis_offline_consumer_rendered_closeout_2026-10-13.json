@@ -1,221 +1,231 @@
-    1	{
-    2	  "schema": "ovnis.offline-consumer-rendered-closeout/v1",
-    3	  "recorded_at": "2026-10-13T00:06:00Z",
-    4	  "preservation": {
-    5	    "predecessor_checkpoint": "48927a7d-119c-4556-b8c2-b2e7f96a6c2f",
-    6	    "implementation_checkpoint": "600f7334-2adb-4d82-80ed-7db6415731ad",
-    7	    "historical_artifacts_preserved": true,
-    8	    "artifact_reference_denominator": {
-    9	      "case_links": 470,
-   10	      "unique_references": 244,
-   11	      "STRICT_BINDING_ELIGIBLE": 1,
-   12	      "DISCOVERY_ONLY": 190,
-   13	      "NON_BINDING_TERMINAL": 36,
-   14	      "REVIEW_TIE": 14,
-   15	      "UNRESOLVED": 3,
-   16	      "sum": 244
-   17	    }
-   18	  },
-   19	  "floot_application": {
-   20	    "project_id": "7fe42a06-1945-4b5b-ba78-55418ad90fbc",
-   21	    "verified_implementation_version": 1791849828579,
-   22	    "routes": 15,
-   23	    "endpoints": 28,
-   24	    "get_endpoints": 8,
-   25	    "post_endpoints": 20,
-   26	    "spec_files": 91,
-   27	    "spec_files_passed": 91,
-   28	    "spec_files_failed": 0,
-   29	    "typecheck": "PASS",
-   30	    "publish_job": "b8c7c907-d07b-496e-ae48-4cdde877d2f0",
-   31	    "publish_state": "SUCCEEDED",
-   32	    "published_url": "https://ovnis-pr.floot.app",
-   33	    "visibility": "internal"
-   34	  },
-   35	  "offline_shell": {
-   36	    "cache_name": "ovnis-offline-shell-v2-20261013",
-   37	    "service_worker_path": "/_api/offline-shell/service-worker",
-   38	    "scope": "/",
-   39	    "canonical_page_file_denominator": 15,
-   40	    "precache_route_urls": 14,
-   41	    "offline_fallback_entries": 1,
-   42	    "runtime_asset_entries": 4,
-   43	    "stable_cache_entries": 19,
-   44	    "old_cache_removed": true,
-   45	    "network_strategy": "NETWORK_FIRST_NAVIGATION_WITH_CACHED_ROUTE_OR_EXPLICIT_SHELL_FALLBACK",
-   46	    "static_strategy": "STALE_WHILE_REVALIDATE",
-   47	    "static_paths": ["/assets/","/_assets/","/_cdn/static/"],
-   48	    "api_interception": false,
-   49	    "non_get_interception": false,
-   50	    "offline_disclosure": "Offline shell · cached program UI only. Live data, source acquisition, authentication changes, and workspace mutations require a connection.",
-   51	    "sandbox_controller_active": true,
-   52	    "sandbox_cache_warm": true,
-   53	    "production_worker": {
-   54	      "http_status": 200,
-   55	      "content_type": "application/javascript; charset=utf-8",
-   56	      "service_worker_allowed": "/",
-   57	      "bytes": 3697,
-   58	      "sha256": "99c0255057220860680c2aa329284db6ed8d1ec040619d1e347f6623ebca7e44",
-   59	      "byte_identical_to_tested_sandbox": true
-   60	    },
-   61	    "production_internal_root": {
-   62	      "http_status_unauthenticated": 302,
-   63	      "location_kind": "FLOOT_INTERNAL_APP_ACCESS",
-   64	      "expected": true
-   65	    },
-   66	    "real_network_loss_reconnect_proof": "OPEN_PHYSICAL_DEVICE_OR_NETWORK_EMULATION_REQUIRED"
-   67	  },
-   68	  "rendered_qa": {
-   69	    "desktop_live_dom": {
-   70	      "state": "PASS",
-   71	      "viewport_width": 1195,
-   72	      "document_scroll_width": 1195,
-   73	      "horizontal_overflow": false,
-   74	      "focusable_controls": 24,
-   75	      "undersized_touch_targets": 0,
-   76	      "theme_control_px": [44,44],
-   77	      "language_control_px": [44,44]
-   78	    },
-   79	    "desktop_screenshot_job": "e4a8e2b0-a0e6-49e5-b7ae-29e99df896f3",
-   80	    "configured_430_screenshot_job": "534360c5-e35a-4ecd-9660-c60dc3f6740f",
-   81	    "configured_393_screenshot_job": "d3c89a00-a91c-43d7-a0dd-71b24640fc05",
-   82	    "named_iphone15_screenshot_job": "bd2d9397-111b-49a5-8149-f7d464ecd748",
-   83	    "mobile_capture_boundary": {
-   84	      "state": "TOOL_LIMITED_NOT_CERTIFIED",
-   85	      "reason": "Floot screenshot artifacts are cropped/rescaled relative to declared viewports; the named 393x852 capture returned a 197x331 raster containing Floot UI overlay text. Live browser instrumentation remains desktop-width and window.resizeTo is ignored.",
-   86	      "configured_430_visual": "BOUNDED_APP_VISIBLE_CAPTURE_CROPPED",
-   87	      "configured_393_visual": "BLOCKED_CAPTURE_CROPPED",
-   88	      "exact_393_dom": "UNAVAILABLE_CURRENT_CONNECTOR"
-   89	    }
-   90	  },
-   91	  "runtime_database": {
-   92	    "cases": 470,
-   93	    "artifacts": 244,
-   94	    "users": 0,
-   95	    "workspace_members": 0,
-   96	    "source_registry_rows": 14,
-   97	    "active_sources": 13,
-   98	    "source_manifestations": 1,
-   99	    "bindings": 0,
-  100	    "claims": 0,
-  101	    "chronology_comparisons": 0,
-  102	    "contradictions": 0,
-  103	    "audit_events": 0,
-  104	    "handoff_packages": 0
-  105	  },
-  106	  "git_floot_record_identity": {
-  107	    "serialization": "UTF8_SORTED_CASE_ID_LF_NO_TRAILING_LF",
-  108	    "git_material_head": "8793e4a097134db01dbeb75bc80653752f3a96f0",
-  109	    "git_master_file_blob_sha1": "428990a32070295f1efe7a7779e4b0e9f7200e82",
-  110	    "git_case_rows": 470,
-  111	    "git_unique_case_ids": 470,
-  112	    "floot_case_rows": 470,
-  113	    "floot_unique_case_ids": 470,
-  114	    "first": "PRUAP-0001",
-  115	    "last": "PRUAP-0470",
-  116	    "contiguous": true,
-  117	    "git_case_id_set_sha256": "bb93183c81dd63c0d3805c231754ab2ad30f322e048ba0da6810ca9a15d3dd38",
-  118	    "floot_case_id_set_sha256": "bb93183c81dd63c0d3805c231754ab2ad30f322e048ba0da6810ca9a15d3dd38",
-  119	    "record_identity_set_parity": "PASS",
-  120	    "source_byte_equivalence": "NOT_CLAIMED_DISTINCT_IMPLEMENTATION_MANIFESTATIONS"
-  121	  },
-  122	  "source_registry": {
-  123	    "git_v2_commit": "9b6444928a688b0b3e6dcd0fbdd0370ed5ee6b7e",
-  124	    "git_v2_blob_sha1": "d4b80bae36273d6612dbc4b9e1332305dd4c40ee",
-  125	    "git_v2_sha256": "6429b7c56eae29c24f28b8e3d0e6756eaaac1325b230b90229a9012e7dd1d486",
-  126	    "git_v2_rows": 26,
-  127	    "runtime_db_rows": 14,
-  128	    "runtime_sync": "BLOCKED_LEGITIMATE_AUTHENTICATED_OPERATOR_REQUIRED"
-  129	  },
-  130	  "src0013": {
-  131	    "supporting_receipt_commit": "e7edb47b3ea92f60c9366f2ec72f647cab3ebbe3",
-  132	    "primary_manifest_blob_sha1": "627150e95f2df28fb529f30cddbc8a6f52f7b83e",
-  133	    "supporting_file_manifest_blob_sha1": "0716c1525fe0630ff2fd5d4a8c472b3e198ce9dd",
-  134	    "supporting_file_manifest_bytes": 2160673,
-  135	    "declared_source_members": 3131,
-  136	    "declared_source_bytes": 33981935989,
-  137	    "deferred_member_hashes": 3131,
-  138	    "raw_source_bytes_state": "OPEN_NOT_FROZEN"
-  139	  },
-  140	  "thehub_consumer": {
-  141	    "state": "PASS_CURRENT_HEAD_ISOLATED_BYTE_IDENTICAL_CONSUMER_COMPATIBILITY",
-  142	    "production_deployment_state": "OPEN_NOT_DEPLOYED",
-  143	    "producer_commit": "8793e4a097134db01dbeb75bc80653752f3a96f0",
-  144	    "producer_package_id": "pkg_e9760640d4fa40be998a974186e7c519",
-  145	    "producer_manifest_sha256": "2fe039e675f98455f0af441cc33ca169d7ddacef6025285c85b3289cacf6accb",
-  146	    "thehub_execution_commit": "86271084ee056d0b40a8ea3e1749ee26097c7768",
-  147	    "thehub_receipt_commit": "13abfacb5b7259274fd77887eed9b042045a38ed",
-  148	    "thehub_receipt_blob_sha1": "251e1f868866ebcae6cb3f6a3d8cf3d060b32892",
-  149	    "thehub_cleanup_commit": "7397ff60ccd352326c6d6ab47622cb45d538b245",
-  150	    "workflow_run_id": 38324053805,
-  151	    "artifact_id": 11779614034,
-  152	    "artifact_digest": "sha256:13654285945a23d401ad6aca6bdfe10d946b9e387fd6d5f6fbba5f6c862895bb",
-  153	    "validate_package": "PASS",
-  154	    "aggregate": "PASS_ONE_PRODUCER_WITH_EXPLICIT_MISSING_PRODUCER_WARNINGS",
-  155	    "correlate_rows": 0,
-  156	    "ingested_rows": 6797,
-  157	    "isolated_hub_db_sha256": "54526e2c81e6c4e6fa4285235601565ec294d1e7e9f4e1f8f16a39c5a76f6867",
-  158	    "identity_boundary": "Zero correlation rows do not prove absence or identity."
-  159	  },
-  160	  "spatial_w8": {
-  161	    "spiderweb_current_head": "504506594ed4e7f6bc15e03ba54f7fbc5ad1bbeb",
-  162	    "v1_transform_blob_sha1": "af1390e28109bd4f0ce448527bd9c5d1b7ff0cbc",
-  163	    "v1_state": "PROVISIONAL",
-  164	    "v1_exact_cell_claims_permitted": false,
-  165	    "v1_independent_validation_state": "FAIL_KILL_CRITERIA",
-  166	    "v2_grid_version": "2.0.0-rc1",
-  167	    "v2_release_state": "RC1_CANDIDATE",
-  168	    "v2_exact_point_binding_capability": "PASS_SEPARATE_AUTHORITY_CAPABILITY",
-  169	    "w8": "OPEN"
-  170	  },
-  171	  "authority_and_positive_runtime": {
-  172	    "legitimate_app_users": 0,
-  173	    "workspace_members": 0,
-  174	    "operator_bootstrap": "BLOCKED_NO_USER_CONTROLLED_AUTHENTICATED_PRINCIPAL",
-  175	    "direct_sql_bootstrap_used": false,
-  176	    "faa_binding": "BLOCKED_OPERATOR_AND_REGISTRY_SYNC_PRECONDITIONS",
-  177	    "claims": "BLOCKED_NO_VERIFIED_BOUND_EXTERNAL_MANIFESTATION",
-  178	    "chronology_positive_runtime": "BLOCKED_AUTHORITY_AND_EVIDENCE_PRECONDITIONS",
-  179	    "contradiction_positive_runtime": "BLOCKED_AUTHORITY_AND_EVIDENCE_PRECONDITIONS"
-  180	  },
-  181	  "source_acquisition": {
-  182	    "external_auto_fetch_performed": false,
-  183	    "reason": "Active external source policies remain MANUAL_ONLY/BLOCKED/credential-last; those policies were not bypassed.",
-  184	    "external_raw_byte_freeze": 0
-  185	  },
-  186	  "native_and_device": {
-  187	    "native_build_state": "succeeded",
-  188	    "native_build_completed_at": "2026-10-02T20:20:05.788Z",
-  189	    "physical_iphone_launch": "OPEN",
-  190	    "physical_offline_reconnect_recovery": "OPEN"
-  191	  },
-  192	  "production_logs_post_publish": {
-  193	    "window_minutes": 10,
-  194	    "pages": 2,
-  195	    "events": 6,
-  196	    "has_more": false,
-  197	    "fatal_like": 0,
-  198	    "error_lines": 0,
-  199	    "service_worker_requests": 1,
-  200	    "state": "PASS_BOUNDED_POST_PUBLISH_WINDOW"
-  201	  },
-  202	  "training": {
-  203	    "state": "DEFERRED",
-  204	    "reason": "Reusable workflow promotion requires passed end-to-end authority/source/device behavior, not only implementation and isolated consumer compatibility."
-  205	  },
-  206	  "certification": {
-  207	    "state": "OPEN_NOT_ISSUED",
-  208	    "zero_material_residue": false,
-  209	    "remaining_material_residue": [
-  210	      "no legitimate user-controlled authenticated operator/publisher principal",
-  211	      "26-row reviewed Git registry not synchronized to runtime database",
-  212	      "FAA binding and real-runtime replay/falsifiers not executed",
-  213	      "external source/artifact raw bytes remain policy-gated and unfrozen",
-  214	      "Claims/chronology/contradiction positive runtime receipts remain blocked",
-  215	      "W8 V1 remains PROVISIONAL / FAIL_KILL_CRITERIA",
-  216	      "exact 393 rendered DOM proof is unavailable because the screenshot/browser connector corrupts or ignores the mobile viewport",
-  217	      "physical iPhone launch/offline/reconnect/recovery proof is absent",
-  218	      "TheHub byte-identical isolated consumer compatibility is PASS but production consumer deployment is not claimed"
-  219	    ]
-  220	  }
-  221	}
+{
+  "schema": "ovnis.offline-consumer-rendered-closeout/v1",
+  "recorded_at": "2026-10-13T00:06:00Z",
+  "preservation": {
+    "predecessor_checkpoint": "48927a7d-119c-4556-b8c2-b2e7f96a6c2f",
+    "implementation_checkpoint": "600f7334-2adb-4d82-80ed-7db6415731ad",
+    "historical_artifacts_preserved": true,
+    "artifact_reference_denominator": {
+      "case_links": 470,
+      "unique_references": 244,
+      "STRICT_BINDING_ELIGIBLE": 1,
+      "DISCOVERY_ONLY": 190,
+      "NON_BINDING_TERMINAL": 36,
+      "REVIEW_TIE": 14,
+      "UNRESOLVED": 3,
+      "sum": 244
+    }
+  },
+  "floot_application": {
+    "project_id": "7fe42a06-1945-4b5b-ba78-55418ad90fbc",
+    "verified_implementation_version": 1791849828579,
+    "routes": 15,
+    "endpoints": 28,
+    "get_endpoints": 8,
+    "post_endpoints": 20,
+    "spec_files": 91,
+    "spec_files_passed": 91,
+    "spec_files_failed": 0,
+    "typecheck": "PASS",
+    "publish_job": "b8c7c907-d07b-496e-ae48-4cdde877d2f0",
+    "publish_state": "SUCCEEDED",
+    "published_url": "https://ovnis-pr.floot.app",
+    "visibility": "internal"
+  },
+  "offline_shell": {
+    "cache_name": "ovnis-offline-shell-v2-20261013",
+    "service_worker_path": "/_api/offline-shell/service-worker",
+    "scope": "/",
+    "canonical_page_file_denominator": 15,
+    "precache_route_urls": 14,
+    "offline_fallback_entries": 1,
+    "runtime_asset_entries": 4,
+    "stable_cache_entries": 19,
+    "old_cache_removed": true,
+    "network_strategy": "NETWORK_FIRST_NAVIGATION_WITH_CACHED_ROUTE_OR_EXPLICIT_SHELL_FALLBACK",
+    "static_strategy": "STALE_WHILE_REVALIDATE",
+    "static_paths": [
+      "/assets/",
+      "/_assets/",
+      "/_cdn/static/"
+    ],
+    "api_interception": false,
+    "non_get_interception": false,
+    "offline_disclosure": "Offline shell · cached program UI only. Live data, source acquisition, authentication changes, and workspace mutations require a connection.",
+    "sandbox_controller_active": true,
+    "sandbox_cache_warm": true,
+    "production_worker": {
+      "http_status": 200,
+      "content_type": "application/javascript; charset=utf-8",
+      "service_worker_allowed": "/",
+      "bytes": 3697,
+      "sha256": "99c0255057220860680c2aa329284db6ed8d1ec040619d1e347f6623ebca7e44",
+      "byte_identical_to_tested_sandbox": true
+    },
+    "production_internal_root": {
+      "http_status_unauthenticated": 302,
+      "location_kind": "FLOOT_INTERNAL_APP_ACCESS",
+      "expected": true
+    },
+    "real_network_loss_reconnect_proof": "OPEN_PHYSICAL_DEVICE_OR_NETWORK_EMULATION_REQUIRED"
+  },
+  "rendered_qa": {
+    "desktop_live_dom": {
+      "state": "PASS",
+      "viewport_width": 1195,
+      "document_scroll_width": 1195,
+      "horizontal_overflow": false,
+      "focusable_controls": 24,
+      "undersized_touch_targets": 0,
+      "theme_control_px": [
+        44,
+        44
+      ],
+      "language_control_px": [
+        44,
+        44
+      ]
+    },
+    "desktop_screenshot_job": "e4a8e2b0-a0e6-49e5-b7ae-29e99df896f3",
+    "configured_430_screenshot_job": "534360c5-e35a-4ecd-9660-c60dc3f6740f",
+    "configured_393_screenshot_job": "d3c89a00-a91c-43d7-a0dd-71b24640fc05",
+    "named_iphone15_screenshot_job": "bd2d9397-111b-49a5-8149-f7d464ecd748",
+    "mobile_capture_boundary": {
+      "state": "TOOL_LIMITED_NOT_CERTIFIED",
+      "reason": "Floot screenshot artifacts are cropped/rescaled relative to declared viewports; the named 393x852 capture returned a 197x331 raster containing Floot UI overlay text. Live browser instrumentation remains desktop-width and window.resizeTo is ignored.",
+      "configured_430_visual": "BOUNDED_APP_VISIBLE_CAPTURE_CROPPED",
+      "configured_393_visual": "BLOCKED_CAPTURE_CROPPED",
+      "exact_393_dom": "UNAVAILABLE_CURRENT_CONNECTOR"
+    }
+  },
+  "runtime_database": {
+    "cases": 470,
+    "artifacts": 244,
+    "users": 0,
+    "workspace_members": 0,
+    "source_registry_rows": 14,
+    "active_sources": 13,
+    "source_manifestations": 1,
+    "bindings": 0,
+    "claims": 0,
+    "chronology_comparisons": 0,
+    "contradictions": 0,
+    "audit_events": 0,
+    "handoff_packages": 0
+  },
+  "git_floot_record_identity": {
+    "serialization": "UTF8_SORTED_CASE_ID_LF_NO_TRAILING_LF",
+    "git_material_head": "8793e4a097134db01dbeb75bc80653752f3a96f0",
+    "git_master_file_blob_sha1": "428990a32070295f1efe7a7779e4b0e9f7200e82",
+    "git_case_rows": 470,
+    "git_unique_case_ids": 470,
+    "floot_case_rows": 470,
+    "floot_unique_case_ids": 470,
+    "first": "PRUAP-0001",
+    "last": "PRUAP-0470",
+    "contiguous": true,
+    "git_case_id_set_sha256": "bb93183c81dd63c0d3805c231754ab2ad30f322e048ba0da6810ca9a15d3dd38",
+    "floot_case_id_set_sha256": "bb93183c81dd63c0d3805c231754ab2ad30f322e048ba0da6810ca9a15d3dd38",
+    "record_identity_set_parity": "PASS",
+    "source_byte_equivalence": "NOT_CLAIMED_DISTINCT_IMPLEMENTATION_MANIFESTATIONS"
+  },
+  "source_registry": {
+    "git_v2_commit": "9b6444928a688b0b3e6dcd0fbdd0370ed5ee6b7e",
+    "git_v2_blob_sha1": "d4b80bae36273d6612dbc4b9e1332305dd4c40ee",
+    "git_v2_sha256": "6429b7c56eae29c24f28b8e3d0e6756eaaac1325b230b90229a9012e7dd1d486",
+    "git_v2_rows": 26,
+    "runtime_db_rows": 14,
+    "runtime_sync": "BLOCKED_LEGITIMATE_AUTHENTICATED_OPERATOR_REQUIRED"
+  },
+  "src0013": {
+    "supporting_receipt_commit": "e7edb47b3ea92f60c9366f2ec72f647cab3ebbe3",
+    "primary_manifest_blob_sha1": "627150e95f2df28fb529f30cddbc8a6f52f7b83e",
+    "supporting_file_manifest_blob_sha1": "0716c1525fe0630ff2fd5d4a8c472b3e198ce9dd",
+    "supporting_file_manifest_bytes": 2160673,
+    "declared_source_members": 3131,
+    "declared_source_bytes": 33981935989,
+    "deferred_member_hashes": 3131,
+    "raw_source_bytes_state": "OPEN_NOT_FROZEN"
+  },
+  "thehub_consumer": {
+    "state": "PASS_CURRENT_HEAD_ISOLATED_BYTE_IDENTICAL_CONSUMER_COMPATIBILITY",
+    "production_deployment_state": "OPEN_NOT_DEPLOYED",
+    "producer_commit": "8793e4a097134db01dbeb75bc80653752f3a96f0",
+    "producer_package_id": "pkg_e9760640d4fa40be998a974186e7c519",
+    "producer_manifest_sha256": "2fe039e675f98455f0af441cc33ca169d7ddacef6025285c85b3289cacf6accb",
+    "thehub_execution_commit": "86271084ee056d0b40a8ea3e1749ee26097c7768",
+    "thehub_receipt_commit": "13abfacb5b7259274fd77887eed9b042045a38ed",
+    "thehub_receipt_blob_sha1": "251e1f868866ebcae6cb3f6a3d8cf3d060b32892",
+    "thehub_cleanup_commit": "7397ff60ccd352326c6d6ab47622cb45d538b245",
+    "workflow_run_id": 38324053805,
+    "artifact_id": 11779614034,
+    "artifact_digest": "sha256:13654285945a23d401ad6aca6bdfe10d946b9e387fd6d5f6fbba5f6c862895bb",
+    "validate_package": "PASS",
+    "aggregate": "PASS_ONE_PRODUCER_WITH_EXPLICIT_MISSING_PRODUCER_WARNINGS",
+    "correlate_rows": 0,
+    "ingested_rows": 6797,
+    "isolated_hub_db_sha256": "54526e2c81e6c4e6fa4285235601565ec294d1e7e9f4e1f8f16a39c5a76f6867",
+    "identity_boundary": "Zero correlation rows do not prove absence or identity."
+  },
+  "spatial_w8": {
+    "spiderweb_current_head": "504506594ed4e7f6bc15e03ba54f7fbc5ad1bbeb",
+    "v1_transform_blob_sha1": "af1390e28109bd4f0ce448527bd9c5d1b7ff0cbc",
+    "v1_state": "PROVISIONAL",
+    "v1_exact_cell_claims_permitted": false,
+    "v1_independent_validation_state": "FAIL_KILL_CRITERIA",
+    "v2_grid_version": "2.0.0-rc1",
+    "v2_release_state": "RC1_CANDIDATE",
+    "v2_exact_point_binding_capability": "PASS_SEPARATE_AUTHORITY_CAPABILITY",
+    "w8": "OPEN"
+  },
+  "authority_and_positive_runtime": {
+    "legitimate_app_users": 0,
+    "workspace_members": 0,
+    "operator_bootstrap": "BLOCKED_NO_USER_CONTROLLED_AUTHENTICATED_PRINCIPAL",
+    "direct_sql_bootstrap_used": false,
+    "faa_binding": "BLOCKED_OPERATOR_AND_REGISTRY_SYNC_PRECONDITIONS",
+    "claims": "BLOCKED_NO_VERIFIED_BOUND_EXTERNAL_MANIFESTATION",
+    "chronology_positive_runtime": "BLOCKED_AUTHORITY_AND_EVIDENCE_PRECONDITIONS",
+    "contradiction_positive_runtime": "BLOCKED_AUTHORITY_AND_EVIDENCE_PRECONDITIONS"
+  },
+  "source_acquisition": {
+    "external_auto_fetch_performed": false,
+    "reason": "Active external source policies remain MANUAL_ONLY/BLOCKED/credential-last; those policies were not bypassed.",
+    "external_raw_byte_freeze": 0
+  },
+  "native_and_device": {
+    "native_build_state": "succeeded",
+    "native_build_completed_at": "2026-10-02T20:20:05.788Z",
+    "physical_iphone_launch": "OPEN",
+    "physical_offline_reconnect_recovery": "OPEN"
+  },
+  "production_logs_post_publish": {
+    "window_minutes": 10,
+    "pages": 2,
+    "events": 6,
+    "has_more": false,
+    "fatal_like": 0,
+    "error_lines": 0,
+    "service_worker_requests": 1,
+    "state": "PASS_BOUNDED_POST_PUBLISH_WINDOW"
+  },
+  "training": {
+    "state": "DEFERRED",
+    "reason": "Reusable workflow promotion requires passed end-to-end authority/source/device behavior, not only implementation and isolated consumer compatibility."
+  },
+  "certification": {
+    "state": "OPEN_NOT_ISSUED",
+    "zero_material_residue": false,
+    "remaining_material_residue": [
+      "no legitimate user-controlled authenticated operator/publisher principal",
+      "26-row reviewed Git registry not synchronized to runtime database",
+      "FAA binding and real-runtime replay/falsifiers not executed",
+      "external source/artifact raw bytes remain policy-gated and unfrozen",
+      "Claims/chronology/contradiction positive runtime receipts remain blocked",
+      "W8 V1 remains PROVISIONAL / FAIL_KILL_CRITERIA",
+      "exact 393 rendered DOM proof is unavailable because the screenshot/browser connector corrupts or ignores the mobile viewport",
+      "physical iPhone launch/offline/reconnect/recovery proof is absent",
+      "TheHub byte-identical isolated consumer compatibility is PASS but production consumer deployment is not claimed"
+    ]
+  }
+}
