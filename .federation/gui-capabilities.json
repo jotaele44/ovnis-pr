@@ -52,7 +52,8 @@
       "backend": {
         "files": [
           "server/backend/__init__.py",
-          "server/backend/main.py"
+          "server/backend/main.py",
+          "server/backend/payloads.py"
         ],
         "endpoints": [
           "GET /cases",
@@ -66,28 +67,35 @@
         "symbols": [
           "server/backend/main.py:all_candidates",
           "server/backend/main.py:all_cases",
-          "server/backend/main.py:as_float",
+          "server/backend/payloads.py:as_float",
           "server/backend/main.py:candidates",
           "server/backend/main.py:case_detail",
           "server/backend/main.py:cases",
-          "server/backend/main.py:data_status",
-          "server/backend/main.py:decade_from_date",
-          "server/backend/main.py:feature_from_case",
-          "server/backend/main.py:first_present",
+          "server/backend/payloads.py:data_status",
+          "server/backend/payloads.py:decade_from_date",
+          "server/backend/payloads.py:feature_from_case",
+          "server/backend/payloads.py:first_present",
           "server/backend/main.py:geojson",
-          "server/backend/main.py:is_placeholder",
+          "server/backend/payloads.py:is_placeholder",
           "server/backend/main.py:latest_geojson_path",
+<<<<<<< Updated upstream
           "server/backend/main.py:location_string",
           "server/backend/main.py:municipios_case_density",
           "server/backend/main.py:matches_query",
           "server/backend/main.py:normalize_candidate",
           "server/backend/main.py:normalize_case",
+=======
+          "server/backend/payloads.py:location_string",
+          "server/backend/payloads.py:matches_query",
+          "server/backend/payloads.py:normalize_candidate",
+          "server/backend/payloads.py:normalize_case",
+>>>>>>> Stashed changes
           "server/backend/main.py:read_jsonl",
           "server/backend/main.py:release_geojson",
           "server/backend/main.py:search",
           "server/backend/main.py:stats",
           "server/backend/main.py:stats_payload",
-          "server/backend/main.py:write_safe_int"
+          "server/backend/payloads.py:write_safe_int"
         ]
       },
       "frontend": {
@@ -121,7 +129,9 @@
           "tests/test_municipios_case_density.py",
           "tests/test_validate_case_ledgers.py",
           "tests/test_import_candidates.py",
-          "tests/test_promote_candidate.py"
+          "tests/test_promote_candidate.py",
+          "tests/test_build_snapshot.py",
+          "tests/test_server_smoke.py"
         ],
         "contract": [
           "tests/test_gui_parity.py"
@@ -131,7 +141,8 @@
           "dashboard/src/components/SpatialToolsPanel.test.jsx"
         ],
         "e2e": [
-          "dashboard/tests/gui-parity.spec.mjs"
+          "dashboard/tests/gui-parity.spec.mjs",
+          "dashboard/tests/zip-design.spec.mjs"
         ]
       },
       "candidate_ids": [
@@ -142,27 +153,28 @@
         "python_module:server/backend/__init__.py",
         "python_symbol:server/backend/main.py:all_candidates",
         "python_symbol:server/backend/main.py:all_cases",
-        "python_symbol:server/backend/main.py:as_float",
+        "python_symbol:server/backend/payloads.py:as_float",
         "python_symbol:server/backend/main.py:candidates",
         "python_symbol:server/backend/main.py:case_detail",
         "python_symbol:server/backend/main.py:cases",
-        "python_symbol:server/backend/main.py:data_status",
-        "python_symbol:server/backend/main.py:decade_from_date",
-        "python_symbol:server/backend/main.py:feature_from_case",
-        "python_symbol:server/backend/main.py:first_present",
+        "python_symbol:server/backend/payloads.py:data_status",
+        "python_symbol:server/backend/payloads.py:decade_from_date",
+        "python_symbol:server/backend/payloads.py:feature_from_case",
+        "python_symbol:server/backend/payloads.py:first_present",
         "python_symbol:server/backend/main.py:geojson",
-        "python_symbol:server/backend/main.py:is_placeholder",
+        "python_symbol:server/backend/payloads.py:is_placeholder",
         "python_symbol:server/backend/main.py:latest_geojson_path",
-        "python_symbol:server/backend/main.py:location_string",
-        "python_symbol:server/backend/main.py:matches_query",
-        "python_symbol:server/backend/main.py:normalize_candidate",
-        "python_symbol:server/backend/main.py:normalize_case",
+        "python_symbol:server/backend/payloads.py:location_string",
+        "python_symbol:server/backend/payloads.py:matches_query",
+        "python_symbol:server/backend/payloads.py:normalize_candidate",
+        "python_symbol:server/backend/payloads.py:normalize_case",
         "python_symbol:server/backend/main.py:read_jsonl",
         "python_symbol:server/backend/main.py:release_geojson",
         "python_symbol:server/backend/main.py:search",
         "python_symbol:server/backend/main.py:stats",
         "python_symbol:server/backend/main.py:stats_payload",
-        "python_symbol:server/backend/main.py:write_safe_int"
+        "python_symbol:server/backend/payloads.py:write_safe_int",
+        "python_module:server/backend/payloads.py"
       ]
     },
     {

@@ -1,0 +1,117 @@
+/* ZIP tokens isolated from the existing semantic contract. Fonts use bundled/system families. */
+
+:root {
+  /* Overlay layers */
+  --zip-z-overlay: 400;
+
+  --zip-z-spotlight: 1000; /* Tutorial spotlights/guided help */
+
+  /* System layers */
+  --zip-z-critical: 2000; /* Critical system notifications */
+
+  /* spacing */
+  --zip-spacing-1: 0.25rem;
+  --zip-spacing-2: 0.5rem;
+  --zip-spacing-3: 0.75rem;
+  --zip-spacing-4: 1rem;
+  --zip-spacing-6: 1.5rem;
+  --zip-spacing-8: 2rem;
+  --zip-spacing-12: 3rem;
+  --zip-spacing-16: 4rem;
+  --zip-spacing-20: 5rem;
+}
+
+:root {
+  --zip-background: #f3f5f8;
+  --zip-foreground: #162033;
+  --zip-surface: #e9edf3;
+  --zip-surface-foreground: #162033;
+  --zip-sidebar: #e6ebf2;
+  --zip-sidebar-foreground: #162033;
+  --zip-card: #f8f9fb;
+  --zip-card-foreground: #162033;
+  --zip-popup: #ffffff;
+  --zip-popup-foreground: #162033;
+  --zip-primary: #6d5dfc;
+  --zip-primary-foreground: #ffffff;
+  --zip-secondary: #dce3ed;
+  --zip-secondary-foreground: #25324a;
+  --zip-accent: #6d5dfc;
+  --zip-accent-foreground: #ffffff;
+  --zip-muted: #dfe5ed;
+  --zip-muted-foreground: #657087;
+  --zip-success: #2f855a;
+  --zip-success-foreground: #ffffff;
+  --zip-error: #c2414b;
+  --zip-error-foreground: #ffffff;
+  --zip-warning: #b7791f;
+  --zip-warning-foreground: #ffffff;
+  --zip-info: #2563a8;
+  --zip-info-foreground: #ffffff;
+  --zip-info-hover: #1f568f;
+  --zip-info-active: #194775;
+  --zip-border: #cbd3df;
+  --zip-font-family-base: 'IBM Plex Sans', system-ui, sans-serif;
+  --zip-font-family-display: 'Newsreader', Georgia, serif;
+  --zip-font-family-monospace: 'IBM Plex Mono', ui-monospace, monospace;
+  --zip-font-family-cursive: cursive;
+  --zip-shadow: 0 1px 2px rgb(23 32 51 / 0.08);
+  --zip-shadow-md: 0 8px 24px rgb(23 32 51 / 0.10);
+  --zip-shadow-lg: 0 18px 48px rgb(23 32 51 / 0.14);
+  --zip-shadow-focus: 0 0 0 3px rgb(109 93 252 / 0.28);
+  --zip-radius-sm: 0.25rem;
+  --zip-radius: 0.375rem;
+  --zip-radius-md: 0.5rem;
+  --zip-radius-lg: 0.75rem;
+  --zip-radius-full: 9999px;
+  --zip-animation-duration-fast: 120ms;
+  --zip-animation-duration-normal: 200ms;
+  --zip-animation-duration-slow: 320ms;
+  --zip-chart-color-1: #6d5dfc;
+  --zip-chart-color-2: #2563a8;
+  --zip-chart-color-3: #2f855a;
+  --zip-chart-color-4: #b7791f;
+  --zip-chart-color-5: #7c3aed;
+}
+
+:root.dark, :root[data-theme="dark"] {
+  --zip-background: #08111f;
+  --zip-foreground: #dce5f2;
+  --zip-surface: #0d1728;
+  --zip-surface-foreground: #dce5f2;
+  --zip-sidebar: #0a1423;
+  --zip-sidebar-foreground: #dce5f2;
+  --zip-card: #0e192b;
+  --zip-card-foreground: #dce5f2;
+  --zip-popup: #101c30;
+  --zip-popup-foreground: #e3ebf6;
+  --zip-primary: #8b7cff;
+  --zip-primary-foreground: #080b14;
+  --zip-secondary: #16243a;
+  --zip-secondary-foreground: #cdd8e8;
+  --zip-accent: #8b7cff;
+  --zip-accent-foreground: #080b14;
+  --zip-muted: #142137;
+  --zip-muted-foreground: #7f8da3;
+  --zip-success: #47c98b;
+  --zip-success-foreground: #06130d;
+  --zip-error: #f06b75;
+  --zip-error-foreground: #190607;
+  --zip-warning: #e8b45b;
+  --zip-warning-foreground: #1a1003;
+  --zip-info: #67a8e8;
+  --zip-info-foreground: #07121e;
+  --zip-info-hover: #7ab5ee;
+  --zip-info-active: #4b91d0;
+  --zip-border: #24334a;
+  --zip-shadow: 0 1px 2px rgb(0 0 0 / 0.30);
+  --zip-shadow-md: 0 10px 28px rgb(0 0 0 / 0.34);
+  --zip-shadow-lg: 0 20px 56px rgb(0 0 0 / 0.42);
+  --zip-shadow-focus: 0 0 0 3px rgb(139 124 255 / 0.30);
+  --zip-chart-color-1: #8b7cff;
+  --zip-chart-color-2: #67a8e8;
+  --zip-chart-color-3: #47c98b;
+  --zip-chart-color-4: #e8b45b;
+  --zip-chart-color-5: #c084fc;
+}
+:root { --zip-font-family-base: "Inter Variable", Inter, system-ui, sans-serif; --zip-font-family-display: Georgia, serif; --zip-font-family-heading: "Inter Variable", Inter, system-ui, sans-serif; --zip-font-family-monospace: "JetBrains Mono", monospace; }

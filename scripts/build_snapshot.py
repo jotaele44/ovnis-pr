@@ -12,11 +12,16 @@ Usage:
 from __future__ import annotations
 
 import json
-import math
+import sys
 from pathlib import Path
 from typing import Any
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from server.backend.payloads import data_status, feature_from_case, normalize_candidate, normalize_case  # noqa: E402
+
 MASTER_LEDGER = REPO_ROOT / "data/master/master_cases.jsonl"
 CANDIDATE_LEDGER = REPO_ROOT / "data/candidates/candidate_cases.jsonl"
 RELEASES_DIR = REPO_ROOT / "releases"
@@ -34,12 +39,6 @@ def _is_placeholder(case: dict[str, Any]) -> bool:
     return case.get("source_family") == "placeholder" or case.get("record_id", "").endswith("-0000")
 
 
-def _has_coords(case: dict[str, Any]) -> bool:
-    lat = case.get("latitude")
-    lon = case.get("longitude")
-    return lat is not None and lon is not None and not (math.isnan(float(lat)) or math.isnan(float(lon)))
-
-
 def _decade(date_str: str) -> str | None:
     try:
         year = int(str(date_str)[:4])
@@ -55,12 +54,11 @@ def _latest_geojson() -> Path | None:
     return candidates[0] if candidates else None
 
 
-def _case_to_feature(case: dict[str, Any]) -> dict[str, Any]:
-    return {
-        "type": "Feature",
-        "geometry": {"type": "Point", "coordinates": [case["longitude"], case["latitude"]]},
-        "properties": {k: v for k, v in case.items() if k not in ("latitude", "longitude")},
-    }
+def _display_path(path: Path) -> str:
+    try:
+        return str(path.relative_to(REPO_ROOT))
+    except ValueError:
+        return str(path)
 
 
 def _municipios_features() -> list[dict[str, Any]]:
@@ -106,10 +104,10 @@ def _point_in_geometry(lon: float, lat: float, geometry: dict[str, Any]) -> bool
 
 
 def main() -> int:
-    master = [c for c in _read_jsonl(MASTER_LEDGER) if not _is_placeholder(c)]
-    candidates = [c for c in _read_jsonl(CANDIDATE_LEDGER) if not _is_placeholder(c)]
+    master = [normalize_case(c) for c in _read_jsonl(MASTER_LEDGER) if not _is_placeholder(c)]
+    candidates = [normalize_candidate(c) for c in _read_jsonl(CANDIDATE_LEDGER) if not _is_placeholder(c)]
 
-    mapped = [c for c in master if _has_coords(c)]
+    mapped = [c for c in master if feature_from_case(c)]
     by_decade: dict[str, int] = {}
     by_tier: dict[str, int] = {}
     for case in master:
@@ -142,7 +140,7 @@ def main() -> int:
     if geojson_path:
         geojson = json.loads(geojson_path.read_text())
     else:
-        geojson = {"type": "FeatureCollection", "features": [_case_to_feature(c) for c in mapped]}
+        geojson = {"type": "FeatureCollection", "features": [feature_from_case(c) for c in mapped]}
 
     snapshot = {
         "/health": {
@@ -150,6 +148,13 @@ def main() -> int:
             "master": len(master),
             "mapped": len(mapped),
             "unmapped": len(master) - len(mapped),
+            "candidates": len(candidates),
+            "data_status": data_status(master, candidates),
+            "source_files": {
+                "master": _display_path(MASTER_LEDGER),
+                "candidates": _display_path(CANDIDATE_LEDGER),
+                "geojson": _display_path(geojson_path) if geojson_path else "derived_from_master_ledger",
+            },
         },
         "/cases": master,
         "/candidates": candidates,
@@ -158,8 +163,11 @@ def main() -> int:
             "total": len(master),
             "mapped": len(mapped),
             "unmapped": len(master) - len(mapped),
+            "candidates": len(candidates),
             "byDecade": by_decade,
             "byTier": by_tier,
+            "dataStatus": data_status(master, candidates),
+            "geojsonSource": _display_path(geojson_path) if geojson_path else "derived_from_master_ledger",
         },
         "/municipios/case_density": {
             "by_geoid": by_geoid,

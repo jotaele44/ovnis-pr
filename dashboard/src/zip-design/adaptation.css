@@ -1,0 +1,50 @@
+/* Shared interaction safeguards for the archive-derived surfaces. */
+.zip-surface { background: var(--zip-background); color: var(--zip-foreground); }
+.zip-surface :is(a,button,input,select):focus-visible { outline: 2px solid var(--zip-primary); outline-offset: 3px; }
+.zip-surface { min-width: 0; }
+.zip-surface main { min-width: 0; }
+@media (prefers-reduced-motion: reduce) { .zip-surface *, .zip-surface *::before, .zip-surface *::after { scroll-behavior: auto !important; transition-duration: 0s !important; animation-duration: 0s !important; } }
+
+/* Keep failure/loading text readable on narrow screens; imported CSS hid it. */
+.zip-surface header [role="alert"] { font-size: 12px; white-space: normal; }
+@media (max-width: 850px) { .zip-surface header { flex-wrap: wrap; } .zip-surface header > div:last-child { font-size: 11px; white-space: normal; flex-basis: 100%; } }
+
+/* Explicit conversion from ZIP full colors to the existing HSL-channel contract. */
+:root {
+ --background: 216.000 26.316% 96.275%;
+ --foreground: 219.310 39.726% 14.314%;
+ --card: 220.000 27.273% 97.843%;
+ --card-foreground: 219.310 39.726% 14.314%;
+ --primary: 246.038 96.364% 67.647%;
+ --primary-foreground: 0.000 0.000% 100.000%;
+ --secondary: 215.294 32.075% 89.608%;
+ --secondary-foreground: 218.919 33.333% 21.765%;
+ --muted: 214.286 28.000% 90.196%;
+ --muted-foreground: 220.588 14.407% 46.275%;
+ --accent: 246.038 96.364% 67.647%;
+ --accent-foreground: 0.000 0.000% 100.000%;
+ --border: 216.000 23.810% 83.529%;
+ --popover: 0.000 0.000% 100.000%;
+ --popover-foreground: 219.310 39.726% 14.314%;
+ --input: 216.000 23.810% 83.529%;
+ --ring: 246.038 96.364% 67.647%;
+}
+:root.dark, :root[data-theme="dark"] {
+ --background: 216.522 58.974% 7.647%;
+ --foreground: 215.455 45.833% 90.588%;
+ --card: 217.241 50.877% 11.176%;
+ --card-foreground: 215.455 45.833% 90.588%;
+ --primary: 246.870 100.000% 74.314%;
+ --primary-foreground: 225.000 42.857% 5.490%;
+ --secondary: 216.667 45.000% 15.686%;
+ --secondary-foreground: 215.556 36.986% 85.686%;
+ --muted: 217.714 46.667% 14.706%;
+ --muted-foreground: 216.667 16.364% 56.863%;
+ --accent: 246.870 100.000% 74.314%;
+ --accent-foreground: 225.000 42.857% 5.490%;
+ --border: 216.316 34.545% 21.569%;
+ --popover: 217.500 50.000% 12.549%;
+ --popover-foreground: 214.737 51.351% 92.745%;
+ --input: 216.316 34.545% 21.569%;
+ --ring: 246.870 100.000% 74.314%;
+}
