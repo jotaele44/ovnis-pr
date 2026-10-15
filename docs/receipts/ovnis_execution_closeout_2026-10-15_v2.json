@@ -1,0 +1,109 @@
+{
+  "schema": "ovnis.execution-closeout-git-mirror/v2",
+  "recorded_at": "2026-10-15T20:05:00Z",
+  "floot": {
+    "project_id": "7fe42a06-1945-4b5b-ba78-55418ad90fbc",
+    "version": 1792094593950,
+    "checkpoint_id": "d114f952-16d2-4978-b466-3800821053ab",
+    "checkpoint_title": "Freeze Oct 15 governed authority closeout",
+    "receipt_path": "static/__dev/docs/ovnis-execution-closeout-2026-10-15-v2.json",
+    "final_publish_job": "149bb271-640d-408a-bdda-440080494b21",
+    "final_publish_state": "SUCCEEDED",
+    "published_url": "https://ovnis-pr.floot.app",
+    "visibility": "internal",
+    "routes": 15,
+    "endpoints": 28,
+    "spec_files": 92,
+    "spec_pass": 89,
+    "spec_fail": 0,
+    "spec_skip_service_harness": 3,
+    "typecheck": "PASS"
+  },
+  "reference_denominator": {
+    "case_links": 470,
+    "unique_references": 244,
+    "STRICT_BINDING_ELIGIBLE": 1,
+    "DISCOVERY_ONLY": 190,
+    "NON_BINDING_TERMINAL": 36,
+    "REVIEW_TIE": 14,
+    "UNRESOLVED": 3
+  },
+  "authority": {
+    "production_owner_viewer_bridge": "IMPLEMENTED_AND_PUBLISHED",
+    "raw_owner_identity_persisted_in_source": false,
+    "production_password_bootstrap_allowed": false,
+    "production_bootstrap_requires_pinned_owner_viewer": true,
+    "sandbox_bootstrap_401_zero_side_effects": true,
+    "production_bootstrap_state": "OPEN_HUMAN_OWNER_ACTIVATION_REQUIRED",
+    "runtime_users": 0,
+    "runtime_passwords": 0,
+    "runtime_viewer_principals": 0,
+    "runtime_workspace_members": 0,
+    "runtime_audits": 0
+  },
+  "source_registry": {
+    "reviewed_git_commit": "9b6444928a688b0b3e6dcd0fbdd0370ed5ee6b7e",
+    "reviewed_git_blob_sha1": "d4b80bae36273d6612dbc4b9e1332305dd4c40ee",
+    "reviewed_git_rows": 26,
+    "runtime_rows": 14,
+    "runtime_sync": "OPEN_REQUIRES_PRODUCTION_OPERATOR"
+  },
+  "faa": {
+    "artifact_id": "OVART_REF_333482f6aba26c9b07ecdf9c",
+    "source_id": "SRC-0005",
+    "historical_state": "STRICT_BINDING_ELIGIBLE",
+    "execution_state": "LOCATOR_STALE_REVIEW_REQUIRED",
+    "stale_locator_http_status": 404,
+    "stale_locator_sha256": "dc1d54dab6ec8c00f70137927504e4f222c8395f10760b6beecfcfa94e08249f",
+    "canonical_registry_locator_http_status": 200,
+    "canonical_registry_locator_sha256": "5ef1c457cb300b77c9a3a590e357f74921f32edcf91a1461f94d25fdf81a0a60",
+    "drift_receipt_commit": "a014de8a6c29e2a2861093422a2f228fa7b9b333",
+    "binding_persisted": false
+  },
+  "producer_export": {
+    "material_head": "70c1f66383acf59d87cf7ec24ee9a46c48022951",
+    "package_id": "pkg_f006c7c911425237eea9bf92bf574780",
+    "manifest_sha256": "5497cb35f17d1d70a6d84669f5b1ee5845a44db8cfaca378a3680a96f43f543a",
+    "counts": {
+      "sources": 280,
+      "entities": 1266,
+      "relationships": 1147,
+      "observations": 470
+    }
+  },
+  "thehub": {
+    "state": "PASS_CURRENT_MATERIAL_HEAD_ISOLATED_CONSUMER_COMPATIBILITY",
+    "execution_commit": "60bcdaaa69add1cee1a57b91c8ce4525bda6db88",
+    "workflow_run_id": 38796693932,
+    "workflow_artifact_id": 12001244612,
+    "workflow_artifact_digest": "sha256:ff7e62029472bf870da6a0622dd43c38a7a2592b4ac852b0190cfb1f9882fc9a",
+    "permanent_receipt_commit": "a338021d407e58b0e481d9e6d213b22255ed1730",
+    "permanent_receipt_blob_sha1": "f1c7ae42873031e25a2613ce8cfdc4ca558b8b8d",
+    "cleanup_commit": "a3e24e3c3d998cd936814517a01f79907ab5488b",
+    "ovnis_mirror_commit": "e34ef388f8cc0e3e3cf1704b12d8ad0e109e197e",
+    "isolated_hub_db_sha256": "8d4fc5b9c23fd6695a216b719b42ab8b594a9fe56e284b7ccd5cbe3b52dc93d1",
+    "production_deployment": false
+  },
+  "offline": {
+    "service_worker_status": 200,
+    "service_worker_bytes": 3697,
+    "service_worker_sha256": "99c0255057220860680c2aa329284db6ed8d1ec040619d1e347f6623ebca7e44",
+    "physical_network_loss_reconnect_proof": "OPEN"
+  },
+  "spatial": {
+    "w8_v1": "OPEN_PROVISIONAL_FAIL_KILL_CRITERIA",
+    "v2_profiles": "RC1_CANDIDATE_EVIDENCE_GATED"
+  },
+  "rendered": {
+    "current_desktop_job": "b17a719c-7a2d-46b7-af4c-6fd5b22473ea",
+    "current_430_job": "f62b5361-4dd2-4d0b-b3ba-f420725a6ad3",
+    "current_393_job": "db03af79-179c-477d-95ee-5307eb400a0d",
+    "state": "OPEN_JOBS_RUNNING_OR_WAITING_AFTER_UI_CHANGE"
+  },
+  "native": {
+    "build_state": "SUCCEEDED",
+    "build_completed_at": "2026-10-02T20:20:05.788Z",
+    "physical_device_proof": "OPEN"
+  },
+  "certification": "OPEN_NOT_ISSUED"
+}
