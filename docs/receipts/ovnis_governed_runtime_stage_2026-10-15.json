@@ -1,0 +1,116 @@
+{
+  "schema": "ovnis.governed-runtime-stage/v1",
+  "recorded_at": "2026-10-16T03:45:00Z",
+  "preserved_reference_denominator": {
+    "STRICT_BINDING_ELIGIBLE": 1,
+    "DISCOVERY_ONLY": 190,
+    "NON_BINDING_TERMINAL": 36,
+    "REVIEW_TIE": 14,
+    "UNRESOLVED": 3,
+    "total": 244
+  },
+  "floot": {
+    "project_id": "7fe42a06-1945-4b5b-ba78-55418ad90fbc",
+    "version": 1792122140162,
+    "checkpoint_id": "a4b27a26-bbae-4c58-b351-76dda7342d93",
+    "publish_job_id": "8ad01e3e-883e-440c-bf87-b8a11217aef6",
+    "publish_state": "SUCCEEDED",
+    "published_url": "https://ovnis-pr.floot.app",
+    "visibility": "internal",
+    "verification": {
+      "spec_files": 92,
+      "pass": 89,
+      "fail": 0,
+      "service_module_harness_skips": 3,
+      "typecheck": "PASS"
+    }
+  },
+  "owner_authority": {
+    "protected_executor_query": "/login?execute_closeout=1",
+    "executor_requires_exact_internal_production_host": true,
+    "executor_requires_pinned_floot_owner_viewer": true,
+    "sql_bypass_used": false,
+    "password_invention_used": false,
+    "live_execution_state": "OPEN_NO_FOREGROUNDED_FLOOT_BROWSER_SESSION",
+    "runtime_rows_at_freeze": {
+      "users": 0,
+      "passwords": 0,
+      "viewer_principals": 0,
+      "workspace_members": 0,
+      "audits": 0
+    }
+  },
+  "source_registry": {
+    "target_commit": "9b6444928a688b0b3e6dcd0fbdd0370ed5ee6b7e",
+    "target_blob_sha1": "d4b80bae36273d6612dbc4b9e1332305dd4c40ee",
+    "target_sha256": "6429b7c56eae29c24f28b8e3d0e6756eaaac1325b230b90229a9012e7dd1d486",
+    "target_bytes": 4329,
+    "target_rows": 26,
+    "target_active_rows": 25,
+    "runtime_rows": 14,
+    "execution_state": "OPEN_REQUIRES_OWNER_PRINCIPAL"
+  },
+  "faa": {
+    "historical_artifact_id": "OVART_REF_333482f6aba26c9b07ecdf9c",
+    "historical_state": "STRICT_BINDING_ELIGIBLE",
+    "historical_locator": "https://www.faa.gov/about/office_org/headquarters_offices/ato/foia/",
+    "stale_locator_http_status": 404,
+    "stale_locator_sha256": "dc1d54dab6ec8c00f70137927504e4f222c8395f10760b6beecfcfa94e08249f",
+    "successor_state": "REVIEWED_FUNCTIONAL_SUCCESSOR_DIRECTORY_NOT_CONTENT_IDENTITY",
+    "successor_locator": "https://www.faa.gov/foia/foia_coordinators",
+    "successor_sha256": "c12d6de970b44d9c64df5801ca9bba21513001487367ba9e4a309978d7807e75",
+    "successor_bytes": 104169,
+    "successor_receipt_commit": "6c28f8fe96ee57b1f81d0f132b4dcfb3e0c8e6dc",
+    "successor_receipt_blob_sha1": "a2ab4ff4324c952e198394e9458b15188c18b301",
+    "binding_execution": "STAGED_PROTECTED_ENDPOINT_NOT_YET_EXECUTED",
+    "acquisition_role": "VERIFIED_REFERENCE_SOURCE_DIRECTORY_ONLY",
+    "claim_evidence_eligible": false
+  },
+  "staged_real_runtime_evidence": {
+    "chronology": {
+      "left_case": "PRUAP-0398",
+      "left_date": "2009-04-15",
+      "right_case": "PRUAP-0442",
+      "right_date": "2019-11-11",
+      "expected_relation": "BEFORE",
+      "state": "STAGED_NOT_EXECUTED"
+    },
+    "contradiction": {
+      "artifact_id": "OVART_REF_c6e39f82c417c29ca93645be",
+      "case_id": "PRUAP-0428",
+      "reference": "NUFORC/AARO",
+      "candidate_source_ids": [
+        "SRC-0010",
+        "SRC-0006"
+      ],
+      "adjudication_state": "REVIEW_TIE",
+      "contradiction_class": "IDENTITY",
+      "state": "STAGED_NOT_EXECUTED"
+    },
+    "claims": "SKIP_UNTIL_CASE_CLAIM_ELIGIBLE_VERIFIED_MANIFESTATION_EXISTS"
+  },
+  "git_floot_relationship": {
+    "receipt_commit": "34cf077a195d7714864fdf87e5ad0d35a5936d25",
+    "disposition": "DISTINCT_VERSIONED_MANIFESTATIONS_WITH_EXPLICIT_CONTRACT_BINDINGS",
+    "code_equivalence": "NOT_CERTIFIED"
+  },
+  "offline": {
+    "service_worker_sha256": "99c0255057220860680c2aa329284db6ed8d1ec040619d1e347f6623ebca7e44",
+    "service_worker_bytes": 3697,
+    "physical_network_loss_reconnect_proof": "OPEN"
+  },
+  "native": {
+    "historical_build_state": "SUCCEEDED",
+    "historical_build_completed_at": "2026-10-02T20:20:05.788Z",
+    "current_head_native_binding": "OPEN_STALE_HISTORICAL_BUILD",
+    "current_build_allowance_remaining": 0,
+    "allowance_reset_at": "2026-11-01T15:26:26.000Z",
+    "app_store_connection": "BLOCKED_NOT_CONNECTED",
+    "physical_iphone_proof": "OPEN"
+  },
+  "spatial": {
+    "w8_v1": "OPEN_PROVISIONAL_FAIL_KILL_CRITERIA",
+    "v2_profile_state": "RC1_CANDIDATE_EVIDENCE_GATED"
+  },
+  "certification": "OPEN_NOT_ISSUED"
+}
