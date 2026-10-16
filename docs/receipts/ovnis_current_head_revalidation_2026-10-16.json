@@ -1,0 +1,65 @@
+{
+  "schema": "ovnis.current-head-revalidation/v1",
+  "recorded_at": "2026-10-16T12:46:00Z",
+  "preserved_checkpoint": "a4b27a26-bbae-4c58-b351-76dda7342d93",
+  "floot": {
+    "project_id": "7fe42a06-1945-4b5b-ba78-55418ad90fbc",
+    "observed_version": 1792151499504,
+    "checkpoint_creation_result": "NO_CHANGES_SINCE_LAST_CHECKPOINT",
+    "verification": {
+      "spec_files": 92,
+      "pass": 89,
+      "fail": 0,
+      "service_module_harness_skips": 3,
+      "typecheck": "PASS"
+    }
+  },
+  "runtime_preconditions": {
+    "users": 0,
+    "passwords": 0,
+    "viewer_principals": 0,
+    "workspace_members": 0,
+    "source_registry_rows": 14,
+    "active_source_registry_rows": 13,
+    "source_registry_snapshot": "68b87366207cb3fe249814ee6611a03b18d67a6b",
+    "source_manifestations": 1,
+    "artifact_source_bindings": 0,
+    "artifact_bytes": 0,
+    "claims": 0,
+    "chronology": 0,
+    "contradictions": 0,
+    "audits": 0
+  },
+  "faa": {
+    "source_id": "SRC-0005",
+    "source_snapshot_commit": "68b87366207cb3fe249814ee6611a03b18d67a6b",
+    "verified_locator": "https://www.faa.gov/foia/electronic_reading_room",
+    "automation_state": "MANUAL_ONLY",
+    "artifact_id": "OVART_REF_333482f6aba26c9b07ecdf9c",
+    "historical_locator": "https://www.faa.gov/about/office_org/headquarters_offices/ato/foia/",
+    "artifact_materialization_state": "INVENTORIED",
+    "artifact_source_id": null,
+    "linked_cases": [
+      {
+        "case_id": "PRUAP-0398",
+        "date_local": "2009-04-15",
+        "source_family": "FAA"
+      },
+      {
+        "case_id": "PRUAP-0442",
+        "date_local": "2019-11-11",
+        "source_family": "FAA"
+      }
+    ]
+  },
+  "executor": {
+    "query_path": "/login?execute_closeout=1",
+    "exact_internal_host_required": true,
+    "pinned_owner_viewer_required": true,
+    "protected_endpoints_only": true,
+    "sql_bypass": false,
+    "password_invention": false,
+    "execution_state": "OPEN_NO_FOREGROUNDED_FLOOT_BROWSER_SESSION"
+  },
+  "certification": "OPEN_NOT_ISSUED"
+}
