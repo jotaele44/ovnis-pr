@@ -1,0 +1,7 @@
+path,classification,materiality,adjudication_note,base_commit,head_commit
+".federation/docs-sync.json","FEDERATION_TEMPLATE_GOVERNANCE_REPIN","SUPPORTING","Shared docs-sync coupling/template governance update; no OVNIS runtime/data/export semantics.","c9101150c26fd3ebcbd74025060f3137b7710f56","a88b8dd8a6a15bbcedd3f06c84803b305b836be8"
+".github/workflows/template-drift.yml","CI_TEMPLATE_GOVERNANCE_REPIN","SUPPORTING","Template drift CI reference update only.","c9101150c26fd3ebcbd74025060f3137b7710f56","a88b8dd8a6a15bbcedd3f06c84803b305b836be8"
+"CONTRIBUTING.md","DOCUMENTATION_GOVERNANCE_UPDATE","NON_RUNTIME","Contributor/governance documentation only.","c9101150c26fd3ebcbd74025060f3137b7710f56","a88b8dd8a6a15bbcedd3f06c84803b305b836be8"
+"dashboard/eslint.config.js","LINT_SCOPE_SUPPORT_UPDATE","SUPPORTING_BUILD","Adds an optional lint glob; commit message states the directory contains no JavaScript here, so application runtime semantics are unchanged.","c9101150c26fd3ebcbd74025060f3137b7710f56","a88b8dd8a6a15bbcedd3f06c84803b305b836be8"
+"governance/change_log.json","GOVERNANCE_CHANGELOG_APPEND","NON_RUNTIME","Governance history only.","c9101150c26fd3ebcbd74025060f3137b7710f56","a88b8dd8a6a15bbcedd3f06c84803b305b836be8"
+"tools/check_docs_sync.py","DOCS_SYNC_CHECKER_FIX","SUPPORTING_TOOLING","Shared checker correctness fix; does not alter OVNIS runtime/data/export semantics.","c9101150c26fd3ebcbd74025060f3137b7710f56","a88b8dd8a6a15bbcedd3f06c84803b305b836be8"
