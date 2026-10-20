@@ -1,0 +1,90 @@
+{
+  "schema": "ovnis.execution-stage-2026-10-20/v1",
+  "recorded_at": "2026-10-20T19:55:00Z",
+  "preservation": {
+    "reference_denominator": {
+      "STRICT_BINDING_ELIGIBLE": 1,
+      "DISCOVERY_ONLY": 190,
+      "NON_BINDING_TERMINAL": 36,
+      "REVIEW_TIE": 14,
+      "UNRESOLVED": 3,
+      "total": 244
+    },
+    "historical_checkpoint": "a4b27a26-bbae-4c58-b351-76dda7342d93",
+    "current_head_revalidation_commit": "c9101150c26fd3ebcbd74025060f3137b7710f56",
+    "git_supporting_drift_commit": "38acfabd69e377326661bcdd7368da32745aa7d4",
+    "faa_successor_receipt_commit": "6c28f8fe96ee57b1f81d0f132b4dcfb3e0c8e6dc",
+    "git_floot_relationship_commit": "34cf077a195d7714864fdf87e5ad0d35a5936d25"
+  },
+  "floot": {
+    "observed_version": 1792517778158,
+    "verification": {
+      "spec_files": 92,
+      "pass": 89,
+      "fail": 0,
+      "service_module_harness_skips": 3,
+      "typecheck": "PASS"
+    },
+    "critical_closeout_code_revalidated": true,
+    "published": true,
+    "visibility": "internal",
+    "published_url": "https://ovnis-pr.floot.app",
+    "owner_browser_context": "OPEN_NO_FOREGROUNDED_FLOOT_WINDOW",
+    "redundant_republish_attempt": "NOT_EXECUTED_NO_DEPLOYMENT_MUTATION"
+  },
+  "database": {
+    "users": 0,
+    "passwords": 0,
+    "viewer_principals": 0,
+    "workspace_members": 0,
+    "registry_rows": 14,
+    "active_registry_rows": 13,
+    "source_manifestations": 1,
+    "source_bindings": 0,
+    "artifact_bytes": 0,
+    "claims": 0,
+    "chronology": 0,
+    "contradictions": 0,
+    "audits": 0,
+    "state": "UNCHANGED_FAIL_CLOSED"
+  },
+  "git_drift": {
+    "prior_head": "c9101150c26fd3ebcbd74025060f3137b7710f56",
+    "upstream_head": "a88b8dd8a6a15bbcedd3f06c84803b305b836be8",
+    "changed_paths": 6,
+    "unclassified": 0,
+    "classification": "SUPPORTING_TEMPLATE_DOCS_LINT_TOOLING_ONLY",
+    "application_semantics_changed": false
+  },
+  "guarded_executor": {
+    "path": "/login?execute_closeout=1",
+    "requires_exact_internal_host": true,
+    "requires_pinned_floot_owner_viewer": true,
+    "sql_bypass": false,
+    "password_invention": false,
+    "steps": [
+      "owner bootstrap",
+      "14->26 registry synchronization + replay/falsifier",
+      "FAA bind + replay/falsifier",
+      "FAA VERIFIED_REFERENCE acquisition + replay",
+      "PRUAP-0398 BEFORE PRUAP-0442 chronology + replay",
+      "PRUAP-0428 NUFORC/AARO identity contradiction + replay/falsifier",
+      "Claims skipped"
+    ],
+    "execution_state": "OPEN_OWNER_BROWSER_SESSION_REQUIRED"
+  },
+  "native": {
+    "historical_build_completed_at": "2026-10-02T20:20:05.788Z",
+    "current_head_binding": "OPEN_HISTORICAL_ONLY",
+    "builds_used": 12,
+    "builds_limit": 12,
+    "builds_remaining": 0,
+    "resets_at": "2026-11-01T15:26:26.000Z",
+    "app_store_connection": "NOT_CONNECTED",
+    "physical_device_proof": "OPEN"
+  },
+  "spatial": {
+    "w8_v1": "OPEN_PROVISIONAL_FAIL_KILL_CRITERIA"
+  },
+  "certification": "OPEN_NOT_ISSUED"
+}
