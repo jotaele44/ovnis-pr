@@ -16,6 +16,7 @@ from typing import Any
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
+
 from server.backend.grid_v2_api import router as grid_v2_router
 
 ROOT = Path(__file__).resolve().parents[2]
