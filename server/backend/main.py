@@ -17,6 +17,8 @@ from typing import Any
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 
+from server.backend.grid_v2_api import router as grid_v2_router
+
 ROOT = Path(__file__).resolve().parents[2]
 MASTER_PATH = ROOT / "data" / "master" / "master_cases.jsonl"
 CANDIDATE_PATH = ROOT / "data" / "candidates" / "candidate_cases.jsonl"
@@ -42,6 +44,7 @@ app.add_middleware(
     allow_methods=["GET", "OPTIONS"],
     allow_headers=["*"],
 )
+app.include_router(grid_v2_router)
 
 
 def read_jsonl(path: Path) -> list[dict[str, Any]]:
