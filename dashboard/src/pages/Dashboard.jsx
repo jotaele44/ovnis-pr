@@ -49,6 +49,7 @@ export default function Dashboard() {
           <span role={healthError ? 'alert' : undefined}>{healthLabel}</span>
         </div>
       </header>
+        <div data-offline-status-host style={{ padding: "2px 12px", flexShrink: 0 }} />
 
       <div className="flex flex-1 min-h-0">
         <div className="relative flex-1 min-w-0">

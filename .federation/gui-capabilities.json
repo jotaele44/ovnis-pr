@@ -520,6 +520,30 @@
           "tests/test_case_reports.py"
         ]
       }
+    },
+    {
+      "id": "offline-app-shell-v1",
+      "classification": "client_only",
+      "status": "active",
+      "requires_terminal": false,
+      "rationale": "Production build precaches only shipped assets; passive shell status in existing layout. Data and sync readiness remain independent. No server mutations cached or queued.",
+      "frontend": {
+        "files": [
+          "dashboard/src/pages/Dashboard.jsx",
+          "dashboard/offline/offline-client.js"
+        ],
+        "routes": [
+          "/"
+        ],
+        "components": [
+          "[data-offline-status-host]"
+        ]
+      },
+      "tests": {
+        "e2e": [
+          "dashboard/offline/test-offline.mjs"
+        ]
+      }
     }
   ],
   "exceptions": []
