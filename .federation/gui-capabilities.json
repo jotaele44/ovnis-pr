@@ -143,7 +143,9 @@
           "dashboard/src/lib/PageNotFound.jsx",
           "dashboard/src/lib/api.js",
           "dashboard/src/pages/Dashboard.jsx",
-          "dashboard/src/components/ProgramTimeline.jsx"
+          "dashboard/src/components/ProgramTimeline.jsx",
+          "dashboard/src/components/MobileNav.jsx",
+          "dashboard/src/components/TopControls.jsx"
         ],
         "discoverability": [
           "dashboard/src/pages/Dashboard.jsx"
@@ -161,15 +163,27 @@
         ],
         "unit": [
           "dashboard/src/components/CaseMap.test.jsx",
-          "dashboard/src/components/SpatialToolsPanel.test.jsx"
+          "dashboard/src/components/SpatialToolsPanel.test.jsx",
+          "dashboard/src/components/CaseGrid.test.jsx",
+          "dashboard/src/components/MobileNav.test.jsx",
+          "dashboard/src/components/TopControls.test.jsx",
+          "dashboard/src/hooks/use-mobile.test.jsx",
+          "dashboard/src/lib/locale.test.js",
+          "dashboard/src/lib/theme.test.js"
         ],
         "e2e": [
-          "dashboard/tests/gui-parity.spec.mjs"
+          "dashboard/tests/gui-parity.spec.mjs",
+          "dashboard/tests/gui-parity-mobile.spec.mjs"
         ]
       },
       "candidate_ids": [
         "gui_control:dashboard/src/components/ErrorBoundary.jsx:button#d1a223462e45",
+        "gui_control:dashboard/src/components/MobileNav.jsx:button#3140ae2d5f6e",
+        "gui_control:dashboard/src/components/MobileNav.jsx:button#640845decc9c",
+        "gui_control:dashboard/src/components/MobileNav.jsx:button#651fd6cdd842",
         "gui_control:dashboard/src/components/QueryState.jsx:button#5ca5ab4a31a6",
+        "gui_control:dashboard/src/components/TopControls.jsx:button#698530d82c22",
+        "gui_control:dashboard/src/components/TopControls.jsx:button#819cd835fc4b",
         "gui_control:dashboard/src/lib/PageNotFound.jsx:button#b06ecd327bfa",
         "gui_route:dashboard/src/App.jsx:*",
         "python_module:server/backend/__init__.py",

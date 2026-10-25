@@ -7,6 +7,14 @@ source, its handler read, and — wherever the environment allowed — exercised
 live with Playwright against a running dev server backed by the bundled
 sample data.
 
+> **Status update (2026-10-25):** the Cases-tab controls inventoried below have
+> since changed. The search box (`Search cases`, placeholder "Search by case,
+> place, agency or year…") now also matches case id, year, decade and agency; the
+> period/tier selects are labelled "Period"/"Tier"; the list is paginated; an
+> empty result shows a "Reset search" action; and below 860px the table becomes
+> cards inside a mobile shell. This audit is otherwise left as the 2026-08-23
+> record. Current behaviour: `dashboard/README.md`.
+
 ## Overview
 
 **What this app is.** OVNIS (`ovnis-pr`) is the historical UAP/anomalous-event
