@@ -17,12 +17,54 @@ test("Cases tab renders the real case count and the search box filters it", asyn
   expect(Array.isArray(cases), "GET /cases did not return an array").toBe(true);
   expect(cases.length, "the committed master ledger should not be empty").toBeGreaterThan(0);
 
-  const countBadge = page.locator("input[placeholder='Search…']").locator("xpath=preceding-sibling::span[1]");
+  const countBadge = page.getByTestId("case-count");
   await expect(countBadge).toHaveText(String(cases.length));
 
   // A query that cannot match any real description or location string.
-  await page.getByPlaceholder("Search…").fill("zzz-no-such-sighting-zzz");
+  await page.getByRole("searchbox", { name: "Search cases" }).fill("zzz-no-such-sighting-zzz");
   await expect(countBadge).toHaveText("0");
+});
+
+test("a search that matches nothing shows the empty state, and Reset search restores every case", async ({ page }) => {
+  const casesResponse = page.waitForResponse(
+    (response) => response.url().includes("/cases") && response.status() === 200,
+  );
+  await page.goto("/", { waitUntil: "domcontentloaded" });
+  const cases = await (await casesResponse).json();
+
+  await page.getByRole("searchbox", { name: "Search cases" }).fill("zzz-no-such-sighting-zzz");
+  await expect(page.getByText("No cases found")).toBeVisible();
+  await page.getByRole("button", { name: "Reset search" }).click();
+  await expect(page.getByText("No cases found")).toBeHidden();
+  await expect(page.getByTestId("case-count")).toHaveText(String(cases.length));
+});
+
+test("the case list is paginated: one page of rows, then the next page", async ({ page }) => {
+  const casesResponse = page.waitForResponse(
+    (response) => response.url().includes("/cases") && response.status() === 200,
+  );
+  await page.goto("/", { waitUntil: "domcontentloaded" });
+  const cases = await (await casesResponse).json();
+  const pages = Math.ceil(cases.length / 12);
+
+  // 12 body rows + the header row, not all of the ledger at once.
+  await expect(page.getByRole("row")).toHaveCount(Math.min(12, cases.length) + 1);
+  await expect(page.getByText(`Page 1 of ${pages}`)).toBeVisible();
+  await page.getByRole("button", { name: "Next page" }).click();
+  await expect(page.getByText(`Page 2 of ${pages}`)).toBeVisible();
+});
+
+test("the search matches a case id and a year, not only the description", async ({ page }) => {
+  const casesResponse = page.waitForResponse(
+    (response) => response.url().includes("/cases") && response.status() === 200,
+  );
+  await page.goto("/", { waitUntil: "domcontentloaded" });
+  const cases = await (await casesResponse).json();
+  const target = cases[cases.length - 1];
+
+  await page.getByRole("searchbox", { name: "Search cases" }).fill(target.case_id);
+  await expect(page.getByTestId("case-count")).not.toHaveText("0");
+  await expect(page.getByTestId("case-count")).not.toHaveText(String(cases.length));
 });
 
 test("the evidence-tier filter narrows the grid to matching real cases", async ({ page }) => {
@@ -33,12 +75,10 @@ test("the evidence-tier filter narrows the grid to matching real cases", async (
   const cases = await (await casesResponse).json();
   const t1Count = cases.filter((c) => c.evidence_tier === "T1").length;
 
-  // Two comboboxes render in the filter row: decade first, evidence tier second.
-  await page.getByRole("combobox").nth(1).click();
+  await page.getByRole("combobox", { name: "Tier" }).click();
   await page.getByRole("option", { name: "T1" }).click();
 
-  const countBadge = page.locator("input[placeholder='Search…']").locator("xpath=preceding-sibling::span[1]");
-  await expect(countBadge).toHaveText(String(t1Count));
+  await expect(page.getByTestId("case-count")).toHaveText(String(t1Count));
 });
 
 test("Statistics tab renders the real totals from the backend", async ({ page }) => {

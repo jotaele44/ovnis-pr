@@ -117,6 +117,14 @@ trimmed for brevity beyond the touch-target/overflow tabulation.
 
 ## Findings (prioritized)
 
+> **Status update (2026-10-25):** Findings 1 and 2 were addressed after this
+> audit. Below 860px the dashboard now uses a mobile shell (header, bottom
+> navigation, card list, bottom-sheet case detail) instead of the fixed 440px
+> pane, and the period / tier selects carry accessible names. The text below is
+> the original 2026-08-24 record and is left as written. See
+> `dashboard/README.md` ("Layout: desktop and mobile"); verified at 390x844,
+> 430x932 and 844x390 by `dashboard/tests/gui-parity-mobile.spec.mjs`.
+
 ### 1. [High] Mobile viewport is not responsive -- the sidebar overflows the screen and the map becomes fully inaccessible
 
 At 390px width, the right-hand tab panel (`<aside className="w-[440px]

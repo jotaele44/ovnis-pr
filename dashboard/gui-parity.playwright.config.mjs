@@ -23,7 +23,7 @@ export default defineConfig({
   testDir: "./tests",
   // Array, not a bare string: a second spec file must not be silently
   // dropped from collection the way it would be with a single-filename match.
-  testMatch: ["gui-parity.spec.mjs"],
+  testMatch: ["gui-parity.spec.mjs", "gui-parity-mobile.spec.mjs"],
   fullyParallel: false,
   retries: process.env.CI ? 1 : 0,
   workers: 1,
@@ -39,6 +39,14 @@ export default defineConfig({
   projects: [
     {
       name: "chromium-gui-parity",
+      testMatch: ["gui-parity.spec.mjs"],
+      use: { ...devices["Desktop Chrome"] },
+    },
+    {
+      // Mobile shell (<= 860px). Chromium with a phone viewport and touch; the
+      // spec sets the exact viewport per describe block. Not a physical device.
+      name: "chromium-mobile-shell",
+      testMatch: ["gui-parity-mobile.spec.mjs"],
       use: { ...devices["Desktop Chrome"] },
     },
   ],
