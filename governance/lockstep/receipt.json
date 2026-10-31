@@ -11,5 +11,6 @@
     "centinelas-pr",
     "ovnis-pr",
     "thehub-pr"
-  ]
+  ],
+  "canary": "compatible-main-v1"
 }
