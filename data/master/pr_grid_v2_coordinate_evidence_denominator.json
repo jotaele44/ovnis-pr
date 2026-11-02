@@ -1,0 +1,31 @@
+{
+  "contract": "ovnis-pr-grid-v2-coordinate-evidence-denominator/1.0",
+  "Source_Path": "data/master/master_cases.jsonl",
+  "Source_Commit": "6fcbfe58b349c59ed3ebd27ca2bca4afcad4aa22",
+  "Source_Git_Blob_SHA1": "428990a32070295f1efe7a7779e4b0e9f7200e82",
+  "Total_Row_Count": 470,
+  "Master_Row_Count": 470,
+  "Numeric_Coordinate_Pair_Count": 469,
+  "Missing_Or_NonNumeric_Coordinate_Pair_Count": 1,
+  "Verified_Source_Coordinate_Marker_Count": 0,
+  "Exact_Source_Point_Admissible_Count": 0,
+  "Coordinate_Provenance_Field_Row_Count": 0,
+  "Location_Confidence_Counts": {
+    "1": 2,
+    "0.4": 25,
+    "0.5": 18,
+    "0.6": 9,
+    "0.7": 415
+  },
+  "Required_Evidence_State": "VERIFIED_SOURCE_COORDINATE",
+  "Coordinate_Presence_Is_Exact_Evidence": false,
+  "Location_Confidence_Is_Exact_Evidence": false,
+  "Evidence_Tier_Is_Exact_Coordinate_Evidence": false,
+  "Migration_Input_Class": "EXACT_SOURCE_POINT",
+  "Migration_State": "BLOCKED_NO_VERIFIED_SOURCE_COORDINATE_DENOMINATOR",
+  "Promotion_State": "CANDIDATE_NOT_CANONICAL",
+  "Identity_Default": "CANDIDATE_NOT_IDENTITY",
+  "Source_Exporter_Geometry_Precision_State": "UNKNOWN",
+  "Generated_Federation_Exports_Committed": false,
+  "Scope_Note": "The master ledger contains 469 numeric latitude/longitude pairs, but it records no coordinate provenance fields and no VERIFIED_SOURCE_COORDINATE markers. Numeric coordinate presence, location_confidence, and evidence_tier are not accepted as exact-coordinate provenance. Exact-source-point Grid V2 migration is therefore blocked until source-supported coordinate evidence is added and independently validated."
+}
