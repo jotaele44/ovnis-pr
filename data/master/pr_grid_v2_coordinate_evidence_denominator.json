@@ -11,11 +11,11 @@
   "Exact_Source_Point_Admissible_Count": 0,
   "Coordinate_Provenance_Field_Row_Count": 0,
   "Location_Confidence_Counts": {
-    "1": 2,
     "0.4": 25,
     "0.5": 18,
     "0.6": 9,
-    "0.7": 415
+    "0.7": 415,
+    "1.0": 2
   },
   "Required_Evidence_State": "VERIFIED_SOURCE_COORDINATE",
   "Coordinate_Presence_Is_Exact_Evidence": false,
