@@ -109,6 +109,8 @@ exports/federation/
 reports/maintenance/
 # generated case reports (scripts/generate_case_report.py; reproducible from the ledgers)
 reports/cases/
+# generated road-reference candidates (scripts/resolve_road_refs.py; reproducible from the ledgers)
+reports/road_refs.json
 
 # Desktop wrapper (see desktop/README.md)
 .venv/

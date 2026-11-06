@@ -125,6 +125,9 @@ manifestation adjudications, research questions and media episodes in the JSONL 
 - `python3 scripts/dedupe_candidates.py --master-pairs` regenerates the CANDIDATE pairs.
 - `python3 scripts/generate_case_report.py --case <id>` writes a case report with a reproducibility
   receipt.
+- `python3 scripts/resolve_road_refs.py` lists road references in case locations and narratives
+  ("Route PR-303", "Hwy 2", "road 191") as CANDIDATES in `reports/road_refs.json`. It never edits a
+  case. Route parsing is pinned from spiderweb-pr (`federation/roads/pr_route_ref.pin.json`).
 
 See [`docs/RESEARCH_LEDGERS.md`](docs/RESEARCH_LEDGERS.md).
 

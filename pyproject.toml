@@ -22,6 +22,10 @@ line-length = 100
 # 3.11+ only and breaks the 3.10 matrix leg at import time.
 target-version = "py310"
 src = ["scripts", "server", "maintenance", "tests"]
+# federation/roads/pr_route_ref.py is a verbatim extract pinned by SHA-256 from
+# spiderweb-pr (see its pin JSON); any lint rewrite would break the pin, so no
+# linter may touch it. Fix style in the authority and re-extract instead.
+extend-exclude = ["federation/roads/pr_route_ref.py"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP", "SIM", "W"]
