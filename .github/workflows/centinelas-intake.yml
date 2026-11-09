@@ -66,14 +66,14 @@ jobs:
 
       - name: Upload routing report artifact
         if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: centinelas-intake-routing-report
           path: reports/intake/routing_report.csv
           if-no-files-found: warn
 
       - name: Open intake pull request (candidate + aux ledgers only; never master)
-        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        uses: peter-evans/create-pull-request@15733dbdfeedb4f7fdb73d13c6f5ac83b710fab8 # v8.1.2
         with:
           base: main
           branch: centinelas-intake/routed-signal
