@@ -160,4 +160,4 @@ def test_production_export_includes_research_rows(tmp_path, monkeypatch):
     types = {e["entity_type"] for e in entities}
     assert {"uap_case", "case_report", "manifestation_adjudication"} <= types
     manifest = json.loads((out / "manifest.json").read_text(encoding="utf-8"))
-    assert {f["stream"] for f in manifest["files"]} == {"sources", "entities", "relationships", "observations"}
+    assert {f["stream"] for f in manifest["files"]} == {"sources", "entities", "relationships", "observations", "source_monitors"}
