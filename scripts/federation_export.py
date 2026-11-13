@@ -491,9 +491,12 @@ _REGISTRY_COLUMNS = ("source_id", "name", "source_family", "reliability_default"
 # The registry's own vocabularies, mapped exactly as thehub-pr's ADR 0012 registry
 # reader maps this file (src/hub/source_monitor.py: _parse_ovnis, normalize_cadence,
 # normalize_status, normalize_tier and _window), so no source's label changes when
-# the Hub stops reading the registry and reads this stream instead. An unlisted
-# value maps to "unknown", as it does there; tests/test_federation_source_monitors.py
-# fails on a committed registry value that is not listed here.
+# the Hub stops reading the registry and reads this stream instead. Only this
+# registry's values are listed. The Hub's tables also hold other producers' values
+# (e.g. batch_file -> event, fully_materialized -> active), which map to "unknown"
+# here, so tests/test_federation_source_monitors.py fails on a committed registry
+# value that is not listed here: a new value gets a deliberate mapping, never a
+# silent "unknown" that differs from the Hub.
 MONITOR_CADENCE = {
     "weekly": "weekly", "monthly": "monthly", "quarterly": "quarterly",
     "yearly": "yearly", "annual": "yearly", "daily": "daily", "hourly": "hourly",
