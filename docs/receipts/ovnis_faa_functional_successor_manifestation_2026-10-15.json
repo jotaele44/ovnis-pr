@@ -1,0 +1,52 @@
+{
+  "schema": "ovnis.faa-functional-successor-manifestation/v1",
+  "recorded_at": "2026-10-16T03:28:30Z",
+  "historical": {
+    "artifact_id": "OVART_REF_333482f6aba26c9b07ecdf9c",
+    "source_id": "SRC-0005",
+    "reviewed_state": "STRICT_BINDING_ELIGIBLE",
+    "locator": "https://www.faa.gov/about/office_org/headquarters_offices/ato/foia/",
+    "observed_2026_10_15_http_status": 404,
+    "observed_response_bytes": 1245,
+    "observed_response_sha256": "dc1d54dab6ec8c00f70137927504e4f222c8395f10760b6beecfcfa94e08249f",
+    "raw_locator_preserved": true
+  },
+  "successor": {
+    "classification": "REVIEWED_FUNCTIONAL_SUCCESSOR_DIRECTORY_NOT_CONTENT_IDENTITY",
+    "locator": "https://www.faa.gov/foia/foia_coordinators",
+    "retrieved_at": "2026-10-16T03:28:30.903Z",
+    "http_status": 200,
+    "content_type": "text/html; charset=UTF-8",
+    "bytes": 104169,
+    "sha256": "c12d6de970b44d9c64df5801ca9bba21513001487367ba9e4a309978d7807e75",
+    "etag": "\"1792104941-gzip\"",
+    "page_evidence": [
+      "Air Traffic Service Centers",
+      "Western Service Area Air Traffic Organization",
+      "Central Service Area, Air Traffic Organization",
+      "Eastern Service Area Air Traffic Organization"
+    ]
+  },
+  "supporting_current_request_guide": {
+    "locator": "https://www.faa.gov/foia/foia_request",
+    "retrieved_at": "2026-10-16T03:28:30.960Z",
+    "http_status": 200,
+    "bytes": 103640,
+    "sha256": "aaa768b23997479cb60a1ce5ebc4a3a5d40d7d5737076397ca078e9b29b7a11a",
+    "role": "Official FAA current request guide directs Air Traffic Records to FAA FOIA service centers."
+  },
+  "historical_support": {
+    "description": "DOT annual FOIA reports document FAA Air Traffic Organization Western, Central, and Eastern service-area FOIA coordinators, supporting organizational continuity of the ATO FOIA function.",
+    "identity_boundary": "Organizational/functional continuity is not byte identity, URL identity, or case-evidence identity."
+  },
+  "adjudication": {
+    "successor_state": "REVIEWED",
+    "source_identity_continuity": "SUPPORTED",
+    "exact_web_resource_identity": "DENY",
+    "historical_locator_rewrite": "DENY",
+    "case_evidence_promotion": "DENY",
+    "binding_use": "MAY_SUPPORT_SOURCE_IDENTITY_BINDING_ONLY_WHEN_THE_BINDING_RECEIPT_PRESERVES_THE_HISTORICAL_LOCATOR_AND_THIS_SUCCESSOR_LINEAGE",
+    "acquisition_use": "SUCCESSOR_DIRECTORY_MANIFESTATION_ONLY",
+    "claim_use": "NOT_CASE_CLAIM_EVIDENCE"
+  }
+}

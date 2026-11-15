@@ -1,0 +1,248 @@
+{
+  "schema": "ovnis.production-republish-closeout/v1",
+  "recorded_date": "2026-10-01",
+  "scope": "Post-suspension runtime reconciliation, governed authority-control implementation, production republish, 27-endpoint proof, frontend route manifestation, current GitHub drift classification, and federation/spatial reference reconciliation",
+  "preserved_floot_checkpoint": {
+    "id": "695c4ddf-3e60-42e9-841e-bdcf8876eba9",
+    "title": "Freeze runtime reopen baseline",
+    "note": "A newer Floot checkpoint could not be created after the daily 1000-action ceiling was reached; this receipt freezes the later evidence externally without claiming a Floot checkpoint that does not exist."
+  },
+  "floot": {
+    "project_id": "7fe42a06-1945-4b5b-ba78-55418ad90fbc",
+    "observed_source_head_before_quota_block": 1790870174226,
+    "published_url": "https://ovnis-pr.floot.app",
+    "publish_job_id": "d5b7e184-2efb-4cd2-8ec8-47e45d847b48",
+    "publish_job_state": "SUCCEEDED",
+    "route_pages": 15,
+    "endpoints": 27,
+    "get_endpoints": 7,
+    "post_endpoints": 20,
+    "spec_files": 81,
+    "spec_files_passed": 81,
+    "spec_files_failed": 0,
+    "typecheck": "PASS"
+  },
+  "post_suspension_database_reconciliation": {
+    "artifacts": 244,
+    "source_registry_rows": 14,
+    "active_source_registry_rows": 13,
+    "source_manifestations": 1,
+    "users": 0,
+    "workspace_members": 0,
+    "artifact_source_binding_receipts": 0,
+    "bound_artifacts": 0,
+    "claims": 0,
+    "chronology_comparisons": 0,
+    "contradictions": 0,
+    "audit_events": 0,
+    "state": "MATCHES_PRE_SUSPENSION_MUTATION_BASELINE"
+  },
+  "authority_stage": {
+    "bootstrap_endpoint": "/_api/workspace/bootstrap/operator",
+    "source_promotion_endpoint": "/_api/workspace/sources/promote",
+    "bootstrap_policy": "FIRST_AUTHENTICATED_MEMBER_ONLY_ZERO_MEMBER_PRECONDITION_STRONG_IDEMPOTENCY_CHAINED_AUDIT",
+    "source_promotion_policy": "OPERATOR_ONLY_EXACT_TARGET_MANIFEST_STRONG_IDEMPOTENCY_CHAINED_AUDIT",
+    "injected_regression_state": "PASS",
+    "real_principal_creation": "BLOCKED_BY_TOOL_CREDENTIAL_SAFETY_BEFORE_REQUEST_REACHED_OVNIS",
+    "database_side_effect_from_blocked_attempt": false,
+    "source_registry_sync_executed": false,
+    "faa_binding_executed": false
+  },
+  "source_registry_promotion_attempt": {
+    "reviewed_plan_rows": 12,
+    "deferred_rows": 5,
+    "historical_promotion_commit": "082068e1c9b7f59192763e5306775616a659fd83",
+    "historical_promotion_blob_sha1": "d4b80bae36273d6612dbc4b9e1332305dd4c40ee",
+    "historical_promotion_sha256": "6429b7c56eae29c24f28b8e3d0e6756eaaac1325b230b90229a9012e7dd1d486",
+    "historical_promotion_bytes": 4329,
+    "historical_promotion_rows": 26,
+    "revert_commit": "8d2175c02e413bcbf31318d895c1e46aaa0ce3a3",
+    "current_canonical_registry_blob_sha1": "4a5a2900202df82fc4b48608ddb16970adf1d55f",
+    "current_canonical_registry_rows": 14,
+    "database_registry_rows": 14,
+    "state": "REVERTED_FAIL_CLOSED_PENDING_GOVERNED_RUNTIME_SYNC"
+  },
+  "production_endpoint_probe": {
+    "denominator": 27,
+    "path_existence_closed": true,
+    "pre_publish": {
+      "present": 25,
+      "missing_404": [
+        "/_api/workspace/bootstrap/operator",
+        "/_api/workspace/sources/promote"
+      ]
+    },
+    "post_publish": {
+      "present": 27,
+      "missing_404": [],
+      "get_200": [
+        "/_api/artifacts/catalog",
+        "/_api/certification/status",
+        "/_api/registry",
+        "/_api/research/snapshot",
+        "/_api/sources/registry",
+        "/_api/workspace/status"
+      ],
+      "get_401_expected": ["/_api/auth/session"],
+      "protected_post_401": [
+        "/_api/artifacts/acquire",
+        "/_api/federation/handoff/deliver",
+        "/_api/federation/handoff/stage",
+        "/_api/workspace/artifacts/source-bind",
+        "/_api/workspace/bootstrap/operator",
+        "/_api/workspace/chronology/compare",
+        "/_api/workspace/intake/run",
+        "/_api/workspace/proposals/create",
+        "/_api/workspace/proposals/revise",
+        "/_api/workspace/proposals/submit",
+        "/_api/workspace/receipts/import",
+        "/_api/workspace/research/claim",
+        "/_api/workspace/research/collection",
+        "/_api/workspace/research/contradiction",
+        "/_api/workspace/research/note",
+        "/_api/workspace/review/decide",
+        "/_api/workspace/sources/promote"
+      ],
+      "auth_negative": {
+        "/_api/auth/login_with_password": 400,
+        "/_api/auth/logout": 401,
+        "/_api/auth/register_with_password": 400
+      }
+    },
+    "database_nonmutation_after_probe": true
+  },
+  "production_frontend_routes": {
+    "denominator": 15,
+    "all_http_200": true,
+    "last_modified": "Thu, 01 Oct 2026 15:58:59 GMT",
+    "root": {
+      "path": "/",
+      "bytes": 18676,
+      "sha256": "7fe5e9b2ca2f432786f54dd04cd7fbc74de2648be70b4365f062481a521930ac",
+      "etag": "W/\"29d54d1622265043c0af54e9987e04b6\""
+    },
+    "shared_nonroot_shell": {
+      "paths": [
+        "/analysis",
+        "/cases",
+        "/dashboard",
+        "/evidence-analysis",
+        "/federation-context",
+        "/login",
+        "/review",
+        "/settings",
+        "/sources",
+        "/statistics",
+        "/timeline",
+        "/tour",
+        "/workspace",
+        "/__ovnis_missing_probe__"
+      ],
+      "bytes": 14181,
+      "sha256": "110de3c977b5a25dc064b16a0c57e59fe7ee974f007fbdb54006559d0a7cb5a6",
+      "etag": "W/\"d02a252dfd894ff3b519772e268ad5e1\""
+    }
+  },
+  "rendered_preview": {
+    "desktop_login": {
+      "viewport": "1514x518",
+      "horizontal_overflow": false,
+      "heading": "OVNIS workspace",
+      "inputs": 2,
+      "buttons": 7
+    },
+    "development_demo_navigation": {
+      "login_to_dashboard": "PASS",
+      "dashboard_horizontal_overflow_at_1514px": false
+    },
+    "full_desktop_surface_sweep": "BLOCKED_DAILY_FLOOT_ACTION_CEILING",
+    "iphone_393_430_rendered_proof": "OPEN",
+    "native_build": "OPEN",
+    "physical_device": "OPEN"
+  },
+  "production_logs": {
+    "window_sample_events": 278,
+    "additional_page_token_present": true,
+    "exhaustive_window": false,
+    "observed_500_or_unhandled": 0,
+    "observed_error_lines": "INTENTIONAL_MALFORMED_REGISTRATION_ZOD_VALIDATION_ONLY",
+    "classification": "PARTIAL_SAMPLE_NO_MATERIAL_RUNTIME_ERROR_OBSERVED"
+  },
+  "source_reference_plane": {
+    "case_links": 470,
+    "unique_references": 244,
+    "adjudication": {
+      "strict_binding_eligible": 1,
+      "discovery_only": 190,
+      "non_binding_terminal": 36,
+      "review_tie": 14,
+      "unresolved": 3,
+      "sum": 244
+    }
+  },
+  "github_drift": {
+    "frozen_floot_source_commit": "68b87366207cb3fe249814ee6611a03b18d67a6b",
+    "scope_head": "8d2175c02e413bcbf31318d895c1e46aaa0ce3a3",
+    "commits_ahead": 54,
+    "commits_behind": 0,
+    "changed_files": 76,
+    "adjudication_path": "data/reference/source_head_drift_adjudication_2026-10-01.csv",
+    "adjudication_commit": "7e0f8277db9d7c65d71bdba3a436311f0bb78080",
+    "adjudication_blob_sha1": "983954eb87709b5b8e20594c53d9c961b2765bd1",
+    "adjudicated_rows": 76,
+    "unclassified_rows": 0,
+    "equivalence": "NOT_CERTIFIED"
+  },
+  "spatial": {
+    "grid_v2_pin": "REFERENCE_ONLY",
+    "grid_v2_version": "2.0.0-rc1",
+    "grid_v2_authority_commit": "0c66e13d14232c0d7cbcbc179b3655904777dc71",
+    "v1_binding_state": "PROVISIONAL",
+    "v1_independent_validation": "FAIL_KILL_CRITERIA",
+    "exact_cell_claims_permitted": false,
+    "cell_set_required": true,
+    "w8_certification": "OPEN"
+  },
+  "federation_lockstep": {
+    "generation": 2,
+    "thehub_peer_receipt_present": true,
+    "thehub_peer_receipt_commit_sha": "0e31b42512e4d53250e1bc0f9ee149f90d41e6fd",
+    "thehub_peer_receipt_blob_sha": "c78fd069dc2fa6a9333d5736a0c7fc41ea03f230",
+    "centinelas_peer_receipt_present": true,
+    "reference_status": "BLOCKED",
+    "reference_pass_issued": false,
+    "production_authority": false,
+    "broad_current_production_consumer_receipt": "OPEN"
+  },
+  "claims_and_mutation_planes": {
+    "claims": 0,
+    "claim_population": "OPEN_NO_VERIFIED_BOUND_EXTERNAL_MANIFESTATION",
+    "chronology_comparisons": 0,
+    "contradictions": 0,
+    "positive_runtime_reason": "NO_LEGITIMATE_AUTHENTICATED_WORKSPACE_PRINCIPAL_AVAILABLE_TO_ASSISTANT_TOOLING"
+  },
+  "daily_tool_ceiling": {
+    "state": "ACTIVE",
+    "limit": 1000,
+    "reset_at_utc": "2026-10-02T00:00:00Z",
+    "application_defect": false,
+    "blocked_after": "production publish/probe, partial rendered desktop preview",
+    "effect": "Further Floot checkpoint/log pagination/browser/native actions unavailable in this turn unless capacity is added or the account day resets."
+  },
+  "certification": {
+    "state": "OPEN",
+    "zero_material_residue": false,
+    "blocking_residue": [
+      "legitimate authenticated operator/publisher positive runtime unavailable",
+      "reviewed source-registry promotions are planned but not synchronized",
+      "FAA strict binding not persisted/replayed/falsified in real authenticated runtime",
+      "external source manifestation bytes and artifact hashes remain incomplete",
+      "Claims, chronology and contradiction positive runtime evidence remain absent",
+      "W8 V1 transform remains PROVISIONAL / FAIL_KILL_CRITERIA",
+      "Git main to Floot source semantic equivalence remains unbound",
+      "Lockstep peer receipts are reference-plane evidence, not production consumer authority",
+      "production log window not fully paginated",
+      "full desktop / iPhone / native / physical-device proof remains incomplete"
+    ]
+  }
+}

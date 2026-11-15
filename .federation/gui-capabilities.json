@@ -45,6 +45,35 @@
   },
   "capabilities": [
     {
+      "id": "pr-grid-v2-runtime-contract",
+      "classification": "internal",
+      "status": "active",
+      "requires_terminal": false,
+      "rationale": "Fail-closed federation contract utility for validating PR_GRID_GEOGRAPHIC_V2 consumer pins, stamping immutable grid identity, and generating canonical grid deep links. It is an internal runtime/governance primitive, not a standalone operator workflow; user-facing grid identity is surfaced through consuming Cell_Profile/API responses rather than a separate validator GUI.",
+      "analysis": {
+        "files": [
+          "federation/spatial/pr_grid_v2_runtime.py"
+        ],
+        "symbols": [
+          "federation/spatial/pr_grid_v2_runtime.py:GridV2Pin",
+          "federation/spatial/pr_grid_v2_runtime.py:GridV2PinError",
+          "federation/spatial/pr_grid_v2_runtime.py:attach_grid_identity",
+          "federation/spatial/pr_grid_v2_runtime.py:build_grid_deep_link",
+          "federation/spatial/pr_grid_v2_runtime.py:grid_identity",
+          "federation/spatial/pr_grid_v2_runtime.py:load_pin",
+          "federation/spatial/pr_grid_v2_runtime.py:validate_cell_id",
+          "federation/spatial/pr_grid_v2_runtime.py:validate_level",
+          "federation/spatial/pr_grid_v2_runtime.py:validate_pin_payload",
+          "federation/spatial/pr_grid_v2_runtime.py:validate_pin_set"
+        ]
+      },
+      "tests": {
+        "contract": [
+          "tests/test_pr_grid_v2_runtime.py"
+        ]
+      }
+    },
+    {
       "id": "case-research-dashboard",
       "classification": "analysis",
       "status": "active",
@@ -114,7 +143,9 @@
           "dashboard/src/lib/PageNotFound.jsx",
           "dashboard/src/lib/api.js",
           "dashboard/src/pages/Dashboard.jsx",
-          "dashboard/src/components/ProgramTimeline.jsx"
+          "dashboard/src/components/ProgramTimeline.jsx",
+          "dashboard/src/components/MobileNav.jsx",
+          "dashboard/src/components/TopControls.jsx"
         ],
         "discoverability": [
           "dashboard/src/pages/Dashboard.jsx"
@@ -132,15 +163,27 @@
         ],
         "unit": [
           "dashboard/src/components/CaseMap.test.jsx",
-          "dashboard/src/components/SpatialToolsPanel.test.jsx"
+          "dashboard/src/components/SpatialToolsPanel.test.jsx",
+          "dashboard/src/components/CaseGrid.test.jsx",
+          "dashboard/src/components/MobileNav.test.jsx",
+          "dashboard/src/components/TopControls.test.jsx",
+          "dashboard/src/hooks/use-mobile.test.jsx",
+          "dashboard/src/lib/locale.test.js",
+          "dashboard/src/lib/theme.test.js"
         ],
         "e2e": [
-          "dashboard/tests/gui-parity.spec.mjs"
+          "dashboard/tests/gui-parity.spec.mjs",
+          "dashboard/tests/gui-parity-mobile.spec.mjs"
         ]
       },
       "candidate_ids": [
         "gui_control:dashboard/src/components/ErrorBoundary.jsx:button#d1a223462e45",
+        "gui_control:dashboard/src/components/MobileNav.jsx:button#3140ae2d5f6e",
+        "gui_control:dashboard/src/components/MobileNav.jsx:button#640845decc9c",
+        "gui_control:dashboard/src/components/MobileNav.jsx:button#651fd6cdd842",
         "gui_control:dashboard/src/components/QueryState.jsx:button#5ca5ab4a31a6",
+        "gui_control:dashboard/src/components/TopControls.jsx:button#698530d82c22",
+        "gui_control:dashboard/src/components/TopControls.jsx:button#819cd835fc4b",
         "gui_control:dashboard/src/lib/PageNotFound.jsx:button#b06ecd327bfa",
         "gui_route:dashboard/src/App.jsx:*",
         "python_module:server/backend/__init__.py",
@@ -287,8 +330,10 @@
         "analysis_symbol:scripts/build_release.py:load_master",
         "analysis_symbol:scripts/build_release.py:main",
         "analysis_symbol:scripts/build_snapshot.py:main",
+        "analysis_symbol:scripts/federation_export.py:build_research_streams",
         "analysis_symbol:scripts/federation_export.py:build_streams",
         "analysis_symbol:scripts/federation_export.py:main",
+        "analysis_symbol:scripts/federation_export.py:merge_streams",
         "analysis_symbol:scripts/federation_export.py:write_package",
         "analysis_symbol:scripts/prii_export_utils.py:fid",
         "analysis_symbol:scripts/prii_export_utils.py:norm",
@@ -298,7 +343,8 @@
       ],
       "tests": {
         "backend": [
-          "tests/test_federation_export.py"
+          "tests/test_federation_export.py",
+          "tests/test_federation_research_export.py"
         ]
       }
     },
@@ -447,6 +493,69 @@
         "analysis_symbol:scripts/offline_operator.py:validate_cmd",
         "cli_surface:scripts/offline_operator.py"
       ]
+    },
+    {
+      "id": "research-ledger-pipeline",
+      "classification": "internal",
+      "status": "active",
+      "requires_terminal": false,
+      "rationale": "Curated research ledgers (topics, findings, hypotheses with falsification checks, contradictions, manifestation adjudications, research queue, media episodes) are recorded by curators editing the committed JSONL files under data/research/ and validated in CI; duplicate-manifestation CANDIDATE pairs and per-case reports are generated deterministically. None of it is an OVNIS user workflow: the federation export carries every record to TheHub, the federation's only product GUI (ADR 0001), which renders them in its Research Hub and case views. Road-reference CANDIDATES (scripts/resolve_road_refs.py) are a curator review report written to the git-ignored reports/road_refs.json; it is not exported and never edits a case, so it has no GUI surface of its own.",
+      "candidate_ids": [
+        "analysis_module:scripts/generate_case_report.py",
+        "analysis_module:scripts/resolve_road_refs.py",
+        "analysis_module:scripts/validate_research_ledgers.py",
+        "analysis_symbol:scripts/dedupe_candidates.py:date_relation",
+        "analysis_symbol:scripts/dedupe_candidates.py:master_pairs",
+        "analysis_symbol:scripts/dedupe_candidates.py:place_basis",
+        "analysis_symbol:scripts/dedupe_candidates.py:render_pairs",
+        "analysis_symbol:scripts/dedupe_candidates.py:write_master_pairs",
+        "analysis_symbol:scripts/generate_case_report.py:build_report",
+        "analysis_symbol:scripts/generate_case_report.py:build_reports",
+        "analysis_symbol:scripts/generate_case_report.py:case_key",
+        "analysis_symbol:scripts/generate_case_report.py:evidence_ids",
+        "analysis_symbol:scripts/generate_case_report.py:git_head",
+        "analysis_symbol:scripts/generate_case_report.py:input_hashes",
+        "analysis_symbol:scripts/generate_case_report.py:main",
+        "analysis_symbol:scripts/generate_case_report.py:render_markdown",
+        "analysis_symbol:scripts/generate_case_report.py:sha256_file",
+        "analysis_symbol:scripts/generate_case_report.py:temporal_precision",
+        "analysis_symbol:scripts/resolve_road_refs.py:build_report",
+        "analysis_symbol:scripts/resolve_road_refs.py:iter_jsonl",
+        "analysis_symbol:scripts/resolve_road_refs.py:main",
+        "analysis_symbol:scripts/resolve_road_refs.py:resolve_case",
+        "analysis_symbol:scripts/validate_research_ledgers.py:load_case_ids",
+        "analysis_symbol:scripts/validate_research_ledgers.py:load_registry_ids",
+        "analysis_symbol:scripts/validate_research_ledgers.py:load_research",
+        "analysis_symbol:scripts/validate_research_ledgers.py:main",
+        "analysis_symbol:scripts/validate_research_ledgers.py:read_ledger",
+        "analysis_symbol:scripts/validate_research_ledgers.py:validate",
+        "cli_surface:scripts/generate_case_report.py",
+        "cli_surface:scripts/resolve_road_refs.py",
+        "cli_surface:scripts/validate_research_ledgers.py"
+      ],
+      "tests": {
+        "backend": [
+          "tests/test_research_ledgers.py",
+          "tests/test_manifestation_candidates.py",
+          "tests/test_case_reports.py",
+          "tests/test_resolve_road_refs.py"
+        ]
+      }
+    },
+    {
+      "id": "federation-source-monitors-export",
+      "classification": "internal",
+      "status": "active",
+      "requires_terminal": false,
+      "rationale": "Builds this producer's source_monitors federation export stream (thehub-pr ADR 0013): one row per source in data/reference/source_registry.csv with what the registry declares about it, and when it last succeeded from a run receipt in data/source_run_state.json or reported as not recorded. It runs inside scripts/federation_export.py and exposes no route, endpoint, control or operator workflow of its own; TheHub's Source Monitor, the federation's only product GUI (ADR 0001), renders the stream.",
+      "candidate_ids": [
+        "analysis_symbol:scripts/federation_export.py:build_source_monitors"
+      ],
+      "tests": {
+        "backend": [
+          "tests/test_federation_source_monitors.py"
+        ]
+      }
     }
   ],
   "exceptions": []

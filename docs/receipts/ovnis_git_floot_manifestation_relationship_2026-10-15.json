@@ -1,0 +1,64 @@
+{
+  "schema": "ovnis.git-floot-manifestation-relationship/v1",
+  "recorded_at": "2026-10-16T03:42:00Z",
+  "relationship": "DISTINCT_VERSIONED_MANIFESTATIONS_WITH_EXPLICIT_CONTRACT_BINDINGS",
+  "git": {
+    "repository": "jotaele44/ovnis-pr",
+    "material_producer_head": "70c1f66383acf59d87cf7ec24ee9a46c48022951",
+    "observed_provenance_head_before_receipt": "6c28f8fe96ee57b1f81d0f132b4dcfb3e0c8e6dc",
+    "material_scope": "Canonical Git data/export/spatial source manifestation used to generate the frozen federation package.",
+    "post_material_commits_are_provenance_only": true,
+    "code_equivalence_to_floot": "NOT_ASSERTED"
+  },
+  "floot": {
+    "project_id": "7fe42a06-1945-4b5b-ba78-55418ad90fbc",
+    "application_version": 1792121970355,
+    "checkpoint_id": "7720bb4d-cd67-40fe-beed-c14b9a280569",
+    "published_url": "https://ovnis-pr.floot.app",
+    "publish_job_id": "1641ee5f-ad08-405a-8f16-19f48b910565",
+    "publish_state": "SUCCEEDED",
+    "scope": "Application runtime, workspace authority, governed mutation endpoints, rendered UI, offline shell and native-wrapper implementation.",
+    "code_equivalence_to_git": "NOT_ASSERTED"
+  },
+  "contract_bindings": {
+    "source_reference_adjudication": {
+      "path": "data/reference/source_reference_adjudication_v1.csv",
+      "blob_sha1": "550360f9d5d55d50341dcdbd56eedace4c42aeda",
+      "rows": 244
+    },
+    "reviewed_source_registry": {
+      "commit": "9b6444928a688b0b3e6dcd0fbdd0370ed5ee6b7e",
+      "blob_sha1": "d4b80bae36273d6612dbc4b9e1332305dd4c40ee",
+      "sha256": "6429b7c56eae29c24f28b8e3d0e6756eaaac1325b230b90229a9012e7dd1d486",
+      "rows": 26
+    },
+    "read_model": {
+      "snapshot_id": "ovnis-readmodel:6f1cb5da",
+      "source_commit": "6f1cb5da2abe1fdb5b8845f77d9fceff36e4841c",
+      "cases": 470
+    },
+    "federation_package": {
+      "producer_commit": "70c1f66383acf59d87cf7ec24ee9a46c48022951",
+      "package_id": "pkg_f006c7c911425237eea9bf92bf574780",
+      "manifest_sha256": "5497cb35f17d1d70a6d84669f5b1ee5845a44db8cfaca378a3680a96f43f543a",
+      "sources": 280,
+      "entities": 1266,
+      "relationships": 1147,
+      "observations": 470
+    },
+    "thehub_consumer": {
+      "receipt_commit": "a338021d407e58b0e481d9e6d213b22255ed1730",
+      "receipt_blob_sha1": "f1c7ae42873031e25a2613ce8cfdc4ca558b8b8d",
+      "state": "PASS_ISOLATED_CURRENT_MATERIAL_HEAD"
+    }
+  },
+  "invariants": {
+    "git_head_is_not_floot_source_identity": true,
+    "floot_version_is_not_git_commit_identity": true,
+    "byte_equivalence_not_claimed": true,
+    "semantic_code_equivalence_not_certified": true,
+    "shared_data_and_contract_identifiers_are_explicit": true,
+    "cross_manifestation_identity_requires_explicit_receipt": true
+  },
+  "terminal_disposition": "RECONCILED_AS_DISTINCT_MANIFESTATIONS; CODE_EQUIVALENCE_NOT_CERTIFIED"
+}
