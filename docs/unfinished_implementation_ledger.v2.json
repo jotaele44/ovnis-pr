@@ -1,0 +1,40 @@
+{
+  "schema_version": "2.0.0",
+  "repository": "jotaele44/ovnis-pr",
+  "audit_date": "2026-11-14",
+  "audited_main_commit": "abf48edc0e40cb56a4cc3a52f8fef585be79b915",
+  "supersedes": "docs/unfinished_implementation_ledger.v1.json",
+  "normalized_score": 78.00,
+  "weights": {"code_completeness": 20, "main_branch_availability": 15, "ci_enforcement": 15, "data_materialization": 15, "operator_verification": 15, "gui_completeness": 10, "federation_readiness": 10},
+  "dimensions": {"code_completeness": 90, "main_branch_availability": 95, "ci_enforcement": 85, "data_materialization": 60, "operator_verification": 50, "gui_completeness": 80, "federation_readiness": 85},
+  "baseline_command": "python3 scripts/corpus_quality_report.py",
+  "baseline": {
+    "master_rows": 470,
+    "master_created_months": {"2026-06": 470},
+    "real_candidate_rows": 0,
+    "source_family_present": 120,
+    "source_citation_present": 4,
+    "source_hash_present": 0,
+    "retrieved_at_present": 0,
+    "municipality_present": 93,
+    "coordinate_pair_count": 469,
+    "coordinate_provenance_row_count": 0,
+    "location_confidence_at_or_below_0_6": 52,
+    "manifestation_candidates": 38,
+    "manifestation_adjudications": 0,
+    "empty_research_ledgers": 7,
+    "source_reference_states": {"DISCOVERY_ONLY": 190, "NON_BINDING_TERMINAL": 36, "REVIEW_TIE": 14, "UNRESOLVED": 3, "STRICT_BINDING_ELIGIBLE": 1},
+    "open_pull_requests": 16
+  },
+  "items": [
+    {"id": "OVN-001", "title": "Land isolated-clone runtime", "state": "resolved", "evidence": ["pull/70 merged 2026-08-08"], "exit_criteria": "Met: main installs, tests and packages without a sibling TheHub checkout; CI asserts the checkout is isolated."},
+    {"id": "OVN-002", "title": "Reconcile workspace policy", "state": "resolved", "evidence": ["pull/68 closed unmerged 2026-08-27", "federation/workspace-policy.json"], "exit_criteria": "Met: superseded by the isolated-clone runtime; one workspace policy remains."},
+    {"id": "OVN-003", "title": "Supersede or refresh GUI parity candidate", "state": "resolved", "evidence": ["pull/67 closed", "pull/81", "docs/GUI_CAPABILITY_PARITY.md"], "exit_criteria": "Met: the parity ratchet runs on main."},
+    {"id": "OVN-004", "title": "Run recurring source discovery and candidate intake", "state": "open", "phase": 2, "owner": "ovnis_operator", "blocker": "no_intake_cycle_has_run", "dependency": ["pull/177"], "evidence": ["data/candidates/candidate_cases.jsonl", ".github/workflows/candidate-intake.yml", "scripts/import_candidates.py"], "exit_criteria": "real_candidate_rows > 0 from a reproducible governed run that records source accounting and does not modify master; the CAND-0000 placeholder row is removed."},
+    {"id": "OVN-005", "title": "Grow corpus through reviewed promotion", "state": "open", "phase": 2, "owner": "ovnis_reviewer", "blocker": "candidate_review", "dependency": ["OVN-004"], "evidence": ["scripts/promote_candidate.py", "docs/CASE_PROMOTION_STANDARD.md"], "exit_criteria": "master_rows > 470, each added row promoted individually with a validation and lineage receipt; master_created_months has a month after 2026-06."},
+    {"id": "OVN-006", "title": "Record coordinate provenance and backfill municipality", "state": "open", "phase": 3, "owner": "ovnis-pr", "blocker": "no_coordinate_provenance_fields", "dependency": [], "evidence": ["data/master/pr_grid_v2_coordinate_evidence_denominator.json", "data/schemas/case.schema.json"], "exit_criteria": "coordinate_provenance_row_count equals coordinate_pair_count (each pair has source, method, precision and review state); every case at location_confidence <= 0.6 is resolved or marked unresolvable; municipality is present or explicitly unresolvable for every case, with derived values labelled as derived."},
+    {"id": "OVN-007", "title": "Bind master cases to registered sources", "state": "open", "phase": 3, "owner": "ovnis-pr", "blocker": "source_reference_adjudication", "dependency": [], "evidence": ["data/reference/source_reference_adjudication_v1.csv", "data/reference/source_registry.csv"], "exit_criteria": "source_family_present and source_citation_present rise from 120 and 4 for every case whose source reference adjudicates unambiguously; ties stay REVIEW_TIE and are not written; DISCOVERY_ONLY count falls from 190."},
+    {"id": "OVN-008", "title": "Adjudicate manifestation candidates and seed research ledgers", "state": "open", "phase": 4, "owner": "ovnis_curator", "blocker": "curator_review", "dependency": ["OVN-007"], "evidence": ["data/research/manifestation_candidates.jsonl", "docs/RESEARCH_LEDGERS.md"], "exit_criteria": "Each of the 38 manifestation candidates has an adjudication (same event, distinct, or unresolved); research_queue and topics are non-empty."},
+    {"id": "OVN-009", "title": "Clear the pull-request backlog", "state": "open", "phase": 1, "owner": "maintainer", "blocker": "maintainer_decision", "dependency": [], "evidence": ["pull/148", "pull/149", "pull/150", "pull/152", "pull/153", "pull/154", "pull/165", "pull/177", "pull/185", "pull/186", "pull/188", "pull/192", "pull/195", "pull/198", "pull/200", "pull/201"], "exit_criteria": "No pull request older than 30 days is open without a recorded disposition; main is branch-protected."}
+  ]
+}

@@ -541,6 +541,28 @@
           "tests/test_resolve_road_refs.py"
         ]
       }
+    },
+    {
+      "id": "corpus-quality-report",
+      "classification": "internal",
+      "status": "active",
+      "requires_terminal": false,
+      "rationale": "Maintainer scoreboard (scripts/corpus_quality_report.py): counts how many master cases carry each provenance field, how coordinates and confidence are distributed, how many real candidates are staged and how many rows each research ledger holds. It prints JSON for the roadmap ledger (docs/unfinished_implementation_ledger.v2.json), never edits a ledger and is not exported, so it is not an OVNIS user workflow and has no GUI surface.",
+      "candidate_ids": [
+        "analysis_module:scripts/corpus_quality_report.py",
+        "analysis_symbol:scripts/corpus_quality_report.py:adjudication_metrics",
+        "analysis_symbol:scripts/corpus_quality_report.py:build_report",
+        "analysis_symbol:scripts/corpus_quality_report.py:candidate_metrics",
+        "analysis_symbol:scripts/corpus_quality_report.py:main",
+        "analysis_symbol:scripts/corpus_quality_report.py:master_metrics",
+        "analysis_symbol:scripts/corpus_quality_report.py:research_metrics",
+        "cli_surface:scripts/corpus_quality_report.py"
+      ],
+      "tests": {
+        "backend": [
+          "tests/test_corpus_quality_report.py"
+        ]
+      }
     }
   ],
   "exceptions": []

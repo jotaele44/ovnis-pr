@@ -73,29 +73,38 @@ python3 scripts/federation_export.py --mode test    # canonical export smoke
 | Review queue | Ambiguous cases remain staged until enough metadata exists for promotion |
 | Federation boundary | OVNIS exports case records; Hub performs cross-producer correlation |
 
-## Suggested repository layout
+## Repository layout
 
 ```text
-data/             raw and normalized case material
-reports/          generated summaries and review outputs
-scripts/          import, validation, deduplication, and reporting tools
-docs/             methodology, source policy, FOIA notes, and analyst runbooks
+data/             case ledgers, source registries, research ledgers and the case schema
+scripts/          import, validation, deduplication, promotion, export and reporting tools
+server/           read-only FastAPI backend for the diagnostic dashboard
+dashboard/        diagnostic dashboard (React)
+desktop/          local desktop app launcher
+federation/       pinned spatial and road-reference modules shared with the federation
+lockstep/         federation lockstep engine and gates
+schemas/          federation record schemas
+docs/             methodology, roadmap, audits and receipts
 tests/            validation and regression tests
-exports/          federation-ready export packages
 ```
 
+`exports/federation/` is where the export package is written. It is generated and not committed.
+
 ## Minimum promotion fields
+
+Field names are those of `data/schemas/case.schema.json`. See
+[`docs/CASE_PROMOTION_STANDARD.md`](docs/CASE_PROMOTION_STANDARD.md) for the full standard.
 
 | Field | Purpose |
 |---|---|
 | `case_id` | Stable local identifier |
-| `event_date` | Known or bounded date/time |
-| `municipio` / `location` | Spatial anchor for Puerto Rico analysis |
-| `source_tier` | Evidence tier classification |
-| `source_ref` | Document, URL, archive, interview, or file reference |
-| `summary` | Controlled, non-dramatized case summary |
-| `confidence` | Review-grade confidence score |
-| `review_status` | `draft`, `needs_review`, `promoted`, or equivalent |
+| `date_local` | Known or bounded date (`YYYY`, `YYYY-MM` or `YYYY-MM-DD`) |
+| `municipality` / `location_name` | Spatial anchor for Puerto Rico analysis |
+| `evidence_tier` | Evidence tier classification (`T1` to `T4`) |
+| `source_url` | Document, URL, archive, interview, or file reference |
+| `description` | Controlled, non-dramatized case summary |
+| `case_confidence` | Review-grade confidence score |
+| `review_action` | `promote`, `merge`, `reject`, `monitor` or `pending` |
 
 ## Federation export target
 
@@ -130,6 +139,13 @@ manifestation adjudications, research questions and media episodes in the JSONL 
   case. Route parsing is pinned from spiderweb-pr (`federation/roads/pr_route_ref.pin.json`).
 
 See [`docs/RESEARCH_LEDGERS.md`](docs/RESEARCH_LEDGERS.md).
+
+## Corpus completeness
+
+`python3 scripts/corpus_quality_report.py` prints how many master cases carry each provenance field,
+how coordinates and confidence are distributed, how many real candidates are staged and how many rows
+each research ledger holds. It never edits a ledger. The roadmap in
+[`docs/ROAD_TO_100.md`](docs/ROAD_TO_100.md) states its exit criteria against these counts.
 
 <!-- PROJECT-OPERATING-CONTRACT:START -->
 ## Current development and certification contract
