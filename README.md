@@ -49,11 +49,11 @@ source .venv/bin/activate
 python -m pip install -r requirements.txt httpx -r server/backend/requirements.txt
 ```
 
-> `requirements.txt` pins the shared federation packages (`prii-maintenance`,
-> `prii-export-utils`) to an immutable git SHA in `thehub-pr`
-> (`git+...@f2b8176...`), not a live local path. Picking up a change made in
-> the hub requires bumping that pinned SHA here and regenerating
-> `requirements.lock` — it does not propagate automatically.
+> `requirements.txt` pins the shared federation packages to immutable git SHAs
+> in `thehub-pr` (`prii-maintenance` at `git+...@f2b8176...`,
+> `prii-export-utils` at `git+...@0f62e4b...`), not a live local path. Picking
+> up a change made in the hub requires bumping that pinned SHA here and
+> regenerating `requirements.lock` — it does not propagate automatically.
 
 Run the checks CI runs:
 
@@ -106,6 +106,7 @@ sources.jsonl
 entities.jsonl
 relationships.jsonl
 observations.jsonl
+source_monitors.jsonl
 manifest.json
 ```
 
@@ -113,6 +114,13 @@ Do not treat exported cases as conclusions. Treat them as structured historical 
 
 The export also carries the research ledgers (`data/research/`) as typed `entities` and `relationships`
 rows, plus computed duplicate-manifestation CANDIDATE pairs and a deterministic report per case.
+
+`source_monitors.jsonl` (thehub-pr ADR 0013) has one row per source in
+`data/reference/source_registry.csv`: what the registry declares about it (status, cadence, tier,
+family), mapped as thehub-pr's registry reader maps it, and when it last succeeded. That time comes only
+from a fetch-run receipt in `data/source_run_state.json`. No OVNIS fetch run writes one yet and no
+OVNIS output records a per-source success time, so every source is reported as not recorded
+(`tests/test_federation_source_monitors.py`).
 
 ## Research ledgers
 
