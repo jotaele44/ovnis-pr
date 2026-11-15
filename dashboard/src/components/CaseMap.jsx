@@ -153,7 +153,9 @@ export default function CaseMap({ geojson, onSelect }) {
       zoom: 8.2,
     })
     mapRef.current = map
-    map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right')
+    // Bottom-right, not top-right: the top-right corner holds the layer buttons
+    // and date filter, and the zoom control used to sit on top of the last button.
+    map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right')
 
     // 'style.load' instead of 'load': the latter waits for raster tiles,
     // which never resolve offline, and the data layer would never appear.
@@ -340,17 +342,19 @@ export default function CaseMap({ geojson, onSelect }) {
     <div className="relative h-full w-full">
       <div ref={containerRef} className="h-full w-full" />
 
-      <div className="pointer-events-none absolute left-2 top-2 rounded bg-slate-900/80 px-2.5 py-2 text-[11px] text-slate-300">
-        <div className="mb-1.5 text-[10px] uppercase tracking-wide text-slate-500">Evidence tier</div>
+      {/* Phone: a wrapped strip along the bottom (clear of the zoom control) instead of
+          a top-left box that collided with the layer buttons. */}
+      <div className={`pointer-events-none absolute left-2 top-2 rounded bg-slate-900/80 px-2.5 py-2 text-[11px] text-slate-300 ${showTools ? 'shell-mobile:hidden ' : ''}shell-mobile:top-auto shell-mobile:bottom-9 shell-mobile:right-14 shell-mobile:flex shell-mobile:flex-wrap shell-mobile:gap-x-3 shell-mobile:gap-y-0.5`}>
+        <div className="mb-1.5 text-[10px] uppercase tracking-wide text-slate-500 shell-mobile:mb-0 shell-mobile:w-full">Evidence tier</div>
         {TIER_LEGEND.map(({ tier, color, label }) => (
-          <div key={tier} className="mb-0.5 flex items-center gap-1.5 last:mb-0">
+          <div key={tier} className="mb-0.5 flex items-center gap-1.5 last:mb-0 shell-mobile:mb-0">
             <span className="inline-block h-2 w-2 shrink-0 rounded-full" style={{ background: color }} />
             {label}
           </div>
         ))}
         {densityMode === 'density' && densityState.status === 'ready' && densityState.data.matchedCount > 0 && (
           <>
-            <div className="mb-1.5 mt-2 border-t border-slate-800 pt-2 text-[10px] uppercase tracking-wide text-slate-500">Case density</div>
+            <div className="mb-1.5 mt-2 border-t border-slate-800 pt-2 text-[10px] uppercase tracking-wide text-slate-500 shell-mobile:mb-0 shell-mobile:w-full">Case density</div>
             {[
               { label: '30+', color: '#38bdf8' },
               { label: '10–29', color: '#818cf8' },
@@ -366,13 +370,13 @@ export default function CaseMap({ geojson, onSelect }) {
         )}
       </div>
 
-      <div className="absolute right-2 top-2 flex flex-col items-end gap-1.5">
-        <div className="flex gap-1.5">
+      <div className="absolute right-2 top-2 flex flex-col items-end gap-1.5 shell-mobile:left-2">
+        <div className="flex flex-wrap justify-end gap-1.5">
           <button
             type="button"
             aria-pressed={showHeatmap}
             onClick={() => setShowHeatmap((v) => !v)}
-            className={`rounded border px-2 py-1 text-[11px] transition ${showHeatmap ? 'border-sky-500/40 bg-sky-500/10 text-sky-300' : 'border-slate-800 bg-slate-900/80 text-slate-400 hover:text-slate-200'}`}
+            className={`rounded border px-2 py-1 text-[11px] transition shell-mobile:min-h-11 shell-mobile:px-3 shell-mobile:text-xs ${showHeatmap ? 'border-sky-500/40 bg-sky-500/10 text-sky-300' : 'border-slate-800 bg-slate-900/80 text-slate-400 hover:text-slate-200'}`}
           >
             Heatmap
           </button>
@@ -380,7 +384,7 @@ export default function CaseMap({ geojson, onSelect }) {
             type="button"
             aria-pressed={showTerrain}
             onClick={() => setShowTerrain((v) => !v)}
-            className={`rounded border px-2 py-1 text-[11px] transition ${showTerrain ? 'border-teal-500/40 bg-teal-500/10 text-teal-300' : 'border-slate-800 bg-slate-900/80 text-slate-400 hover:text-slate-200'}`}
+            className={`rounded border px-2 py-1 text-[11px] transition shell-mobile:min-h-11 shell-mobile:px-3 shell-mobile:text-xs ${showTerrain ? 'border-teal-500/40 bg-teal-500/10 text-teal-300' : 'border-slate-800 bg-slate-900/80 text-slate-400 hover:text-slate-200'}`}
           >
             Terrain
           </button>
@@ -388,7 +392,7 @@ export default function CaseMap({ geojson, onSelect }) {
             type="button"
             aria-pressed={densityMode === 'density'}
             onClick={toggleDensity}
-            className={`rounded border px-2 py-1 text-[11px] transition ${densityMode === 'density' ? 'border-blue-500/40 bg-blue-500/10 text-blue-300' : 'border-slate-800 bg-slate-900/80 text-slate-400 hover:text-slate-200'}`}
+            className={`rounded border px-2 py-1 text-[11px] transition shell-mobile:min-h-11 shell-mobile:px-3 shell-mobile:text-xs ${densityMode === 'density' ? 'border-blue-500/40 bg-blue-500/10 text-blue-300' : 'border-slate-800 bg-slate-900/80 text-slate-400 hover:text-slate-200'}`}
           >
             Density{densityMode === 'density' ? ` · ${densityState.status}` : ''}
           </button>
@@ -396,7 +400,7 @@ export default function CaseMap({ geojson, onSelect }) {
             type="button"
             aria-pressed={showTools}
             onClick={() => setShowTools((v) => !v)}
-            className={`rounded border px-2 py-1 text-[11px] transition ${showTools ? 'border-pink-500/40 bg-pink-500/10 text-pink-300' : 'border-slate-800 bg-slate-900/80 text-slate-400 hover:text-slate-200'}`}
+            className={`rounded border px-2 py-1 text-[11px] transition shell-mobile:min-h-11 shell-mobile:px-3 shell-mobile:text-xs ${showTools ? 'border-pink-500/40 bg-pink-500/10 text-pink-300' : 'border-slate-800 bg-slate-900/80 text-slate-400 hover:text-slate-200'}`}
           >
             Spatial tools
           </button>
@@ -413,12 +417,12 @@ export default function CaseMap({ geojson, onSelect }) {
             {densityState.data.matchedCount} matched · {densityState.data.unmatchedCount} unresolved · {densityState.data.totalCases} total · identity effect NONE · {densityState.data.scopeState}
           </div>
         )}
-        <div className="flex items-center gap-1 rounded border border-slate-800 bg-slate-900/80 px-2 py-1 text-[11px] text-slate-400">
+        <div className="flex items-center gap-1 rounded border border-slate-800 bg-slate-900/80 px-2 py-1 text-[11px] text-slate-400 shell-mobile:min-h-11 shell-mobile:flex-wrap">
           <input
             type="date"
             value={dateStart}
             onChange={(e) => setDateStart(e.target.value)}
-            className="w-[110px] bg-transparent text-slate-300 [color-scheme:dark]"
+            className="w-[110px] bg-transparent text-slate-300 dark:[color-scheme:dark] shell-mobile:w-[132px] shell-mobile:text-base"
             aria-label="Filter cases from date"
           />
           <span>–</span>
@@ -426,7 +430,7 @@ export default function CaseMap({ geojson, onSelect }) {
             type="date"
             value={dateEnd}
             onChange={(e) => setDateEnd(e.target.value)}
-            className="w-[110px] bg-transparent text-slate-300 [color-scheme:dark]"
+            className="w-[110px] bg-transparent text-slate-300 dark:[color-scheme:dark] shell-mobile:w-[132px] shell-mobile:text-base"
             aria-label="Filter cases to date"
           />
           {(dateStart || dateEnd) && (

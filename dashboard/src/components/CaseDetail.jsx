@@ -8,14 +8,29 @@ import {
   confidenceTone, locString, hasCoords, sourceFamilyMeta, sourceLabel, sourceUrl,
 } from '@/lib/ovnis-format'
 import { cn } from '@/lib/utils'
+import { useLocale } from '@/lib/locale'
+import { useIsMobile } from '@/hooks/use-mobile'
 import { ExternalLink } from 'lucide-react'
 
 export default function CaseDetail({ case: c, onClose }) {
+  const isMobile = useIsMobile()
+  const { t } = useLocale()
   const agency = c ? sourceFamilyMeta(c.source_family) : null
   const link = c ? sourceUrl(c) : null
   return (
     <Sheet open={!!c} onOpenChange={(o) => !o && onClose?.()}>
-      <SheetContent className="bg-slate-950 border-slate-800 text-slate-200 w-full sm:max-w-md overflow-y-auto">
+      {/* Desktop: right-hand drawer. Mobile: a bottom sheet (no persistent
+          inspector), capped so the map/list stays visible behind it and padded
+          for the home indicator. */}
+      <SheetContent
+        side={isMobile ? 'bottom' : 'right'}
+        className={cn(
+          'bg-slate-950 border-slate-800 text-slate-200 overflow-y-auto',
+          isMobile
+            ? 'max-h-[85dvh] rounded-t-xl px-4 pb-[calc(1.5rem+var(--safe-bottom))]'
+            : 'w-full sm:max-w-md',
+        )}
+      >
         {c && (
           <>
             <SheetHeader>
@@ -25,7 +40,7 @@ export default function CaseDetail({ case: c, onClose }) {
                 <span className="text-xs text-slate-500">{c.decade}</span>
               </div>
               <SheetTitle className="text-slate-100 text-left">{c.case_id} · {c.date_raw}</SheetTitle>
-              <SheetDescription className="text-slate-400 text-left">{locString(c)}{!hasCoords(c) && ' · (no coordinates)'}</SheetDescription>
+              <SheetDescription className="text-slate-400 text-left">{locString(c)}{!hasCoords(c) && ` · ${t('detail.noCoords')}`}</SheetDescription>
             </SheetHeader>
 
             <div className="mt-4 space-y-4 text-sm">
@@ -34,11 +49,11 @@ export default function CaseDetail({ case: c, onClose }) {
                 <p className="text-slate-500 italic leading-relaxed">{c.description_en}</p>
               )}
 
-              <Field label="Witness">
+              <Field label={t('detail.witness')}>
                 {c.witness ? `${c.witness.class ?? '—'}${c.witness.count ? ` · ${c.witness.count}` : ''}${c.witness.name ? ` · ${c.witness.name}` : ''}` : '—'}
               </Field>
-              <Field label="Evidence type">{c.evidence_type ?? '—'}</Field>
-              <Field label="Source">
+              <Field label={t('detail.evidenceType')}>{c.evidence_type ?? '—'}</Field>
+              <Field label={t('detail.source')}>
                 <div className="flex flex-wrap items-center gap-2">
                   {link ? (
                     <a
@@ -55,21 +70,21 @@ export default function CaseDetail({ case: c, onClose }) {
                   )}
                   {!link && (
                     <Badge variant="outline" className="text-[10px] bg-amber-500/10 text-amber-300 border-amber-500/30">
-                      No URL
+                      {t('cases.noUrl')}
                     </Badge>
                   )}
                 </div>
               </Field>
               {agency && (
-                <Field label="Agency involvement">
+                <Field label={t('detail.agency')}>
                   <Badge variant="outline" className={cn('text-[10px]', agency.badge)}>{agency.label}</Badge>
                 </Field>
               )}
               {c.contradictions_or_gaps ? (
-                <Field label="Contradictions / gaps"><span className="text-amber-300/90">{c.contradictions_or_gaps}</span></Field>
+                <Field label={t('detail.gaps')}><span className="text-amber-300/90">{c.contradictions_or_gaps}</span></Field>
               ) : null}
-              <Field label="Provenance">
-                <span className="text-xs text-slate-500">{c.reviewer_action} · from {c.promoted_from} · {c.promoted_at?.slice?.(0, 10)} · {c.promoted_by}</span>
+              <Field label={t('detail.provenance')}>
+                <span className="text-xs text-slate-500">{c.reviewer_action} · {t('detail.from')} {c.promoted_from} · {c.promoted_at?.slice?.(0, 10)} · {c.promoted_by}</span>
               </Field>
             </div>
           </>
