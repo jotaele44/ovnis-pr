@@ -29,7 +29,8 @@ installs dependencies, later runs work offline):
 - `PRII-OVNIS.bat` (Windows)
 - `PRII-OVNIS.sh` (Linux)
 
-See [`desktop/README.md`](desktop/README.md) for details.
+See [`desktop/README.md`](desktop/README.md) for details, including the
+Launch Pad the app shows before it starts.
 
 ## Setup / Development
 
