@@ -8,6 +8,7 @@
     "entities": "federation_entity.schema.json",
     "observations": "federation_observation.schema.json",
     "relationships": "federation_relationship.schema.json",
+    "source_monitors": "federation_source_monitor.schema.json",
     "sources": "federation_source.schema.json"
   },
   "manifest_keys": [

@@ -8,6 +8,13 @@
    being silently dropped from the compiled bundle. `@theme` below is the native v4
    replacement for tailwind.config.js's theme.extend. */
 @custom-variant dark (&:where(.dark, .dark *));
+/* The shell switches layout at 860px (the federation GUI spec's mobile breakpoint),
+   not at Tailwind's md/lg. Keep this in step with MOBILE_BREAKPOINT in
+   hooks/use-mobile.jsx, which gates the JS-side layout. */
+@custom-variant shell-mobile (@media (width < 860px));
+@custom-variant shell-desktop (@media (width >= 860px));
+/* Landscape phones: little vertical room, so stacked blocks go side by side. */
+@custom-variant short (@media (height < 500px));
 
 :root {
   --background: 215 28% 7%;
@@ -43,6 +50,16 @@
   --sidebar-border: 215 20% 18%;
   --sidebar-ring: 187 100% 50%;
   --radius: 0.5rem;
+
+  /* Mobile shell metrics (federation GUI spec): 54px header, 56px bottom nav,
+     44px minimum touch target. Safe-area insets are 0 outside a notched device. */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --header-h: 54px;
+  --bottom-nav-h: 56px;
+  --touch-target: 44px;
   --font-heading: 'Inter Variable', 'Inter', ui-sans-serif, system-ui, sans-serif;
   --font-body: 'Inter Variable', 'Inter', ui-sans-serif, system-ui, sans-serif;
   --font-display: 'Inter Variable', 'Inter', ui-sans-serif, system-ui, sans-serif;
@@ -110,6 +127,82 @@
 @keyframes accordion-up {
   from { height: var(--radix-accordion-content-height); }
   to { height: 0; }
+}
+
+
+/* Light theme. The app is authored with hard-coded slate/colour utilities, so the
+   slate scale is inverted here rather than rewriting every component: bg-slate-950
+   becomes the page background, text-slate-200 becomes body text, and so on. The
+   *-300 accent text colours are darkened so tinted badges stay readable. */
+:root[data-theme='light'] {
+  --background: 210 40% 98%;
+  --foreground: 222 47% 11%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 11%;
+  --primary: 199 89% 30%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 214 32% 91%;
+  --secondary-foreground: 222 47% 20%;
+  --muted: 214 32% 93%;
+  --muted-foreground: 215 16% 36%;
+  --accent: 172 80% 26%;
+  --accent-foreground: 0 0% 100%;
+  --border: 214 25% 80%;
+  --input: 214 25% 84%;
+  --ring: 199 89% 36%;
+  --chart-1: 199 89% 36%;
+  --chart-2: 172 80% 30%;
+  --chart-3: 215 20% 45%;
+  --chart-4: 199 70% 42%;
+  --sidebar-background: 0 0% 100%;
+  --sidebar-foreground: 222 47% 11%;
+  --sidebar-primary: 199 89% 30%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 172 80% 26%;
+  --sidebar-accent-foreground: 0 0% 100%;
+  --sidebar-border: 214 25% 80%;
+  --sidebar-ring: 199 89% 36%;
+  --panel-bg: rgba(255, 255, 255, 0.95);
+  --glow-border: rgba(3, 105, 161, 0.25);
+
+  --color-slate-50: #020617;
+  --color-slate-100: #0f172a;
+  --color-slate-200: #1e293b;
+  --color-slate-300: #334155;
+  --color-slate-400: #475569;
+  --color-slate-500: #5b6b82;
+  --color-slate-600: #94a3b8;
+  --color-slate-700: #cbd5e1;
+  --color-slate-800: #d3dce8;
+  --color-slate-900: #f1f5f9;
+  --color-slate-950: #f8fafc;
+
+  --color-sky-200: #075985;
+  --color-sky-300: #0369a1;
+  --color-indigo-300: #4338ca;
+  --color-violet-300: #6d28d9;
+  --color-amber-200: #92400e;
+  --color-amber-300: #b45309;
+  --color-emerald-300: #047857;
+  --color-emerald-400: #059669;
+  --color-red-300: #b91c1c;
+  --color-red-400: #dc2626;
+  --color-cyan-300: #0e7490;
+  --color-teal-300: #0f766e;
+}
+
+body {
+  background-attachment: fixed;
+}
+
+/* Never let the document itself scroll sideways on a phone; panes scroll inside. */
+html, body, #root {
+  max-width: 100%;
+}
+html {
+  -webkit-text-size-adjust: 100%;
 }
 
 @layer base {
