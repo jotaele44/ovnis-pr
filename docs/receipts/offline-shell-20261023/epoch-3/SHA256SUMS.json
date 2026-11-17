@@ -1,0 +1,13 @@
+{
+  "browser-receipt.json": "1b753f801d4ee085650ee98b8cc9ce38d6cc2887abfaf33a3aa1695ff5dc6f65",
+  "build-manifest.json": "9832f72dd9e3aa3ef18626b7e10785cd3f8bce65e7bf18b459b23e11702b3e40",
+  "candidate-receipt.json": "9ceb823850cf1cf96cc7ba8ba25bec74778d8ed1ca8e779d75c9fb38362bc955",
+  "offline-1440.png": "4ea97c8051b46fba10532ae2a96dc88da634d8ef2577560ccd823080eee17dcd",
+  "offline-393.png": "b95667081489e7b453cdeb21393cb1a107e37f3bb3884f60075d81c599bd3fc6",
+  "offline-430.png": "be7c39bf262d2df4d623575323e1d9c56a1ee058103f5726a2415d7f25514d5b",
+  "ovnis-pr-offline-browser-closure.log": "d8beaf78f6c188a28b6d54619bad122c0e0afe3753bfb4f80dfd488f29cc3a5f",
+  "ovnis-pr-offline-browser-closure2.log": "d8beaf78f6c188a28b6d54619bad122c0e0afe3753bfb4f80dfd488f29cc3a5f",
+  "ovnis-pr-offline-build-closure.log": "8e8e9526cd34f9713104913f83f4a586125ee5f78458957f42661e6b3c20a60c",
+  "ovnis-pr-offline-build-closure2.log": "8e8e9526cd34f9713104913f83f4a586125ee5f78458957f42661e6b3c20a60c",
+  "ovnis-pr-offline-docs.log": "eb7949cfbaa2a974b7cc799c2a37b23674e7cf74f038086890b57b10f6d93d54"
+}
