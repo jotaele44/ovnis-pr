@@ -29,9 +29,9 @@ and the latest map release), then opens the dashboard when you press
 choice and there are no launch options; the dashboard has one page, so there is
 one place to start. You can tick "skip next time" to go straight in.
 
-The Launch Pad appears once `requirements-desktop.txt` pins a `prii-desktop`
-that includes it (0.3.0 or later). With an older runtime the declaration is
-ignored and the app opens directly, as before.
+`requirements-desktop.txt` pins a `prii-desktop` that includes the Launch Pad
+(0.3.0). If you set the app up before that pin moved, run
+`python desktop/setup.py --force` once to install the newer runtime.
 
 ## How it works
 
