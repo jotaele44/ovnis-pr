@@ -12,6 +12,7 @@ import TopControls from '@/components/TopControls'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { useLocale } from '@/lib/locale'
 import brandMark from "@/assets/icon-64.png?inline";
+import { scrollRegion } from '@/lib/scrollRegion'
 
 const PROGRAM_TIMELINE = [
   { id:'ovnis-sweep', phase:'NOW', title:'Primary-source case sweep', detail:'Search government, archival, maritime, aviation, and local records for new Puerto Rico UAP/USO evidence.', category:'Discovery' },
@@ -58,7 +59,7 @@ export default function Dashboard() {
         <img src={brandMark} alt="" aria-hidden="true" className="h-6 w-6 rounded-md" />
         <div className="min-w-0 flex-1">
           <h1 className="text-sm font-semibold text-slate-100 leading-none">OVNIS · Ovnis-PR</h1>
-          <p className="mt-0.5 truncate text-[11px] text-slate-500">{t('app.subtitle')}</p>
+          <p className="mt-0.5 truncate text-[11px] text-slate-400">{t('app.subtitle')}</p>
         </div>
         <div className="flex items-center gap-2 text-xs text-slate-400">
           <span className={`inline-flex h-2 w-2 shrink-0 rounded-full ${up ? 'bg-emerald-400 animate-pulse' : 'bg-red-400'}`} />
@@ -84,7 +85,7 @@ export default function Dashboard() {
             {view === 'stats' && <section className="h-full"><StatsPanel /></section>}
             {view === 'candidates' && <section className="h-full"><CandidateReview /></section>}
             {view === 'activity' && (
-              <section className="h-full overflow-y-auto p-3">
+              <section {...scrollRegion("Activity")} className="h-full overflow-y-auto p-3">
                 <ProgramTimeline producerId="ovnis-pr" items={PROGRAM_TIMELINE} compact />
               </section>
             )}
