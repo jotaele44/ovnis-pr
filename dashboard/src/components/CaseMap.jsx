@@ -345,7 +345,7 @@ export default function CaseMap({ geojson, onSelect }) {
       {/* Phone: a wrapped strip along the bottom (clear of the zoom control) instead of
           a top-left box that collided with the layer buttons. */}
       <div className={`pointer-events-none absolute left-2 top-2 rounded bg-slate-900/80 px-2.5 py-2 text-[11px] text-slate-300 ${showTools ? 'shell-mobile:hidden ' : ''}shell-mobile:top-auto shell-mobile:bottom-9 shell-mobile:right-14 shell-mobile:flex shell-mobile:flex-wrap shell-mobile:gap-x-3 shell-mobile:gap-y-0.5`}>
-        <div className="mb-1.5 text-[10px] uppercase tracking-wide text-slate-500 shell-mobile:mb-0 shell-mobile:w-full">Evidence tier</div>
+        <div className="mb-1.5 text-[10px] uppercase tracking-wide text-slate-400 shell-mobile:mb-0 shell-mobile:w-full">Evidence tier</div>
         {TIER_LEGEND.map(({ tier, color, label }) => (
           <div key={tier} className="mb-0.5 flex items-center gap-1.5 last:mb-0 shell-mobile:mb-0">
             <span className="inline-block h-2 w-2 shrink-0 rounded-full" style={{ background: color }} />
@@ -354,7 +354,7 @@ export default function CaseMap({ geojson, onSelect }) {
         ))}
         {densityMode === 'density' && densityState.status === 'ready' && densityState.data.matchedCount > 0 && (
           <>
-            <div className="mb-1.5 mt-2 border-t border-slate-800 pt-2 text-[10px] uppercase tracking-wide text-slate-500 shell-mobile:mb-0 shell-mobile:w-full">Case density</div>
+            <div className="mb-1.5 mt-2 border-t border-slate-800 pt-2 text-[10px] uppercase tracking-wide text-slate-400 shell-mobile:mb-0 shell-mobile:w-full">Case density</div>
             {[
               { label: '30+', color: '#38bdf8' },
               { label: '10–29', color: '#818cf8' },
@@ -435,11 +435,11 @@ export default function CaseMap({ geojson, onSelect }) {
           />
           {(dateStart || dateEnd) && (
             <>
-              <span className="ml-1 text-slate-500">{filteredGeojson.features.length} shown</span>
+              <span className="ml-1 text-slate-400">{filteredGeojson.features.length} shown</span>
               <button
                 type="button"
                 onClick={() => { setDateStart(''); setDateEnd('') }}
-                className="ml-1 text-slate-500 hover:text-slate-300"
+                className="ml-1 text-slate-400 hover:text-slate-300"
                 aria-label="Clear date filter"
               >
                 ×

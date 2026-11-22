@@ -28,7 +28,9 @@
   --secondary: 215 20% 16%;
   --secondary-foreground: 195 80% 85%;
   --muted: 215 20% 14%;
-  --muted-foreground: 215 15% 50%;
+  /* 58% lightness: at least 4.7:1 on every dark surface, including
+     secondary (16%); 50% measured 4.2:1 on cards. */
+  --muted-foreground: 215 15% 58%;
   --accent: 170 100% 40%;
   --accent-foreground: 215 28% 7%;
   --destructive: 0 72% 51%;

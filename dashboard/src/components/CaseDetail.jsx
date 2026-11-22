@@ -37,7 +37,7 @@ export default function CaseDetail({ case: c, onClose }) {
               <div className="flex items-center gap-2">
                 <Badge variant="outline" className={cn('text-[10px]', tierBadge(c.evidence_tier))}>{c.evidence_tier}</Badge>
                 <Badge variant="outline" className={cn('text-[10px]', confidenceTone(c.confidence))}>{c.confidence}</Badge>
-                <span className="text-xs text-slate-500">{c.decade}</span>
+                <span className="text-xs text-slate-400">{c.decade}</span>
               </div>
               <SheetTitle className="text-slate-100 text-left">{c.case_id} · {c.date_raw}</SheetTitle>
               <SheetDescription className="text-slate-400 text-left">{locString(c)}{!hasCoords(c) && ` · ${t('detail.noCoords')}`}</SheetDescription>
@@ -46,7 +46,7 @@ export default function CaseDetail({ case: c, onClose }) {
             <div className="mt-4 space-y-4 text-sm">
               <p className="text-slate-300 leading-relaxed">{c.description}</p>
               {c.description_en && c.description_en !== c.description && (
-                <p className="text-slate-500 italic leading-relaxed">{c.description_en}</p>
+                <p className="text-slate-400 italic leading-relaxed">{c.description_en}</p>
               )}
 
               <Field label={t('detail.witness')}>
@@ -84,7 +84,7 @@ export default function CaseDetail({ case: c, onClose }) {
                 <Field label={t('detail.gaps')}><span className="text-amber-300/90">{c.contradictions_or_gaps}</span></Field>
               ) : null}
               <Field label={t('detail.provenance')}>
-                <span className="text-xs text-slate-500">{c.reviewer_action} · {t('detail.from')} {c.promoted_from} · {c.promoted_at?.slice?.(0, 10)} · {c.promoted_by}</span>
+                <span className="text-xs text-slate-400">{c.reviewer_action} · {t('detail.from')} {c.promoted_from} · {c.promoted_at?.slice?.(0, 10)} · {c.promoted_by}</span>
               </Field>
             </div>
           </>
@@ -97,7 +97,7 @@ export default function CaseDetail({ case: c, onClose }) {
 function Field({ label, children }) {
   return (
     <div className="space-y-0.5 border-t border-slate-900 pt-2">
-      <div className="text-[11px] uppercase tracking-wide text-slate-500">{label}</div>
+      <div className="text-[11px] uppercase tracking-wide text-slate-400">{label}</div>
       <div className="text-slate-200">{children}</div>
     </div>
   )
