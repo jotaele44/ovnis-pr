@@ -143,6 +143,9 @@ export default function CaseMap({ geojson, onSelect }) {
   const [densityRequest, setDensityRequest] = useState(0)
   const [showTools, setShowTools] = useState(false)
   const [mapReady, setMapReady] = useState(false)
+  // Set when the browser cannot create the map (e.g. no WebGL); the view then
+  // says why instead of breaking the rest of the app.
+  const [mapFailed, setMapFailed] = useState(null)
 
   const filteredGeojson = useMemo(() => {
     if (!dateStart && !dateEnd) return geojson || EMPTY
@@ -153,12 +156,18 @@ export default function CaseMap({ geojson, onSelect }) {
   filteredRef.current = filteredGeojson
 
   useEffect(() => {
-    const map = new maplibregl.Map({
-      container: containerRef.current,
-      style: OSM_STYLE,
-      center: PR_CENTER,
-      zoom: 8.2,
-    })
+    let map
+    try {
+      map = new maplibregl.Map({
+        container: containerRef.current,
+        style: OSM_STYLE,
+        center: PR_CENTER,
+        zoom: 8.2,
+      })
+    } catch (error) {
+      setMapFailed(String(error?.message ?? error))
+      return undefined
+    }
     mapRef.current = map
     // Bottom-right, not top-right: the top-right corner holds the layer buttons
     // and date filter, and the zoom control used to sit on top of the last button.
@@ -248,7 +257,13 @@ export default function CaseMap({ geojson, onSelect }) {
       })
     })
 
-    return () => { readyRef.current = false; map.remove() }
+    return () => {
+      readyRef.current = false
+      mapRef.current = null
+      // Without a WebGL context map.remove() throws ("this.painter is
+      // undefined"); leaving the Map view must not take the app down.
+      try { map.remove() } catch { /* already unusable */ }
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -344,6 +359,14 @@ export default function CaseMap({ geojson, onSelect }) {
     [filteredGeojson],
   )
   const spatialTools = useSpatialTools({ mapRef, mapReady, targets: spatialToolTargets, interactionLockRef: spatialToolActiveRef })
+
+  if (mapFailed) {
+    return (
+      <div role="status" className="flex h-full w-full items-center justify-center p-6 text-center text-sm text-muted-foreground">
+        Map unavailable: {mapFailed}
+      </div>
+    )
+  }
 
   return (
     <div className="relative h-full w-full">
