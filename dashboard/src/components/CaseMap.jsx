@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import * as maplibregl from 'maplibre-gl'
+import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'
 import { useSpatialTools, SpatialToolsPanel } from './SpatialToolsPanel'
 import { getMunicipiosCaseDensity } from '../lib/api'
 
@@ -8,6 +9,12 @@ import { getMunicipiosCaseDensity } from '../lib/api'
 // skywatcher template — note the h-full container (not absolute inset-0), since
 // maplibre-gl.css sets .maplibregl-map{position:relative} and would otherwise
 // override `absolute` and collapse the height to 0.
+// maplibre-gl 6 loads its worker from a separate module next to the bundle.
+// Without this the build ships no worker, and the request falls through to the
+// app's index.html (WebKit reports "Unexpected token '<'"). `?worker&url` hands
+// it the self-contained worker chunk Vite's worker pipeline emits.
+maplibregl.setWorkerUrl(maplibreWorkerUrl)
+
 // Resolve against the configured base so it works in the normal build
 // (served from '/') and the VITE_OFFLINE single-file file:// export (base './').
 const MUNICIPIOS_URL = new URL('geo/pr_municipios.geojson', document.baseURI).href
