@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">OVNIS PR</string>
+    <string name="title_activity_main">OVNIS PR</string>
+    <string name="package_name">pr.ovnis.app</string>
+    <string name="custom_url_scheme">pr.ovnis.app</string>
+</resources>

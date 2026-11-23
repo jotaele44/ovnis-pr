@@ -1,9 +1,13 @@
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
+import { scrollRegion } from "@/lib/scrollRegion"
 
-const Table = React.forwardRef(({ className, ...props }, ref) => (
-  <div className="relative w-full overflow-auto">
+// The wrapper scrolls; scrollRegion makes it a tab stop while it overflows and
+// holds nothing focusable, so a wide table can be scrolled from the keyboard.
+// `scrollLabel` names it; pass one where a page has several.
+const Table = React.forwardRef(({ className, scrollLabel = "Table", ...props }, ref) => (
+  <div {...scrollRegion(scrollLabel)} className="relative w-full overflow-auto">
     <table
       ref={ref}
       className={cn("w-full caption-bottom text-sm", className)}

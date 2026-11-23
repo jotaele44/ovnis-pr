@@ -33,6 +33,19 @@ jobs:
         run: |
           python -m pip install -r requirements.txt httpx -r server/backend/requirements.txt
           test ! -e "$GITHUB_WORKSPACE/../thehub-pr"
+      - name: Validate research ledgers
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          # On a pull request, also prove no research record present at the base was deleted.
+          if [ -n "$BASE_SHA" ]; then
+            git fetch --no-tags --depth=1 origin "$BASE_SHA"
+            python3 scripts/validate_research_ledgers.py --base "$BASE_SHA"
+          else
+            python3 scripts/validate_research_ledgers.py
+          fi
+      - name: Duplicate-manifestation candidates are current
+        run: python3 scripts/dedupe_candidates.py --master-pairs --check
       - name: Run unit tests
         run: python -m pytest -q --cov --cov-report=term-missing:skip-covered
       - name: Export canonical streams (smoke)

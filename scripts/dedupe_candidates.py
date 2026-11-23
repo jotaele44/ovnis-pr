@@ -1,13 +1,24 @@
 #!/usr/bin/env python3
-"""Generate a preliminary OVNIS dedupe report.
+"""Generate OVNIS dedupe review queues.
 
-This is a conservative review-queue generator. It does not merge or promote cases.
+Two conservative review-queue generators; neither merges, promotes or edits a case.
+
+* Default: score each intake candidate against the master ledger and write a CSV.
+* ``--master-pairs``: pair master cases that may record the same event and write
+  ``data/research/manifestation_candidates.jsonl``. A pair needs recorded dates that
+  agree at the coarser of their two precisions AND the same place (the same
+  municipality, or, when either case has none, near-identical location text).
+  Narrative similarity and a shared source are recorded as signals for the reviewer.
+  Every pair is a COMPUTED CANDIDATE: similarity never decides identity, and only a
+  curator's reviewed entry in ``manifestation_adjudications.jsonl`` can.
 """
 
 from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
+import itertools
 import json
 from difflib import SequenceMatcher
 from math import asin, cos, radians, sin, sqrt
@@ -75,13 +86,106 @@ def match_score(candidate: dict[str, Any], master: dict[str, Any]) -> float:
     return round((ds * 0.35) + (ls * 0.30) + (ts * 0.20) + (ss * 0.15), 3)
 
 
-def main() -> int:
-    parser = argparse.ArgumentParser(description="Generate OVNIS dedupe review report")
+MASTER_PAIR_METHOD = "ovnis-master-pair-blocking-v1"
+MASTER_PAIRS_OUTPUT = "data/research/manifestation_candidates.jsonl"
+LOCATION_TEXT_RATIO = 0.85
+
+
+def _clean(value: Any) -> str:
+    return " ".join(str(value or "").lower().split())
+
+
+def date_relation(a: str, b: str) -> str | None:
+    """How two recorded dates agree, or None. "1967" agrees with "1967-03-02" at year
+    precision; a finer date is never derived from a coarser one."""
+    if not a or not b:
+        return None
+    if a == b:
+        return "IDENTICAL_RECORDED_DATE"
+    shorter, longer = sorted((a, b), key=len)
+    return "COMPATIBLE_PRECISION" if longer.startswith(shorter) else None
+
+
+def place_basis(a: dict[str, Any], b: dict[str, Any]) -> str | None:
+    """The place two cases share, or None. Two different recorded municipalities never pair."""
+    muni_a, muni_b = _clean(a.get("municipality")), _clean(b.get("municipality"))
+    if muni_a and muni_b:
+        return "MUNICIPALITY" if muni_a == muni_b else None
+    loc_a, loc_b = _clean(a.get("location_name")), _clean(b.get("location_name"))
+    if loc_a and loc_b and SequenceMatcher(None, loc_a, loc_b).ratio() >= LOCATION_TEXT_RATIO:
+        return "LOCATION_TEXT"
+    return None
+
+
+def _case_key(case: dict[str, Any]) -> str:
+    return str(case.get("case_id") or case.get("record_id"))
+
+
+def master_pairs(masters: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Candidate duplicate-manifestation pairs among master cases, sorted and deterministic."""
+    cases = sorted((m for m in masters if m.get("record_type") == "master"), key=_case_key)
+    rows: list[dict[str, Any]] = []
+    for a, b in itertools.combinations(cases, 2):
+        relation = date_relation(str(a.get("date_local") or ""), str(b.get("date_local") or ""))
+        if relation is None:
+            continue
+        basis = place_basis(a, b)
+        if basis is None:
+            continue
+        case_a, case_b = sorted((_case_key(a), _case_key(b)))
+        digest = hashlib.sha256(f"{case_a}|{case_b}".encode()).hexdigest()[:12].upper()
+        rows.append({
+            "adjudication_id": f"ADJ-C-{digest}",
+            "case_a": case_a,
+            "case_b": case_b,
+            "status": "CANDIDATE",
+            "origin": "COMPUTED",
+            "method": MASTER_PAIR_METHOD,
+            "signals": {
+                "date_relation": relation,
+                "place_basis": basis,
+                "narrative_similarity": round(text_score(a, b), 3),
+                "same_source": bool(a.get("source_url")) and a.get("source_url") == b.get("source_url"),
+            },
+        })
+    return sorted(rows, key=lambda row: (row["case_a"], row["case_b"]))
+
+
+def render_pairs(rows: list[dict[str, Any]]) -> str:
+    return "".join(json.dumps(row, sort_keys=True, ensure_ascii=False) + "\n" for row in rows)
+
+
+def write_master_pairs(master: Path, output: Path, *, check: bool = False) -> int:
+    text = render_pairs(master_pairs(iter_jsonl(master)))
+    count = text.count("\n")
+    if check:
+        current = output.read_text(encoding="utf-8") if output.exists() else None
+        if current != text:
+            print(f"{output} is stale; regenerate it with: python3 scripts/dedupe_candidates.py --master-pairs")
+            return 1
+        print(f"{output} is current ({count} candidate pairs)")
+        return 0
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(text, encoding="utf-8")
+    print(f"Wrote {count} candidate pairs to {output}")
+    return 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description="Generate OVNIS dedupe review queues")
     parser.add_argument("--candidates", default="data/candidates/candidate_cases.jsonl")
     parser.add_argument("--master", default="data/master/master_cases.jsonl")
     parser.add_argument("--output", default="reports/dedupe_candidates.csv")
     parser.add_argument("--threshold", type=float, default=0.55)
-    args = parser.parse_args()
+    parser.add_argument("--master-pairs", action="store_true",
+                        help="pair master cases that may record the same event (CANDIDATE only)")
+    parser.add_argument("--pairs-output", default=MASTER_PAIRS_OUTPUT)
+    parser.add_argument("--check", action="store_true",
+                        help="with --master-pairs: fail if the committed pairs file is stale")
+    args = parser.parse_args(argv)
+
+    if args.master_pairs:
+        return write_master_pairs(Path(args.master), Path(args.pairs_output), check=args.check)
 
     candidates = iter_jsonl(Path(args.candidates))
     masters = iter_jsonl(Path(args.master))

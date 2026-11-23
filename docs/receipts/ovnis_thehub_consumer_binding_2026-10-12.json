@@ -1,0 +1,53 @@
+{
+  "schema": "ovnis.thehub-consumer-binding/v1",
+  "recorded_at": "2026-10-12T23:50:00Z",
+  "producer": {
+    "repository": "jotaele44/ovnis-pr",
+    "commit": "8793e4a097134db01dbeb75bc80653752f3a96f0",
+    "package_id": "pkg_e9760640d4fa40be998a974186e7c519",
+    "manifest_sha256": "2fe039e675f98455f0af441cc33ca169d7ddacef6025285c85b3289cacf6accb",
+    "streams": {
+      "sources": {
+        "rows": 280,
+        "sha256": "a22f8ef58b20ee3a398e2dbc93d2c9893517da06d3db7dfaa9f5be795f67aeaf"
+      },
+      "entities": {
+        "rows": 1266,
+        "sha256": "bb649d7f2d7193a5d5d8c1f1f76022888358cb4e0fc57080032a844ca92b64a8"
+      },
+      "relationships": {
+        "rows": 1147,
+        "sha256": "ab5bf9888c3e6c01e282bd9dbe42dbdbc8c46e45ac653ae7ea8d6fea6ce5be9e"
+      },
+      "observations": {
+        "rows": 470,
+        "sha256": "62845015c2edf6906d0e320a18db8a129af2c2b412933787dcb586784895184c"
+      }
+    }
+  },
+  "consumer": {
+    "repository": "jotaele44/thehub-pr",
+    "authority_execution_commit": "86271084ee056d0b40a8ea3e1749ee26097c7768",
+    "receipt_commit": "13abfacb5b7259274fd77887eed9b042045a38ed",
+    "receipt_path": "docs/receipts/ovnis_current_head_consumer_2026-10-12.json",
+    "receipt_blob_sha1": "251e1f868866ebcae6cb3f6a3d8cf3d060b32892",
+    "workflow_cleanup_commit": "7397ff60ccd352326c6d6ab47622cb45d538b245",
+    "workflow_run_id": 38324053805,
+    "workflow_artifact_id": 11779614034,
+    "workflow_artifact_digest": "sha256:13654285945a23d401ad6aca6bdfe10d946b9e387fd6d5f6fbba5f6c862895bb",
+    "isolated_hub_db_sha256": "54526e2c81e6c4e6fa4285235601565ec294d1e7e9f4e1f8f16a39c5a76f6867",
+    "result": "PASS"
+  },
+  "contract": {
+    "byte_identical_package_reproduced": true,
+    "validate_package": "PASS",
+    "aggregate": "PASS",
+    "correlate": "PASS",
+    "ingest": "PASS",
+    "production_deployment": false,
+    "committed_fixture_promoted": false,
+    "identity_boundary": "Zero new correlation rows does not prove identity or absence; it only records the output of the bounded isolated consumer run."
+  },
+  "state": "PASS_CURRENT_HEAD_ISOLATED_CONSUMER_COMPATIBILITY",
+  "production_consumer_state": "OPEN_NOT_DEPLOYED"
+}

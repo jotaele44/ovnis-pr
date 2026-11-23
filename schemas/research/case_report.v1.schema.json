@@ -1,0 +1,189 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:prii:ovnis:research:case_report:v1",
+  "title": "OVNIS case report",
+  "description": "A deterministic per-case report generated from the case ledger and the research ledgers by scripts/generate_case_report.py. It restates the case as recorded, lists its evidence ids and linked research, names what is unresolved, and carries a reproducibility receipt.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "report_id": {
+      "type": "string",
+      "pattern": "^RPT-[A-Z0-9][A-Z0-9-]*$"
+    },
+    "report_version": {
+      "const": "ovnis-case-report-v1"
+    },
+    "case_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "case": {
+      "type": "object"
+    },
+    "narrative": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "citation": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "url": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^https?://"
+        },
+        "locator": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "A recorded source reference that is not a link, such as a publication name."
+        },
+        "family": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "evidence_ids": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "entity": {
+          "type": "string",
+          "pattern": "^evo:entities:ent_[a-f0-9]{32}$"
+        },
+        "observation": {
+          "type": "string",
+          "pattern": "^evo:observations:obs_[a-f0-9]{32}$"
+        },
+        "source": {
+          "type": "string",
+          "pattern": "^evo:sources:src_[a-f0-9]{32}$"
+        }
+      },
+      "required": [
+        "entity",
+        "observation",
+        "source"
+      ]
+    },
+    "linked": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "unresolved": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "type": "string",
+            "minLength": 1
+          },
+          "detail": {
+            "type": "string",
+            "minLength": 1
+          },
+          "ref": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "kind",
+          "detail"
+        ]
+      }
+    },
+    "receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "run_id": {
+          "type": "string",
+          "pattern": "^run_[a-f0-9]{32}$"
+        },
+        "snapshot_id": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "retrieval_profile": {
+          "type": "string",
+          "minLength": 1
+        },
+        "provider_config": {
+          "type": "object"
+        },
+        "evidence_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "access_context": {
+          "type": "string",
+          "minLength": 1
+        },
+        "input_sha256": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "report_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "created_at": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}(T\\d{2}:\\d{2}(:\\d{2})?(Z|[+-]\\d{2}:\\d{2}))?$"
+        }
+      },
+      "required": [
+        "run_id",
+        "snapshot_id",
+        "retrieval_profile",
+        "provider_config",
+        "evidence_ids",
+        "access_context",
+        "input_sha256",
+        "report_sha256",
+        "created_at"
+      ]
+    }
+  },
+  "required": [
+    "report_id",
+    "report_version",
+    "case_id",
+    "case",
+    "source",
+    "evidence_ids",
+    "linked",
+    "unresolved",
+    "receipt"
+  ]
+}

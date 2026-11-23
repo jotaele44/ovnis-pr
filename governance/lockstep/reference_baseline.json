@@ -1,0 +1,17 @@
+{
+  "schema_version": "federation_lockstep_baseline_v1",
+  "protocol_version": "1.0",
+  "generation": 2,
+  "captured_at": "2026-09-30T15:32:00Z",
+  "reference_repo": "ovnis-pr",
+  "members": {
+    "thehub-pr": "9d62f46bf7432013f14a9f48b657c53d6cfea556",
+    "moneysweep-pr": "c271f8e763129f8e644ff6349f5658def1180040",
+    "spiderweb-pr": "c4b8d5fe5cac283ccf91cb55c84d4d4f4b5ea825",
+    "aguayluz-pr": "ff670a5f7de22459508a621156ea95fd4b312384",
+    "ovnis-pr": "6ac7d9df4270fa5262c23825c4b3f1ac20b65321",
+    "skywatcher-pr": "b9b1491c7662532476c053f404d422848c4f63e9",
+    "centinelas-pr": "86adddafb346a3613eb227c86f828febb9140398"
+  },
+  "baseline_id": "sha256:ce6f5c188af93b13bf4c99d4b6e70fb8adfcf376c2a07de8d5d34e3c002bf26a"
+}

@@ -1,0 +1,76 @@
+{
+  "schema": "ovnis.owner-session-and-rendered-gate/v1",
+  "recorded_at": "2026-10-20T20:05:00Z",
+  "floot": {
+    "project_id": "7fe42a06-1945-4b5b-ba78-55418ad90fbc",
+    "observed_version": 1792525987506,
+    "checkpoint_id": "32815dbd-2009-45f3-b06e-c877f72434f0",
+    "verification": {
+      "spec_files": 93,
+      "pass": 90,
+      "fail": 0,
+      "service_module_harness_skips": 3,
+      "typecheck": "PASS"
+    },
+    "published_url": "https://ovnis-pr.floot.app",
+    "visibility": "internal"
+  },
+  "owner_session": {
+    "guarded_path": "/login?execute_closeout=1",
+    "in_place_navigation_attempted": true,
+    "separate_tab_open_attempted": true,
+    "published_backend_events_observed_during_attempt": 0,
+    "database_mutations_observed": 0,
+    "conclusion": "REQUEST_DID_NOT_REACH_OVNIS_PUBLISHED_BACKEND",
+    "editor_context": "SANDBOX_PREVIEW_ONLY",
+    "production_owner_closeout": "OPEN"
+  },
+  "database": {
+    "users": 0,
+    "passwords": 0,
+    "viewer_principals": 0,
+    "workspace_members": 0,
+    "source_registry_rows": 14,
+    "active_source_registry_rows": 13,
+    "source_manifestations": 1,
+    "source_bindings": 0,
+    "artifact_bytes": 0,
+    "claims": 0,
+    "chronology": 0,
+    "contradictions": 0,
+    "audits": 0,
+    "state": "UNCHANGED_FAIL_CLOSED"
+  },
+  "rendered_jobs": {
+    "desktop": {
+      "job_id": "fca6b2ff-3362-455c-83b5-e21a3737f0cb",
+      "state": "AWAITING_PREVIEW_WINDOW"
+    },
+    "viewport_430": {
+      "job_id": "6dfc537f-dc58-4ce1-a768-593db5e632c1",
+      "state": "AWAITING_PREVIEW_WINDOW"
+    },
+    "viewport_393": {
+      "job_id": "3ffc033d-7658-47db-a9f8-27098043b6df",
+      "state": "AWAITING_PREVIEW_WINDOW"
+    }
+  },
+  "browser_evidence": {
+    "sandbox_auth_session_401_observed": true,
+    "sandbox_service_worker_403_observed": true,
+    "production_backend_request_observed": false,
+    "note": "Sandbox preview browser identity is not substituted for internal production owner identity."
+  },
+  "native": {
+    "historical_build_completed_at": "2026-10-02T20:20:05.788Z",
+    "current_head_binding": "OPEN_HISTORICAL_ONLY",
+    "builds_remaining": 0,
+    "resets_at": "2026-11-01T15:26:26.000Z",
+    "app_store_connection": "NOT_CONNECTED",
+    "future_build_watch": "ENABLED_CONDITION_GATED"
+  },
+  "spatial": {
+    "w8_v1": "OPEN_PROVISIONAL_FAIL_KILL_CRITERIA"
+  },
+  "certification": "OPEN_NOT_ISSUED"
+}
