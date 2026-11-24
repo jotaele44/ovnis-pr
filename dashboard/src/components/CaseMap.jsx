@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import * as maplibregl from 'maplibre-gl'
+import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'
 import { useSpatialTools, SpatialToolsPanel } from './SpatialToolsPanel'
 import { getMunicipiosCaseDensity } from '../lib/api'
 
@@ -8,6 +9,12 @@ import { getMunicipiosCaseDensity } from '../lib/api'
 // skywatcher template — note the h-full container (not absolute inset-0), since
 // maplibre-gl.css sets .maplibregl-map{position:relative} and would otherwise
 // override `absolute` and collapse the height to 0.
+// maplibre-gl 6 loads its worker from a separate module next to the bundle.
+// Without this the build ships no worker, and the request falls through to the
+// app's index.html (WebKit reports "Unexpected token '<'"). `?worker&url` hands
+// it the self-contained worker chunk Vite's worker pipeline emits.
+maplibregl.setWorkerUrl(maplibreWorkerUrl)
+
 // Resolve against the configured base so it works in the normal build
 // (served from '/') and the VITE_OFFLINE single-file file:// export (base './').
 const MUNICIPIOS_URL = new URL('geo/pr_municipios.geojson', document.baseURI).href
@@ -136,6 +143,9 @@ export default function CaseMap({ geojson, onSelect }) {
   const [densityRequest, setDensityRequest] = useState(0)
   const [showTools, setShowTools] = useState(false)
   const [mapReady, setMapReady] = useState(false)
+  // Set when the browser cannot create the map (e.g. no WebGL); the view then
+  // says why instead of breaking the rest of the app.
+  const [mapFailed, setMapFailed] = useState(null)
 
   const filteredGeojson = useMemo(() => {
     if (!dateStart && !dateEnd) return geojson || EMPTY
@@ -146,12 +156,18 @@ export default function CaseMap({ geojson, onSelect }) {
   filteredRef.current = filteredGeojson
 
   useEffect(() => {
-    const map = new maplibregl.Map({
-      container: containerRef.current,
-      style: OSM_STYLE,
-      center: PR_CENTER,
-      zoom: 8.2,
-    })
+    let map
+    try {
+      map = new maplibregl.Map({
+        container: containerRef.current,
+        style: OSM_STYLE,
+        center: PR_CENTER,
+        zoom: 8.2,
+      })
+    } catch (error) {
+      setMapFailed(String(error?.message ?? error))
+      return undefined
+    }
     mapRef.current = map
     // Bottom-right, not top-right: the top-right corner holds the layer buttons
     // and date filter, and the zoom control used to sit on top of the last button.
@@ -241,7 +257,13 @@ export default function CaseMap({ geojson, onSelect }) {
       })
     })
 
-    return () => { readyRef.current = false; map.remove() }
+    return () => {
+      readyRef.current = false
+      mapRef.current = null
+      // Without a WebGL context map.remove() throws ("this.painter is
+      // undefined"); leaving the Map view must not take the app down.
+      try { map.remove() } catch { /* already unusable */ }
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -337,6 +359,14 @@ export default function CaseMap({ geojson, onSelect }) {
     [filteredGeojson],
   )
   const spatialTools = useSpatialTools({ mapRef, mapReady, targets: spatialToolTargets, interactionLockRef: spatialToolActiveRef })
+
+  if (mapFailed) {
+    return (
+      <div role="status" className="flex h-full w-full items-center justify-center p-6 text-center text-sm text-muted-foreground">
+        Map unavailable: {mapFailed}
+      </div>
+    )
+  }
 
   return (
     <div className="relative h-full w-full">
