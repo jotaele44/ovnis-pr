@@ -96,7 +96,7 @@
     "eslint-plugin-react-refresh": "^0.5.8",
     "eslint-plugin-unused-imports": "^4.4.1",
     "globals": "^17.14.0",
-    "jsdom": "^30.0.1",
+    "jsdom": "^31.0.1",
     "postcss": "^8.5.33",
     "tailwindcss": "^4.3.3",
     "tailwindcss-animate": "^1.0.7",
