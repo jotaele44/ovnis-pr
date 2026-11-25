@@ -308,24 +308,28 @@ def test_record_sets_verified_point_date_and_appends_notes(tmp_path):
     ledger = _ledger(tmp_path, Alpha={"state": "forward"})
     evidence = tmp_path / "evidence.txt"
     evidence.write_text("fixture evidence", encoding="utf-8")
+    configuration = tmp_path / "configuration.json"
+    configuration.write_text("{}", encoding="utf-8")
     receipt = tmp_path / "receipt.json"
     receipt.write_text(
         json.dumps({
             "source": "Alpha",
-            "verified_through": "post of 2026-11-01",
+            "verified_through": "2026-11-01",
             "sweep_date": "2026-11-25",
             "status": "success",
             "reconciliation": "complete",
             "execution_id": "fixture-1",
             "interval_start": "2026-10-01",
-            "configuration_sha256": "a" * 64,
+            "previous_frontier": "",
+            "configuration_path": configuration.name,
+            "configuration_sha256": hashlib.sha256(configuration.read_bytes()).hexdigest(),
             "evidence": [{"path": evidence.name, "sha256": hashlib.sha256(evidence.read_bytes()).hexdigest()}],
         }),
         encoding="utf-8",
     )
     argv = [
         "--ledger", str(ledger), "record", "--source", "Alpha",
-        "--verified-through", "post of 2026-11-01", "--date", "2026-11-25",
+        "--verified-through", "2026-11-01", "--date", "2026-11-25",
         "--receipt", str(receipt), "--note", "swept",
     ]
     assert sl.main(argv) == 0
@@ -333,9 +337,25 @@ def test_record_sets_verified_point_date_and_appends_notes(tmp_path):
     assert sl.main(argv) == 0
     assert ledger.read_bytes() == before
     row = sl.read_csv(ledger)[0]
-    assert (row["verified_through"], row["last_swept"]) == ("post of 2026-11-01", "2026-11-25")
+    assert (row["verified_through"], row["last_swept"]) == ("2026-11-01", "2026-11-25")
     assert "receipt_sha256=" in row["notes"]
     assert "2026-11-25: swept" in row["notes"]
+    stale = json.loads(receipt.read_text(encoding="utf-8"))
+    stale["previous_frontier"] = "2026-11-01"
+    stale["verified_through"] = "2026-10-31"
+    stale_receipt = tmp_path / "stale.json"
+    stale_receipt.write_text(json.dumps(stale), encoding="utf-8")
+    rollback = [
+        "--ledger", str(ledger), "record", "--source", "Alpha",
+        "--verified-through", "2026-10-31", "--date", "2026-11-25",
+        "--receipt", str(stale_receipt),
+    ]
+    assert sl.main(rollback) == 2
+    assert ledger.read_bytes() == before
+    configuration.write_text("tampered", encoding="utf-8")
+    assert sl.main(argv) == 2
+    assert ledger.read_bytes() == before
+    configuration.write_text("{}", encoding="utf-8")
     evidence.write_text("tampered", encoding="utf-8")
     assert sl.main(argv) == 2
     assert ledger.read_bytes() == before
