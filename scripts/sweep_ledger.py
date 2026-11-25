@@ -43,6 +43,7 @@ import sys
 import tempfile
 import unicodedata
 from collections import defaultdict
+from contextlib import ExitStack
 from datetime import date, timedelta
 from difflib import SequenceMatcher
 from pathlib import Path
@@ -938,7 +939,30 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
-    return int(args.func(args))
+    # Exclusive lock files protect the entire read-modify-write operation.
+    # A crash leaves a lock in place deliberately; an operator must reconcile it.
+    paths = []
+    if args.command in ("record", "refresh"):
+        paths.append(Path(args.ledger).resolve())
+    if args.command == "refresh":
+        paths.append(Path(args.index).resolve())
+    if args.command == "query" and args.log:
+        paths.append(Path(args.query_log).resolve())
+    with ExitStack() as stack:
+        for path in sorted(set(paths)):
+            path.parent.mkdir(parents=True, exist_ok=True)
+            lock = path.with_name(path.name + ".lock")
+            try:
+                fd = os.open(lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
+            except FileExistsError:
+                print("ledger locked; reconcile existing writer before retrying", file=sys.stderr)
+                return 2
+            stack.callback(lock.unlink)
+            with os.fdopen(fd, "w", encoding="utf-8") as handle:
+                handle.write(str(os.getpid()) + "\n")
+                handle.flush()
+                os.fsync(handle.fileno())
+        return int(args.func(args))
 
 
 if __name__ == "__main__":
