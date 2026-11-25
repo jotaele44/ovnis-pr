@@ -594,7 +594,10 @@
           "/"
         ],
         "components": [
-          "[data-offline-status-host]"
+          "dashboard/src/pages/Dashboard.jsx"
+        ],
+        "e2e_routes": [
+          "/"
         ]
       },
       "tests": {
