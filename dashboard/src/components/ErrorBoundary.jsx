@@ -36,10 +36,10 @@ export default class ErrorBoundary extends Component {
     return (
       <div className="flex min-h-[200px] flex-col items-center justify-center gap-2 p-6 text-center" role="alert">
         <p className="text-sm font-medium text-amber-300">Something broke while rendering this view</p>
-        <p className="max-w-md text-[11px] text-slate-500">
+        <p className="max-w-md text-[11px] text-slate-400">
           {error.message || String(error)}
         </p>
-        <p className="max-w-md text-[11px] text-slate-600">
+        <p className="max-w-md text-[11px] text-slate-400">
           This is a bug in the dashboard, not a problem with your data.
         </p>
         <button

@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { tierBadge } from '@/lib/format'
 import { locString } from '@/lib/ovnis-format'
 import { cn, lookup } from '@/lib/utils'
+import { scrollRegion } from '@/lib/scrollRegion'
 
 // Map this app's candidate review-status vocabulary onto the canonical
 // federation status roles (see @pr-federation/react). Colors now come from the
@@ -28,14 +29,14 @@ export default function CandidateReview() {
   // "Queue empty".
   if (isLoading || isError) {
     return (
-      <div className="h-full overflow-auto p-2">
+      <div {...scrollRegion("Candidates")} className="h-full overflow-auto p-2">
         <QueryState loading={isLoading} error={isError ? error : null} onRetry={refetch} />
       </div>
     )
   }
 
   return (
-    <div className="h-full overflow-auto p-2 space-y-1.5">
+    <div {...scrollRegion("Candidate list")} className="h-full overflow-auto p-2 space-y-1.5">
       <div className="px-1 pb-1 text-xs text-slate-400">{candidates.length} candidates in queue</div>
       {candidates.map((c) => (
         <div key={c.candidate_id} className="rounded-md border border-slate-800 bg-slate-900 p-2.5">
@@ -50,10 +51,10 @@ export default function CandidateReview() {
                 </span>
               )
             })()}
-            {c.intake_channel && <span className="text-[10px] text-slate-600">{c.intake_channel}</span>}
+            {c.intake_channel && <span className="text-[10px] text-slate-400">{c.intake_channel}</span>}
           </div>
           <p className="text-xs text-slate-300 mt-1 line-clamp-2">{c.description}</p>
-          <p className="text-[11px] text-slate-500 mt-0.5">{c.date_raw || '—'} · {locString(c)}</p>
+          <p className="text-[11px] text-slate-400 mt-0.5">{c.date_raw || '—'} · {locString(c)}</p>
         </div>
       ))}
       {/* Reached only when the fetch succeeded, so an empty queue here is a

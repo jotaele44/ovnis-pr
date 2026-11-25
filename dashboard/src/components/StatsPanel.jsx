@@ -5,6 +5,7 @@ import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Cell,
 } from 'recharts'
 import { tierHex } from '@/lib/ovnis-format'
+import { scrollRegion } from '@/lib/scrollRegion'
 
 function toData(obj = {}) {
   return Object.entries(obj).map(([name, value]) => ({ name, value }))
@@ -17,7 +18,7 @@ export default function StatsPanel() {
   // blanks that read as "zero cases" rather than "the numbers are unknown".
   if (isLoading || isError) {
     return (
-      <div className="h-full overflow-auto p-3">
+      <div {...scrollRegion("Statistics")} className="h-full overflow-auto p-3">
         <QueryState loading={isLoading} error={isError ? error : null} onRetry={refetch} />
       </div>
     )
@@ -28,7 +29,7 @@ export default function StatsPanel() {
   const tiers = ['T1', 'T2', 'T3', 'T4'].map((t) => ({ name: t, value: s.byTier?.[t] ?? 0 }))
 
   return (
-    <div className="h-full overflow-auto p-3 space-y-3">
+    <div {...scrollRegion("Statistics")} className="h-full overflow-auto p-3 space-y-3">
       <div className="grid grid-cols-3 gap-2">
         <Kpi label="Total" value={s.total} />
         <Kpi label="Mapped" value={s.mapped} />
@@ -72,7 +73,7 @@ function Kpi({ label, value, tone = 'text-slate-100' }) {
   return (
     <div className="rounded-md border border-slate-800 bg-slate-900 p-2 text-center">
       <div className={`text-lg font-semibold ${tone}`}>{value ?? '–'}</div>
-      <div className="text-[10px] uppercase tracking-wide text-slate-500">{label}</div>
+      <div className="text-[10px] uppercase tracking-wide text-slate-400">{label}</div>
     </div>
   )
 }
@@ -80,7 +81,7 @@ function Kpi({ label, value, tone = 'text-slate-100' }) {
 function Card({ title, children }) {
   return (
     <div className="rounded-md border border-slate-800 bg-slate-900 p-3">
-      <h4 className="text-xs uppercase tracking-wide text-slate-500 mb-2">{title}</h4>
+      <h4 className="text-xs uppercase tracking-wide text-slate-400 mb-2">{title}</h4>
       {children}
     </div>
   )
