@@ -1,0 +1,168 @@
+{
+  "schema": "ovnis.reference-source-adjudication-closeout/v1",
+  "recorded_date": "2026-09-28",
+  "scope": "Exact 244-reference terminal adjudication, source-registry candidate verification/promotion planning, bounded manifestation freeze, current spatial consumer receipt reconciliation, and runtime blocker accounting",
+  "predecessor_floot_checkpoint": {
+    "id": "2c815d25-5908-4c79-bc61-314f232dacbb",
+    "title": "Freeze source registry gap plane",
+    "floot_head": "1790443506469",
+    "regression_receipt": "static/__dev/docs/ovnis-source-registry-gap-audit-2026-09-26.json",
+    "preservation_state": "PRESERVED_NOT_OVERWRITTEN"
+  },
+  "floot_runtime_observation": {
+    "publish_status": "PUBLISHED",
+    "published_url": "https://ovnis-pr.floot.app",
+    "preview_status": "READY",
+    "database_reconciliation": "BLOCKED_TOOL_ACCESS",
+    "endpoint_runtime_proof": "BLOCKED_TOOL_ACCESS",
+    "reason": "Floot account exhausted the 1000 build-action daily allowance. Metered file/database/test/runtime tools are paused until the account-day reset or capacity increase. External web fetch cannot access the Floot sandbox API.",
+    "quota_is_application_certification_residue": false,
+    "no_runtime_health_inference": true
+  },
+  "canonical_inputs": {
+    "master_release": {
+      "path": "releases/2026-06-23/ovnis_cases_master.csv",
+      "git_blob_sha1": "8b97115f32bfbe48e80fd96a36d74e4e4e168226",
+      "case_rows": 470
+    },
+    "source_registry": {
+      "path": "data/reference/source_registry.csv",
+      "git_blob_sha1": "4a5a2900202df82fc4b48608ddb16970adf1d55f",
+      "rows": 14,
+      "active_rows": 13,
+      "changed_in_this_tranche": false
+    }
+  },
+  "source_reference_adjudication": {
+    "path": "data/reference/source_reference_adjudication_v1.csv",
+    "commit": "20b62261270fb8e5e7d59f213da978ab546a4277",
+    "git_blob_sha1": "550360f9d5d55d50341dcdbd56eedace4c42aeda",
+    "denominator": 244,
+    "arithmetic": {
+      "strict_binding_eligible": 1,
+      "discovery_only": 190,
+      "non_binding_terminal": 36,
+      "review_tie": 14,
+      "unresolved": 3,
+      "sum": 244
+    },
+    "unresolved_exact_references": [
+      "Chat-internal reference (Phase A live log)",
+      "Chat-internal reference (Stage B live log)",
+      "source_pending"
+    ],
+    "rules": [
+      "Every row preserves the exact source reference plus SHA-256 and deterministic OVART_REF ID.",
+      "No row permits automatic identity write.",
+      "Carrier/platform references may terminate NON_BINDING_TERMINAL without identifying the underlying producer.",
+      "Composite references remain REVIEW_TIE; candidate sets are preserved.",
+      "The prior FAA strict candidate remains eligible but not persisted."
+    ],
+    "faa_strict_candidate": {
+      "artifact_id": "OVART_REF_333482f6aba26c9b07ecdf9c",
+      "source_id": "SRC-0005",
+      "case_ids": ["PRUAP-0398", "PRUAP-0442"],
+      "persisted_binding": false
+    }
+  },
+  "source_registry_candidate_verification": {
+    "path": "data/reference/source_registry_candidate_verification.csv",
+    "commit": "a4805bad67576baf40ef8cf82f123742e4e9caf0",
+    "git_blob_sha1": "1183a485c1c517d31999d31cbdc6056f889fbd67",
+    "candidate_rows": 17,
+    "verification_rule": "Entity identity, canonical locator, source role and acquisition policy are reviewed independently; weak/dead/composite identities are not promoted."
+  },
+  "source_registry_promotion_plan": {
+    "path": "data/reference/source_registry_promotion_plan_v1.csv",
+    "commit": "1001b9dfa6141b6d46bb6bbe0871677ad2f8b65d",
+    "git_blob_sha1": "318f848ba32feec2d836436cba041797b386337e",
+    "promotion_ready": 12,
+    "deferred": 5,
+    "reserved_ids": ["SRC-0014","SRC-0015","SRC-0016","SRC-0017","SRC-0018","SRC-0019","SRC-0020","SRC-0021","SRC-0022","SRC-0023","SRC-0024","SRC-0025"],
+    "canonical_registry_effect": "NONE",
+    "promotion_precondition": "Synchronize reviewed rows into the restored database and canonical registry as one governed change; do not advance the denominator from GitHub alone."
+  },
+  "manifestation_freeze": {
+    "path": "data/reference/source_manifestation_freeze_ledger_v1.csv",
+    "commit": "c6ef3b400be15be573680fa94278dcea66c72126",
+    "rows": 23,
+    "internal_git_blob_frozen": 6,
+    "external_byte_frozen": 0,
+    "rule": "Verified locator is not immutable manifestation evidence. External sources remain locator-verified/blocked/credential-last/manual-archive-only until exact bytes are frozen."
+  },
+  "source_head_drift": {
+    "frozen_floot_source_commit": "68b87366207cb3fe249814ee6611a03b18d67a6b",
+    "latest_observed_head_before_receipt": "c6ef3b400be15be573680fa94278dcea66c72126",
+    "commits_ahead": 46,
+    "commits_behind": 0,
+    "changed_file_count": 48,
+    "combined_status_count": 0,
+    "pr_triggered_workflow_run_count": 0,
+    "canonical_master_release_changed": false,
+    "canonical_source_registry_changed": false,
+    "equivalence": "NOT_CERTIFIED",
+    "reason": "Current changed set includes dashboard snapshot, backend/UI, federation spatial contracts and source-provenance additions. The newer source head has not been proven byte/semantic equivalent to the frozen Floot source."
+  },
+  "spatial_federation": {
+    "thehub_closeout_repository": "jotaele44/thehub-pr",
+    "thehub_closeout_head": "2631a14ba6832c2dccfd09406d90a404eb9d99be",
+    "thehub_closeout_path": "registry/spatial/record_cell_binding_v0_2_closeout_2026-09-28.json",
+    "thehub_closeout_blob_sha1": "4929594a7c4afd832253521c608f2f3b690348fc",
+    "ovnis_consumer_head": "ecfe25114b9a83ac72916c37716b7e38443bffe2",
+    "contract_artifact_state": "PASS_ATTESTED",
+    "federation_generation": "CLOSED",
+    "repository_wide_execution": "AUDIT_ONLY",
+    "transform_state": "PROVISIONAL",
+    "independent_validation_state": "FAIL_KILL_CRITERIA",
+    "exact_cell_claims_permitted": false,
+    "cell_set_required": true,
+    "w8_effect": "SAFETY_CONTRACT_ADVANCED_W8_NOT_VERIFIED"
+  },
+  "broad_thehub_handoff": {
+    "state": "OPEN_CURRENT_HEAD_RECEIPT_ABSENT",
+    "historical_evidence": {
+      "package_id": "pkg_698815477e425c9e1c08029697599890",
+      "stream_counts": {"sources":278,"entities":758,"relationships":563,"observations":470},
+      "hub_validation": "HISTORICAL_PASS"
+    },
+    "current_ovnis_export_manifest_committed": false,
+    "rule": "Historic package validation and ready_for_live declaration do not establish a current-head consumer receipt."
+  },
+  "runtime_mutation_planes": {
+    "workspace_member_reconciliation": "BLOCKED_TOOL_ACCESS",
+    "faa_positive_binding": "OPEN_NOT_EXECUTED",
+    "faa_idempotency_replay": "OPEN_NOT_EXECUTED",
+    "faa_stale_source_falsifier": "PASS_INJECTED_REGRESSION_ONLY_RUNTIME_OPEN",
+    "faa_locator_falsifier": "PASS_INJECTED_REGRESSION_ONLY_RUNTIME_OPEN",
+    "faa_tie_falsifier": "PASS_INJECTED_REGRESSION_ONLY_RUNTIME_OPEN",
+    "claim_population": "OPEN_NO_VERIFIED_EXTERNAL_MANIFESTATION_BYTES",
+    "chronology_positive_runtime": "OPEN",
+    "contradiction_positive_runtime": "OPEN"
+  },
+  "qa_release_planes": {
+    "current_24_endpoint_production_equivalence": "OPEN",
+    "desktop_rendered_qa": "OPEN_CURRENT_HEAD",
+    "iphone_rendered_qa": "OPEN_CURRENT_HEAD",
+    "native_build": "OPEN",
+    "physical_device": "OPEN"
+  },
+  "training": {
+    "state": "CANDIDATE_ONLY",
+    "promotion_permitted": false,
+    "reason": "Only passed bounded behaviors may be added; end-to-end workflow still has material runtime/source/manifestation/device residue."
+  },
+  "certification": {
+    "state": "OPEN",
+    "zero_material_residue": false,
+    "blocking_residue": [
+      "database/post-suspension runtime reconciliation unavailable in current tooling window",
+      "no legitimate real-principal FAA positive binding receipt",
+      "external source manifestation bytes not frozen",
+      "latest 46-commit source drift not equivalence-certified",
+      "broad current-head TheHub consumer receipt absent",
+      "W8 transform remains PROVISIONAL / FAIL_KILL_CRITERIA",
+      "Claims/chronology/contradiction positive runtime evidence incomplete",
+      "current-head production endpoint equivalence/rendered/native/physical-device proof incomplete"
+    ]
+  }
+}

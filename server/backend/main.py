@@ -165,8 +165,20 @@ def all_cases() -> list[dict[str, Any]]:
     return [normalize_case(row) for row in read_jsonl(MASTER_PATH)]
 
 
-def all_candidates() -> list[dict[str, Any]]:
+def raw_candidates() -> list[dict[str, Any]]:
     return [normalize_candidate(row) for row in read_jsonl(CANDIDATE_PATH)]
+
+
+def partition_candidates(rows: list[dict[str, Any]] | None = None) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    source_rows = raw_candidates() if rows is None else rows
+    retained = [row for row in source_rows if not is_placeholder(row)]
+    excluded_placeholders = [row for row in source_rows if is_placeholder(row)]
+    return retained, excluded_placeholders
+
+
+def all_candidates() -> list[dict[str, Any]]:
+    retained, _ = partition_candidates()
+    return retained
 
 
 def latest_geojson_path() -> Path | None:
@@ -225,16 +237,18 @@ def is_placeholder(row: dict[str, Any]) -> bool:
 
 
 def data_status(cases: list[dict[str, Any]], candidates: list[dict[str, Any]]) -> str:
-    if not cases and not candidates:
+    rows = [*cases, *candidates]
+    if not rows:
         return "empty"
-    if cases and all(is_placeholder(row) for row in cases) and all(is_placeholder(row) for row in candidates):
+    if all(is_placeholder(row) for row in rows):
         return "placeholder_only"
     return "loaded"
 
 
 def stats_payload() -> dict[str, Any]:
     cases = all_cases()
-    candidates = all_candidates()
+    candidate_source_rows = raw_candidates()
+    candidates, candidate_excluded_placeholders = partition_candidates(candidate_source_rows)
     geojson = release_geojson()
     mapped = len(geojson.get("features") or [])
     by_decade = Counter(case.get("decade") or "unknown" for case in cases)
@@ -244,9 +258,11 @@ def stats_payload() -> dict[str, Any]:
         "mapped": mapped,
         "unmapped": max(len(cases) - mapped, 0),
         "candidates": len(candidates),
+        "candidateSourceRows": len(candidate_source_rows),
+        "candidateExcludedPlaceholders": len(candidate_excluded_placeholders),
         "byDecade": dict(by_decade),
         "byTier": dict(by_tier),
-        "dataStatus": data_status(cases, candidates),
+        "dataStatus": data_status(cases, candidate_source_rows),
         "geojsonSource": str(latest_geojson_path().relative_to(ROOT)) if latest_geojson_path() else "derived_from_master_ledger",
     }
 
@@ -280,6 +296,8 @@ def health() -> dict[str, Any]:
         "mapped": stats["mapped"],
         "unmapped": stats["unmapped"],
         "candidates": stats["candidates"],
+        "candidate_source_rows": stats["candidateSourceRows"],
+        "candidate_excluded_placeholders": stats["candidateExcludedPlaceholders"],
         "data_status": stats["dataStatus"],
         "source_files": {
             "master": str(MASTER_PATH.relative_to(ROOT)),

@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 
-vi.mock('maplibre-gl', () => ({ default: {} }))
+vi.mock('maplibre-gl', () => ({ default: {}, setWorkerUrl: vi.fn() }))
+vi.mock('maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url', () => ({ default: 'worker.js' }))
 
 import { parseCaseDensity } from './CaseMap'
 

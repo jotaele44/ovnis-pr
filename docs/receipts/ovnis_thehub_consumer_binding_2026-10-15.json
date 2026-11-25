@@ -1,0 +1,36 @@
+{
+  "schema": "ovnis.thehub-consumer-binding/v1",
+  "recorded_at": "2026-10-15T19:50:00Z",
+  "producer": {
+    "repository": "jotaele44/ovnis-pr",
+    "commit": "70c1f66383acf59d87cf7ec24ee9a46c48022951",
+    "package_id": "pkg_f006c7c911425237eea9bf92bf574780",
+    "manifest_sha256": "5497cb35f17d1d70a6d84669f5b1ee5845a44db8cfaca378a3680a96f43f543a"
+  },
+  "consumer": {
+    "repository": "jotaele44/thehub-pr",
+    "authority_execution_commit": "60bcdaaa69add1cee1a57b91c8ce4525bda6db88",
+    "receipt_commit": "a338021d407e58b0e481d9e6d213b22255ed1730",
+    "receipt_path": "docs/receipts/ovnis_current_head_consumer_2026-10-15.json",
+    "receipt_blob_sha1": "f1c7ae42873031e25a2613ce8cfdc4ca558b8b8d",
+    "cleanup_commit": "a3e24e3c3d998cd936814517a01f79907ab5488b",
+    "workflow_run_id": 38796693932,
+    "workflow_artifact_id": 12001244612,
+    "workflow_artifact_digest": "sha256:ff7e62029472bf870da6a0622dd43c38a7a2592b4ac852b0190cfb1f9882fc9a",
+    "isolated_hub_db_sha256": "8d4fc5b9c23fd6695a216b719b42ab8b594a9fe56e284b7ccd5cbe3b52dc93d1",
+    "result": "PASS"
+  },
+  "contract": {
+    "byte_identical_package_reproduced": true,
+    "validate_package": "PASS",
+    "aggregate": "PASS",
+    "correlate": "PASS",
+    "ingest": "PASS",
+    "correlations_rows": 0,
+    "zero_correlations_identity_proof": false,
+    "production_deployment": false,
+    "committed_fixture_promoted": false
+  },
+  "state": "PASS_CURRENT_MATERIAL_HEAD_ISOLATED_CONSUMER_COMPATIBILITY",
+  "production_consumer_state": "OPEN_NOT_DEPLOYED"
+}

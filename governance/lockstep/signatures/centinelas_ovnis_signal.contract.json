@@ -1,0 +1,22 @@
+{
+  "schema_version": "federation_lockstep_event_signature_v1",
+  "producer": "centinelas-pr",
+  "consumer": "ovnis-pr",
+  "envelope_keys": ["signal", "signals"],
+  "candidate_fields": [
+    "date_local",
+    "description",
+    "environment",
+    "evidence_tier",
+    "language",
+    "location_name",
+    "municipality",
+    "object_type",
+    "record_id",
+    "retrieved_at",
+    "source_citation",
+    "source_family",
+    "source_url"
+  ],
+  "quarantine_required": ["date_local", "description", "location_name"]
+}
