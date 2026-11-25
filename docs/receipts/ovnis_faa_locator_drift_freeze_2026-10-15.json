@@ -1,0 +1,51 @@
+{
+  "schema": "ovnis.faa-locator-drift-freeze/v1",
+  "recorded_at": "2026-10-15T19:41:25.411Z",
+  "policy": {
+    "source_id": "SRC-0005",
+    "acquisition_state": "MANUAL_ONLY",
+    "execution": "MANUAL_READ_ONLY_FREEZE",
+    "database_mutation": false,
+    "binding_promotion": false
+  },
+  "historical_binding_candidate": {
+    "artifact_id": "OVART_REF_333482f6aba26c9b07ecdf9c",
+    "historical_disposition": "STRICT_BINDING_ELIGIBLE",
+    "historical_reference_denominator_preserved": true,
+    "requested_locator": "https://www.faa.gov/about/office_org/headquarters_offices/ato/foia/",
+    "corroborating_case_ids": [
+      "PRUAP-0398",
+      "PRUAP-0442"
+    ],
+    "current_http_status": 404,
+    "response_bytes": 1245,
+    "response_sha256": "dc1d54dab6ec8c00f70137927504e4f222c8395f10760b6beecfcfa94e08249f",
+    "state": "HISTORICAL_STRICT_ELIGIBILITY_PRESERVED_CURRENT_EXECUTION_BLOCKED_LOCATOR_STALE"
+  },
+  "canonical_registry_locator": {
+    "url": "https://www.faa.gov/foia/electronic_reading_room",
+    "current_http_status": 200,
+    "content_type": "text/html; charset=UTF-8",
+    "response_bytes": 118323,
+    "response_sha256": "5ef1c457cb300b77c9a3a590e357f74921f32edcf91a1461f94d25fdf81a0a60",
+    "etag": "\"1792093285-gzip\"",
+    "observed_last_modified": "Thu, 15 Oct 2026 19:41:25 GMT",
+    "state": "LIVE_CANONICAL_SOURCE_LOCATOR_HASHED_METADATA_ONLY"
+  },
+  "adjudication": {
+    "identity_rule": "A live registry locator on the same FAA host does not authorize rewriting the historical artifact locator or binding identity by hostname.",
+    "binding_rule": "Do not execute /_api/workspace/artifacts/source-bind for the FAA candidate until a reviewed artifact-locator correction or independently verified manifestation preserves the historical locator relationship.",
+    "candidate_replacement_locator": "https://www.faa.gov/foia/electronic_reading_room",
+    "candidate_replacement_state": "REVIEW_REQUIRED_NOT_PROMOTED",
+    "raw_response_bytes_persisted": false,
+    "reason_raw_bytes_not_persisted": "The governed artifact/source byte store requires authenticated authority; this receipt freezes retrieval metadata and hashes without bypassing that write plane."
+  },
+  "reference_arithmetic": {
+    "STRICT_BINDING_ELIGIBLE": 1,
+    "DISCOVERY_ONLY": 190,
+    "NON_BINDING_TERMINAL": 36,
+    "REVIEW_TIE": 14,
+    "UNRESOLVED": 3,
+    "sum": 244
+  }
+}

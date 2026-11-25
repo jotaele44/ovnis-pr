@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:prii:ovnis:research:finding:v1",
+  "title": "OVNIS research finding",
+  "description": "A curated statement backed by cited sources. A finding is not an established fact: ACCEPTED means a reviewer accepted it as supported by its cited sources. ACCEPTED requires at least one source_ref and a review; INTERPRETIVE requires an interpretation_basis; SUPERSEDED requires superseded_by. Rejected and superseded findings are kept, never deleted.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "finding_id": {
+      "type": "string",
+      "pattern": "^FIND-[A-Z0-9][A-Z0-9-]*$"
+    },
+    "statement": {
+      "type": "string",
+      "minLength": 10
+    },
+    "topic_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^TOPIC-[A-Z0-9][A-Z0-9-]*$"
+      },
+      "uniqueItems": true
+    },
+    "case_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "source_refs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "description": "Where a claim is stated: an OVNIS case (its own cited source) or a source-registry entry, plus a locator inside it.",
+        "properties": {
+          "case_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source_id": {
+            "type": "string",
+            "pattern": "^SRC-\\d{4}$"
+          },
+          "locator": {
+            "type": "string",
+            "minLength": 1
+          },
+          "quote": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "locator"
+        ],
+        "anyOf": [
+          {
+            "required": [
+              "case_id"
+            ]
+          },
+          {
+            "required": [
+              "source_id"
+            ]
+          }
+        ]
+      }
+    },
+    "status": {
+      "enum": [
+        "CANDIDATE",
+        "ACCEPTED",
+        "REJECTED",
+        "SUPERSEDED"
+      ]
+    },
+    "epistemic_class": {
+      "enum": [
+        "CURATED",
+        "INTERPRETIVE"
+      ]
+    },
+    "interpretation_basis": {
+      "type": "string",
+      "minLength": 1
+    },
+    "superseded_by": {
+      "type": "string",
+      "pattern": "^FIND-[A-Z0-9][A-Z0-9-]*$"
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "reviewed_by": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reviewed_at": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}(T\\d{2}:\\d{2}(:\\d{2})?(Z|[+-]\\d{2}:\\d{2}))?$"
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "reviewed_by",
+        "reviewed_at",
+        "rationale"
+      ]
+    },
+    "origin": {
+      "const": "CURATED",
+      "description": "Recorded by a curator editing this ledger. Search output is never promoted into a research record."
+    },
+    "notes": {
+      "type": "string"
+    },
+    "recorded_by": {
+      "type": "string",
+      "minLength": 1
+    },
+    "recorded_at": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}(T\\d{2}:\\d{2}(:\\d{2})?(Z|[+-]\\d{2}:\\d{2}))?$"
+    }
+  },
+  "required": [
+    "finding_id",
+    "statement",
+    "source_refs",
+    "status",
+    "epistemic_class",
+    "origin",
+    "recorded_by",
+    "recorded_at"
+  ]
+}

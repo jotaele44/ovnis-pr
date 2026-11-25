@@ -1,0 +1,57 @@
+{
+  "schema_version": "federation_lockstep_peer_receipt_bindings_v1",
+  "generation": 2,
+  "baseline_id": "sha256:ce6f5c188af93b13bf4c99d4b6e70fb8adfcf376c2a07de8d5d34e3c002bf26a",
+  "receipts": [
+    {
+      "repo": "centinelas-pr",
+      "remote_branch": "lockstep-reference-v2-receipt",
+      "remote_path": ".federation/lockstep-receipt.json",
+      "receipt_commit_sha": "0d2727558b64f6a97280144cbb9c4ef395b18f5d",
+      "receipt_blob_sha": "45547c9f50608121240659d8534504b0176414f4",
+      "payload": {
+        "schema_version": "federation_lockstep_peer_receipt_v1",
+        "repo": "centinelas-pr",
+        "reference_repo": "ovnis-pr",
+        "generation": 2,
+        "baseline_id": "sha256:ce6f5c188af93b13bf4c99d4b6e70fb8adfcf376c2a07de8d5d34e3c002bf26a",
+        "source_sha": "86adddafb346a3613eb227c86f828febb9140398",
+        "disposition": "COMPATIBLE_UNCHANGED",
+        "contracts": [
+          "centinelas_ovnis_signal@1"
+        ],
+        "impact_set": [
+          "centinelas-pr",
+          "ovnis-pr",
+          "thehub-pr"
+        ]
+      }
+    },
+    {
+      "repo": "thehub-pr",
+      "remote_branch": "lockstep-reference-v2-receipt",
+      "remote_path": ".federation/lockstep-receipt.json",
+      "receipt_commit_sha": "0e31b42512e4d53250e1bc0f9ee149f90d41e6fd",
+      "receipt_blob_sha": "c78fd069dc2fa6a9333d5736a0c7fc41ea03f230",
+      "payload": {
+        "schema_version": "federation_lockstep_peer_receipt_v1",
+        "repo": "thehub-pr",
+        "reference_repo": "ovnis-pr",
+        "generation": 2,
+        "baseline_id": "sha256:ce6f5c188af93b13bf4c99d4b6e70fb8adfcf376c2a07de8d5d34e3c002bf26a",
+        "source_sha": "9d62f46bf7432013f14a9f48b657c53d6cfea556",
+        "disposition": "COMPATIBLE_UNCHANGED",
+        "contracts": [
+          "federation_export_manifest@1",
+          "ovnis_case_schema@1",
+          "repo_federation_manifest@1"
+        ],
+        "impact_set": [
+          "centinelas-pr",
+          "ovnis-pr",
+          "thehub-pr"
+        ]
+      }
+    }
+  ]
+}
