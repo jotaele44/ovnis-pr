@@ -303,25 +303,52 @@ def _ledger(tmp_path, **rows):
 
 
 def test_record_sets_verified_point_date_and_appends_notes(tmp_path):
+    import hashlib
+
     ledger = _ledger(tmp_path, Alpha={"state": "forward"})
+    evidence = tmp_path / "evidence.txt"
+    evidence.write_text("fixture evidence", encoding="utf-8")
+    receipt = tmp_path / "receipt.json"
+    receipt.write_text(
+        json.dumps({
+            "source": "Alpha",
+            "verified_through": "post of 2026-11-01",
+            "sweep_date": "2026-11-25",
+            "status": "success",
+            "reconciliation": "complete",
+            "execution_id": "fixture-1",
+            "interval_start": "2026-10-01",
+            "configuration_sha256": "a" * 64,
+            "evidence": [{"path": evidence.name, "sha256": hashlib.sha256(evidence.read_bytes()).hexdigest()}],
+        }),
+        encoding="utf-8",
+    )
     argv = [
-        "--ledger",
-        str(ledger),
-        "record",
-        "--source",
-        "Alpha",
-        "--verified-through",
-        "post of 2026-11-01",
-        "--date",
-        "2026-11-25",
-        "--note",
-        "swept",
+        "--ledger", str(ledger), "record", "--source", "Alpha",
+        "--verified-through", "post of 2026-11-01", "--date", "2026-11-25",
+        "--receipt", str(receipt), "--note", "swept",
     ]
     assert sl.main(argv) == 0
-    assert sl.main([*argv[:-2], "--note", "again"]) == 0
+    before = ledger.read_bytes()
+    assert sl.main(argv) == 0
+    assert ledger.read_bytes() == before
     row = sl.read_csv(ledger)[0]
     assert (row["verified_through"], row["last_swept"]) == ("post of 2026-11-01", "2026-11-25")
-    assert row["notes"] == "2026-11-25: swept | 2026-11-25: again"
+    assert "receipt_sha256=" in row["notes"]
+    assert "2026-11-25: swept" in row["notes"]
+    evidence.write_text("tampered", encoding="utf-8")
+    assert sl.main(argv) == 2
+    assert ledger.read_bytes() == before
+
+
+def test_frontier_requires_receipt(tmp_path):
+    ledger = _ledger(tmp_path, Alpha={"state": "forward"})
+    before = ledger.read_bytes()
+    assert sl.main([
+        "--ledger", str(ledger), "record", "--source", "Alpha",
+        "--verified-through", "#200",
+    ]) == 2
+    assert ledger.read_bytes() == before
 
 
 def test_record_rejects_unknown_source_and_bad_vocabulary(tmp_path, capsys):
