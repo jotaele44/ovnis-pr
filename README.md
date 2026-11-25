@@ -29,7 +29,8 @@ installs dependencies, later runs work offline):
 - `PRII-OVNIS.bat` (Windows)
 - `PRII-OVNIS.sh` (Linux)
 
-See [`desktop/README.md`](desktop/README.md) for details.
+See [`desktop/README.md`](desktop/README.md) for details, including the
+Launch Pad the app shows before it starts.
 
 ## Setup / Development
 
@@ -49,11 +50,11 @@ source .venv/bin/activate
 python -m pip install -r requirements.txt httpx -r server/backend/requirements.txt
 ```
 
-> `requirements.txt` pins the shared federation packages (`prii-maintenance`,
-> `prii-export-utils`) to an immutable git SHA in `thehub-pr`
-> (`git+...@f2b8176...`), not a live local path. Picking up a change made in
-> the hub requires bumping that pinned SHA here and regenerating
-> `requirements.lock` — it does not propagate automatically.
+> `requirements.txt` pins the shared federation packages to immutable git SHAs
+> in `thehub-pr` (`prii-maintenance` at `git+...@f2b8176...`,
+> `prii-export-utils` at `git+...@0f62e4b...`), not a live local path. Picking
+> up a change made in the hub requires bumping that pinned SHA here and
+> regenerating `requirements.lock` — it does not propagate automatically.
 
 Run the checks CI runs:
 
@@ -73,29 +74,38 @@ python3 scripts/federation_export.py --mode test    # canonical export smoke
 | Review queue | Ambiguous cases remain staged until enough metadata exists for promotion |
 | Federation boundary | OVNIS exports case records; Hub performs cross-producer correlation |
 
-## Suggested repository layout
+## Repository layout
 
 ```text
-data/             raw and normalized case material
-reports/          generated summaries and review outputs
-scripts/          import, validation, deduplication, and reporting tools
-docs/             methodology, source policy, FOIA notes, and analyst runbooks
+data/             case ledgers, source registries, research ledgers and the case schema
+scripts/          import, validation, deduplication, promotion, export and reporting tools
+server/           read-only FastAPI backend for the diagnostic dashboard
+dashboard/        diagnostic dashboard (React)
+desktop/          local desktop app launcher
+federation/       pinned spatial and road-reference modules shared with the federation
+lockstep/         federation lockstep engine and gates
+schemas/          federation record schemas
+docs/             methodology, roadmap, audits and receipts
 tests/            validation and regression tests
-exports/          federation-ready export packages
 ```
 
+`exports/federation/` is where the export package is written. It is generated and not committed.
+
 ## Minimum promotion fields
+
+Field names are those of `data/schemas/case.schema.json`. See
+[`docs/CASE_PROMOTION_STANDARD.md`](docs/CASE_PROMOTION_STANDARD.md) for the full standard.
 
 | Field | Purpose |
 |---|---|
 | `case_id` | Stable local identifier |
-| `event_date` | Known or bounded date/time |
-| `municipio` / `location` | Spatial anchor for Puerto Rico analysis |
-| `source_tier` | Evidence tier classification |
-| `source_ref` | Document, URL, archive, interview, or file reference |
-| `summary` | Controlled, non-dramatized case summary |
-| `confidence` | Review-grade confidence score |
-| `review_status` | `draft`, `needs_review`, `promoted`, or equivalent |
+| `date_local` | Known or bounded date (`YYYY`, `YYYY-MM` or `YYYY-MM-DD`) |
+| `municipality` / `location_name` | Spatial anchor for Puerto Rico analysis |
+| `evidence_tier` | Evidence tier classification (`T1` to `T4`) |
+| `source_url` | Document, URL, archive, interview, or file reference |
+| `description` | Controlled, non-dramatized case summary |
+| `case_confidence` | Review-grade confidence score |
+| `review_action` | `promote`, `merge`, `reject`, `monitor` or `pending` |
 
 ## Federation export target
 
@@ -106,6 +116,7 @@ sources.jsonl
 entities.jsonl
 relationships.jsonl
 observations.jsonl
+source_monitors.jsonl
 manifest.json
 ```
 
@@ -113,6 +124,13 @@ Do not treat exported cases as conclusions. Treat them as structured historical 
 
 The export also carries the research ledgers (`data/research/`) as typed `entities` and `relationships`
 rows, plus computed duplicate-manifestation CANDIDATE pairs and a deterministic report per case.
+
+`source_monitors.jsonl` (thehub-pr ADR 0013) has one row per source in
+`data/reference/source_registry.csv`: what the registry declares about it (status, cadence, tier,
+family), mapped as thehub-pr's registry reader maps it, and when it last succeeded. That time comes only
+from a fetch-run receipt in `data/source_run_state.json`. No OVNIS fetch run writes one yet and no
+OVNIS output records a per-source success time, so every source is reported as not recorded
+(`tests/test_federation_source_monitors.py`).
 
 ## Research ledgers
 
@@ -125,8 +143,18 @@ manifestation adjudications, research questions and media episodes in the JSONL 
 - `python3 scripts/dedupe_candidates.py --master-pairs` regenerates the CANDIDATE pairs.
 - `python3 scripts/generate_case_report.py --case <id>` writes a case report with a reproducibility
   receipt.
+- `python3 scripts/resolve_road_refs.py` lists road references in case locations and narratives
+  ("Route PR-303", "Hwy 2", "road 191") as CANDIDATES in `reports/road_refs.json`. It never edits a
+  case. Route parsing is pinned from spiderweb-pr (`federation/roads/pr_route_ref.pin.json`).
 
 See [`docs/RESEARCH_LEDGERS.md`](docs/RESEARCH_LEDGERS.md).
+
+## Corpus completeness
+
+`python3 scripts/corpus_quality_report.py` prints how many master cases carry each provenance field,
+how coordinates and confidence are distributed, how many real candidates are staged and how many rows
+each research ledger holds. It never edits a ledger. The roadmap in
+[`docs/ROAD_TO_100.md`](docs/ROAD_TO_100.md) states its exit criteria against these counts.
 
 <!-- PROJECT-OPERATING-CONTRACT:START -->
 ## Current development and certification contract
