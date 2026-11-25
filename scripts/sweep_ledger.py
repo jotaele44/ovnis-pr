@@ -161,6 +161,11 @@ def strip_accents(text: str) -> str:
     return "".join(c for c in unicodedata.normalize("NFKD", text) if not unicodedata.combining(c))
 
 
+def _on_domain(host: str, domain: str) -> bool:
+    """True when ``host`` is ``domain`` or one of its subdomains, never a look-alike."""
+    return host == domain or host.endswith("." + domain)
+
+
 def url_key(value: Any) -> str:
     """A stable identity key for a source URL, or "" when the value is not a URL.
 
@@ -188,15 +193,15 @@ def url_key(value: Any) -> str:
     if "." not in host:
         return ""
     path = parts.path or ""
-    if host.endswith("nuforc.org"):
+    if _on_domain(host, "nuforc.org"):
         found = re.search(r"(?:^|[?&])id=(\d+)", parts.query) or re.search(r"/S(\d+)\.html?$", path)
         if found:
             return f"nuforc:{int(found.group(1))}"
-    if host == "ufosighting.report":
+    if _on_domain(host, "ufosighting.report"):
         found = re.match(r"^/sighting/(\d+)", path)
         if found:
             return f"ufosighting.report:{int(found.group(1))}"
-    if host.endswith("ufo-hunters.com"):
+    if _on_domain(host, "ufo-hunters.com"):
         found = re.search(r"/sightings/search/([0-9a-fA-F]{24})", path)
         if found:
             return f"ufo-hunters:{found.group(1).lower()}"

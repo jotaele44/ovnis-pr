@@ -55,6 +55,26 @@ def test_url_key_treats_variants_as_one_source(a, b):
     assert sl.url_key(a) == sl.url_key(b) != ""
 
 
+@pytest.mark.parametrize(
+    "url",
+    [
+        "https://evilnuforc.org/sighting/?id=79425",
+        "https://nuforc.org.example.com/sighting/?id=79425",
+        "https://notufosighting.report/sighting/13290/x",
+        "https://ufosighting.report.example.com/sighting/13290/x",
+        "https://myufo-hunters.com/sightings/search/514398d60ad2e1e9be44aa2f/",
+    ],
+)
+def test_url_key_does_not_treat_lookalike_hosts_as_a_known_source(url):
+    key = sl.url_key(url)
+    assert not key.startswith(("nuforc:", "ufosighting.report:", "ufo-hunters:"))
+
+
+def test_url_key_accepts_subdomains_of_a_known_source():
+    assert sl.url_key("https://data.nuforc.org/sighting/?id=79425") == "nuforc:79425"
+    assert sl.url_key("https://m.ufosighting.report/sighting/13290/x") == "ufosighting.report:13290"
+
+
 def test_url_key_keeps_distinct_pages_and_meaningful_queries_apart():
     assert sl.url_key("https://example.com/a") != sl.url_key("https://example.com/b")
     assert sl.url_key("https://example.com/p?id=1") != sl.url_key("https://example.com/p?id=2")
