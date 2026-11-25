@@ -31,7 +31,7 @@ Each ledger row has a `state` that says what a sweep of that source means.
 
 | `state` | Meaning | What to do |
 |---|---|---|
-| `forward` | A live collection that keeps growing. | Sweep newest first and stop when items are already logged. |
+| `forward` | A live collection that keeps growing. | Sweep the bounded interval to its verified prior frontier; record coverage gaps. |
 | `closed` | A static collection that was swept in full. | Do not sweep again. Re-open only if the source changes. |
 | `citation_only` | Specific pages are cited, but the source was never swept as a collection. | Nothing to sweep. Promote to `forward` or `closed` only after a real collection sweep. |
 | `not_started` | A collection-level sweep is wanted and has not been done. | Plan a sweep, then record it. |
@@ -67,17 +67,14 @@ not mean a search was never run.
 `last_swept`, `next_action` or `notes`.
 
 Event dates are informational only. A source can publish a post today about an event from 1998, so the
-newest event date logged is not a high-water mark for what was swept. The point a sweep reached is the
-manual `verified_through` value. The one exception is a source with numeric item ids (NUFORC and
-ufosighting.report), where `highest_item_id` is a real position: sweep down from the newest id the source
-shows to the highest id already logged.
+newest event date logged is not a high-water mark for what was swept. The point a sweep reached is the receipt-backed `verified_through` value. A highest logged item ID is a discovery hint, not evidence of contiguous coverage.
 
 ## Workflow
 
 1. `python3 scripts/sweep_ledger.py status` lists forward sources that were never verified or are older than
    `--stale-days` (default 90), unclassified and not-started sources, and sources blocked to automation.
 2. Before running a search, `python3 scripts/sweep_ledger.py query "<text>" --source "<site or engine>"`
-   reports whether it was already run within `--within-days` (default 90). It exits 1 if so.
+   with matching language and scope reports whether it was already run within `--within-days` (default 90). It exits 1 if so.
    Add `--log` with `--results` and `--new` to record a run.
 3. Sweep newest first. Run each item through `check` before staging it:
 
@@ -85,11 +82,10 @@ shows to the highest id already logged.
    python3 scripts/sweep_ledger.py check --url <URL> --date "October 5, 2026" --municipality Salinas
    ```
 
-   `--jsonl <file>` checks a batch, one candidate object per line. `--fail-on-match` makes the exit status 1
-   on any match, for scripts.
-4. Stop after a run of about ten consecutive items that are already logged.
-5. `python3 scripts/sweep_ledger.py record --source "<name>" --verified-through "<position>" --note "<what was done>"`
-   records the point reached and the date. Use `--add --category ...` for a new source.
+   `--jsonl <file>` checks a batch, one candidate object per line. `--fail-on-match` returns 1 for any verdict other than `NO_KNOWN_MATCH`; unavailable comparison inputs return 2.
+4. Stop only when the bounded interval has been reconciled. Known items alone do not establish coverage.
+5. `python3 scripts/sweep_ledger.py record --source "<name>" --verified-through "<position>" --receipt <receipt.json> --note "<what was done>"`
+   records the point reached and the date after validating the receipt and evidence bytes. Use `--add --category ...` for a new source.
 6. After cases are added to the Case Log workbook, `python3 scripts/sweep_ledger.py refresh --xlsx <workbook>`
    rebuilds the index and the computed columns. The output is deterministic.
 
@@ -97,9 +93,13 @@ shows to the highest id already logged.
 
 | Verdict | Meaning |
 |---|---|
-| `EXACT_SOURCE` | A candidate URL resolves to a source already attached to a case. |
+| `EXACT_REPORT` | A source-native report identifier matches without detected metadata conflict; review still required. |
+| `IDENTITY_CONFLICT` | A matching native report has contradictory date or municipality metadata. |
+| `SHARED_DOCUMENT` | A normalized document URL overlaps; event identity is not established. |
 | `POSSIBLE_DUPLICATE` | No shared URL, but the recorded dates agree and the place agrees. |
-| `NEW` | Neither. |
+| `NO_KNOWN_MATCH` | No match found with minimum candidate metadata; not proof of novelty. |
+| `INSUFFICIENT_IDENTITY` | No match found and minimum metadata is absent. |
+| `COMPARISON_UNAVAILABLE` | Required comparison inputs are missing or invalid. |
 
 URLs are compared by a normalized key, so these count as one source: a NUFORC `S79425.html` page and the
 `?id=79425` page, a ufosighting.report link with a different slug, a UFO-Hunters link in a different case,
@@ -123,15 +123,28 @@ cases, with the difference noted.
 
 - `scripts/import_candidates.py` and `scripts/dedupe_candidates.py` stage and compare candidates against the
   master ledger. `sweep_ledger.py check` reuses the date and location rules of the latter and adds the
-  working-workbook index and source-URL keys.
+  working-workbook index, source-URL keys, persistent intake ledgers and earlier candidates in the current batch.
 - `data/reference/source_registry.csv` declares sources and their cadence for the federation export.
   The sweep ledger does not replace it and does not feed `source_monitors.jsonl`. It is a curator's record
-  of sweep coverage, not a fetch-run receipt, so a `last_swept` value says only that a curator recorded a
-  sweep. Only `data/source_run_state.json` can mark a source as having run successfully, and nothing writes
+  of sweep coverage, not a fetch-run receipt, so a `last_swept` value records a receipt-backed curator assertion, not an independently authenticated fetch run. Only `data/source_run_state.json` can mark a source as having run successfully, and nothing writes
   to it yet.
 
 ## Tests
 
-`tests/test_sweep_ledger.py` covers URL normalization, date and place agreement, the three verdicts, `record`,
+`tests/test_sweep_ledger.py` covers URL normalization, date and place agreement, the current verdicts, `record`,
 `status`, `query` and `refresh`, and checks that the committed ledger and index use the declared columns and
 vocabulary. The `refresh` test needs `openpyxl` and is skipped without it.
+
+## Receipt and writer integrity
+
+Frontier updates require a local JSON receipt with source, execution_id, interval_start,
+previous_frontier, verified_through, sweep_date, status (success), reconciliation (complete),
+configuration_path, configuration_sha256 and a nonempty evidence array of path/sha256 objects.
+Paths must resolve inside the receipt directory. The configuration and evidence bytes are hashed.
+Existing frontiers support increasing numeric IDs or ISO dates; other representations cannot be advanced
+without additional progression rules. Identical validated receipts are idempotent. Receipt assertions do
+not independently prove source completeness or issuer authorization.
+
+CLI mutations use exclusive sibling lock files and atomic CSV replacement. A lock left by an interrupted
+worker must be reconciled before retrying; never delete an active writer's lock. Refresh is not an atomic
+multi-file transaction. Unattended recovery and publication privacy qualification remain separate gates.
