@@ -19,9 +19,14 @@ and, from the research ledgers under data/research/ (build_research_streams):
     a candidate in the Hub
   * each master case            -> one case_report entity (about_case)
 
-Writes `exports/federation/{sources,entities,relationships,observations}.jsonl`
-+ a Hub-conformant `manifest.json` (federation_export_manifest). Dependency-light
-(stdlib only), consistent with the rest of OVNIS.
+and, from data/reference/source_registry.csv (build_source_monitors):
+  * each registered source      -> one `source_monitors` row (thehub-pr ADR 0013)
+    with when it last succeeded: a run receipt in data/source_run_state.json
+    (RUN_RECEIPT) when one exists, else NOT_RECORDED with a null time
+
+Writes `exports/federation/{sources,entities,relationships,observations,source_monitors}.jsonl`
++ a Hub-conformant `manifest.json` (federation_export_manifest). Dependency-light:
+stdlib plus the pinned `prii-export-utils` helpers (through scripts/prii_export_utils.py).
 
 Deterministic IDs: `src_/ent_/rel_/obs_` + sha256(key)[:32], so the same case
 always maps to the same federation id.
@@ -29,13 +34,16 @@ always maps to the same federation id.
 from __future__ import annotations
 
 import argparse
+import csv
 import hashlib
 import json
+import re
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 from generate_case_report import REPORT_VERSION, build_reports, git_head
+from prii_export_utils import SourceRunState, resolve_last_success, source_monitor_row
 from prii_export_utils import fid as _fid
 from prii_export_utils import norm as _norm
 from prii_export_utils import sha256 as _sha256
@@ -474,19 +482,134 @@ def _relationship(rel_id, source_id, src_ent, tgt_ent, rtype, confidence, synthe
     }
 
 
+# --- source_monitors (thehub-pr ADR 0013) -----------------------------------
+
+SOURCE_REGISTRY = "data/reference/source_registry.csv"
+SOURCE_RUN_STATE = "data/source_run_state.json"
+_REGISTRY_COLUMNS = ("source_id", "name", "source_family", "reliability_default", "active", "retrieval_cadence")
+
+# The registry's own vocabularies, mapped exactly as thehub-pr's ADR 0012 registry
+# reader maps this file (src/hub/source_monitor.py: _parse_ovnis, normalize_cadence,
+# normalize_status, normalize_tier and _window), so no source's label changes when
+# the Hub stops reading the registry and reads this stream instead. Only this
+# registry's values are listed. The Hub's tables also hold other producers' values
+# (e.g. batch_file -> event, fully_materialized -> active), which map to "unknown"
+# here, so tests/test_federation_source_monitors.py fails on a committed registry
+# value that is not listed here: a new value gets a deliberate mapping, never a
+# silent "unknown" that differs from the Hub.
+MONITOR_CADENCE = {
+    "weekly": "weekly", "monthly": "monthly", "quarterly": "quarterly",
+    "yearly": "yearly", "annual": "yearly", "daily": "daily", "hourly": "hourly",
+    "ad_hoc": "event", "on_drop": "event", "on_foia_release": "event",
+    "on_legacy_consolidation": "event", "one_time": "static", "none": "static",
+    "manual": "manual",
+}
+MONITOR_STATUS = {"active": "active", "manual": "manual", "yes": "active", "no": "inactive"}
+# Nominal window per named cadence; event/static/manual/unknown have none.
+MONITOR_WINDOW_SECONDS = {
+    "realtime": 3600, "hourly": 3600, "daily": 86400, "weekly": 7 * 86400,
+    "monthly": 31 * 86400, "quarterly": 92 * 86400, "yearly": 366 * 86400,
+}
+_TIER = re.compile(r"^T[1-4]$")
+
+
+def _registry_text(value: Any) -> str | None:
+    text = "" if value is None else str(value).strip()
+    return text or None
+
+
+def _monitor_cadence(raw: Any) -> str:
+    return MONITOR_CADENCE.get((_registry_text(raw) or "").lower(), "unknown")
+
+
+def _monitor_status(raw: Any) -> str:
+    return MONITOR_STATUS.get((_registry_text(raw) or "").lower(), "unknown")
+
+
+def _monitor_tier(raw: Any) -> str | None:
+    value = (_registry_text(raw) or "").upper()
+    return value if _TIER.match(value) else None
+
+
+def _repo_relative(path: Path) -> str:
+    try:
+        return path.resolve().relative_to(REPO_ROOT).as_posix()
+    except ValueError:
+        return str(path)
+
+
+def _load_source_registry(path: Path) -> list[dict[str, str]]:
+    with path.open(newline="", encoding="utf-8") as fh:
+        reader = csv.DictReader(fh)
+        missing = [c for c in _REGISTRY_COLUMNS if c not in (reader.fieldnames or [])]
+        if missing:
+            raise ValueError(f"{path}: source registry is missing column(s): {', '.join(missing)}")
+        return list(reader)
+
+
+def build_source_monitors(
+    now: str,
+    *,
+    registry_path: Path = REPO_ROOT / SOURCE_REGISTRY,
+    run_state_path: Path = REPO_ROOT / SOURCE_RUN_STATE,
+) -> list[dict[str, Any]]:
+    """The ``source_monitors`` stream: one row per registered source, sorted by id.
+
+    ``declared_status``, ``cadence`` and ``evidence_tier`` say what the registry
+    declares, not whether the source is healthy. ``last_success_at`` comes only
+    from a run receipt in ``data/source_run_state.json`` (RUN_RECEIPT), written by
+    ``prii_export_utils.record_run``. No OVNIS fetch run records one today and no
+    OVNIS output carries a per-source success time, so without that file every
+    row is NOT_RECORDED with a null time. Nothing is inferred from file dates.
+    """
+    state = SourceRunState.load(run_state_path)
+    registry = _repo_relative(registry_path)
+    inputs = [registry] + ([_repo_relative(run_state_path)] if run_state_path.exists() else [])
+    lineage = {
+        "producer_script": PRODUCER_SCRIPT,
+        "producer_phase": "SOURCE_MONITOR",
+        "source_inputs": inputs,
+        "extraction_method": "registry_projection",
+    }
+    rows: dict[str, dict[str, Any]] = {}
+    for entry in _load_source_registry(registry_path):
+        source_ref = _registry_text(entry.get("source_id"))
+        if not source_ref:
+            raise ValueError(f"{registry}: a row has no source_id")
+        if source_ref in rows:
+            raise ValueError(f"{registry}: duplicate source_id {source_ref!r}")
+        receipt = state.get(source_ref) or {}
+        at, basis = resolve_last_success(receipt, None)
+        cadence = _monitor_cadence(entry.get("retrieval_cadence"))
+        rows[source_ref] = source_monitor_row(
+            producer=PRODUCER, source_ref=source_ref,
+            name=_registry_text(entry.get("name")) or source_ref,
+            declared_status=_monitor_status(entry.get("active")), cadence=cadence,
+            cadence_window_seconds=MONITOR_WINDOW_SECONDS.get(cadence),
+            last_success_at=at, last_success_basis=basis,
+            last_attempt_at=receipt.get("last_attempt_at"),
+            last_attempt_status=receipt.get("last_attempt_status"),
+            producer_family=_registry_text(entry.get("source_family")),
+            evidence_tier=_monitor_tier(entry.get("reliability_default")),
+            registry_path=registry, lineage=lineage, created_at=now, extracted_at=now,
+        )
+    return [rows[key] for key in sorted(rows)]
+
+
 STREAM_SCHEMA = {
     "sources": "federation_source.schema.json",
     "entities": "federation_entity.schema.json",
     "relationships": "federation_relationship.schema.json",
     "observations": "federation_observation.schema.json",
+    "source_monitors": "federation_source_monitor.schema.json",
 }
 
 
 def write_package(streams: dict[str, list[dict[str, Any]]], out_dir: Path, mode: str, now: str) -> Path:
     out_dir.mkdir(parents=True, exist_ok=True)
     files = []
-    for stream in ("sources", "entities", "relationships", "observations"):
-        rows = streams[stream]
+    for stream in ("sources", "entities", "relationships", "observations", "source_monitors"):
+        rows = streams.get(stream) or []
         if not rows:
             continue
         fpath = out_dir / f"{stream}.jsonl"
@@ -529,6 +652,7 @@ def main() -> int:
     reports = build_reports(cases, research, master_path=Path(args.ledger), research_dir=Path(args.research_dir),
                             created_at=now, git_sha=git_head())
     streams = merge_streams(build_streams(cases, now), build_research_streams(cases, research, now, reports=reports))
+    streams["source_monitors"] = build_source_monitors(now)
 
     if args.mode == "production":
         synthetic = [r for s in streams.values() for r in s if r.get("synthetic")]
