@@ -36,8 +36,10 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import os
 import re
 import sys
+import tempfile
 import unicodedata
 from collections import defaultdict
 from datetime import date, timedelta
@@ -287,11 +289,24 @@ def read_csv(path: Path) -> list[dict[str, str]]:
 
 def write_csv(path: Path, columns: list[str], rows: list[dict[str, Any]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", newline="", encoding="utf-8") as fh:
-        writer = csv.DictWriter(fh, fieldnames=columns, lineterminator="\n", extrasaction="ignore")
-        writer.writeheader()
-        for row in rows:
-            writer.writerow({c: ("" if row.get(c) is None else row.get(c)) for c in columns})
+    temporary: Path | None = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="w", newline="", encoding="utf-8", dir=path.parent, delete=False
+        ) as fh:
+            temporary = Path(fh.name)
+            writer = csv.DictWriter(
+                fh, fieldnames=columns, lineterminator="\n", extrasaction="ignore"
+            )
+            writer.writeheader()
+            for row in rows:
+                writer.writerow({c: ("" if row.get(c) is None else row.get(c)) for c in columns})
+            fh.flush()
+            os.fsync(fh.fileno())
+        os.replace(temporary, path)
+    finally:
+        if temporary is not None:
+            temporary.unlink(missing_ok=True)
 
 
 def _sorted_ledger(rows: list[dict[str, str]]) -> list[dict[str, str]]:
@@ -433,7 +448,52 @@ def cmd_check(args: argparse.Namespace) -> int:
     if not index_path.is_file() or not master_path.is_file():
         print(json.dumps({"verdict": "COMPARISON_UNAVAILABLE", "reason": "missing index or master"}))
         return 2
-    known = _known_records(index_path, master_path)
+    try:
+        with index_path.open(newline="", encoding="utf-8") as fh:
+            reader = csv.DictReader(fh)
+            if not set(INDEX_COLUMNS).issubset(reader.fieldnames or []):
+                raise ValueError("invalid index header")
+            rows = list(reader)
+        ids = [row["case_id"] for row in rows]
+        if not ids or any(not item or not item.strip() for item in ids):
+            raise ValueError("empty index or case identifier")
+        if len(ids) != len(set(ids)) or any(None in row or None in row.values() for row in rows):
+            raise ValueError("duplicate index identifiers or malformed rows")
+        known = _known_records(index_path, master_path)
+        # Production CLI checks include all persistent intake ledgers. Explicit
+        # fixture paths may supply their own additional comparison ledgers.
+        extra_paths = [Path(value) for value in args.candidate_ledger]
+        if master_path.resolve() == MASTER_PATH.resolve():
+            data_root = master_path.parent.parent
+            extra_paths.extend(
+                data_root / name for name in (
+                    "candidates/candidate_cases.jsonl",
+                    "already_listed.jsonl",
+                    "updates_new_evidence.jsonl",
+                    "echoes_noise.jsonl",
+                )
+            )
+        for path in dict.fromkeys(extra_paths):
+            if not path.is_file():
+                raise ValueError(f"missing intake ledger: {path.name}")
+            for row in iter_jsonl(path):
+                identity = row.get("record_id") or row.get("candidate_id")
+                if not identity:
+                    raise ValueError("missing intake record identity")
+                key = url_key(row.get("source_url"))
+                known.append(
+                    {
+                        "dataset": "persistent_intake",
+                        "case_id": identity,
+                        "date_local": str(row.get("date_local") or ""),
+                        "municipality": row.get("municipality") or "",
+                        "location_name": row.get("location_name") or "",
+                        "keys": {key} if key else set(),
+                    }
+                )
+    except (OSError, ValueError, TypeError, KeyError, AttributeError, csv.Error):
+        print(json.dumps({"verdict": "COMPARISON_UNAVAILABLE", "reason": "invalid comparison input"}))
+        return 2
     if not known:
         print(json.dumps({"verdict": "COMPARISON_UNAVAILABLE", "reason": "empty comparison"}))
         return 2
@@ -754,6 +814,7 @@ def build_parser() -> argparse.ArgumentParser:
     check.add_argument("--municipality")
     check.add_argument("--location")
     check.add_argument("--jsonl", help="batch file; one candidate object per line")
+    check.add_argument("--candidate-ledger", action="append", default=[], help="extra intake ledger")
     check.add_argument(
         "--fail-on-match", action="store_true", help="exit 1 unless every verdict is NO_KNOWN_MATCH"
     )
