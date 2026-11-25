@@ -19,9 +19,24 @@ Offline caveat: map basemap tiles are fetched from the internet
 (OpenStreetMap), so without a connection the map background is blank while
 all data, tables, and charts keep working.
 
+## The Launch Pad
+
+`desktop/config.py` declares a **Launch Pad**: a screen the shared desktop
+runtime shows before the app starts. For OVNIS it says what the app is for and
+reports readiness (how many cases are in the corpus, candidates awaiting review,
+and the latest map release), then opens the dashboard when you press
+**Launch**. OVNIS serves a read-only corpus, so there is no Guest/Operator
+choice and there are no launch options; the dashboard has one page, so there is
+one place to start. You can tick "skip next time" to go straight in.
+
+`requirements-desktop.txt` pins a `prii-desktop` that includes the Launch Pad
+(0.3.0). If you set the app up before that pin moved, run
+`python desktop/setup.py --force` once to install the newer runtime.
+
 ## How it works
 
-- `desktop/config.py` — the only per-repo file (title, paths, requirements).
+- `desktop/config.py` — the only per-repo file (title, paths, requirements, and
+  the `LAUNCHPAD` declaration).
 - `desktop/app_server.py` — reuses the existing FastAPI backend and also
   serves the built dashboard from the same port (no CORS, one process).
 - `desktop/launch.py` — picks a free port, starts uvicorn, opens a native

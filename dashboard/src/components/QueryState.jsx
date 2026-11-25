@@ -30,7 +30,7 @@ export default function QueryState({
 }) {
   if (loading) {
     return (
-      <div className="py-8 text-center text-xs text-slate-500" role="status" aria-live="polite" aria-busy="true">
+      <div className="py-8 text-center text-xs text-slate-400" role="status" aria-live="polite" aria-busy="true">
         {loadingLabel}
       </div>
     )
@@ -40,10 +40,10 @@ export default function QueryState({
     return (
       <div className="py-8 text-center" role="alert">
         <p className="text-xs font-medium text-amber-300">Could not load this data</p>
-        <p className="mx-auto mt-1 max-w-sm text-[11px] text-slate-500">
+        <p className="mx-auto mt-1 max-w-sm text-[11px] text-slate-400">
           {error.message || 'The backend did not respond.'}
         </p>
-        <p className="mt-1 text-[11px] text-slate-600">
+        <p className="mt-1 text-[11px] text-slate-400">
           This is not an empty result — the request did not succeed.
         </p>
         {onRetry && (
