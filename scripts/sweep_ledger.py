@@ -21,12 +21,9 @@ Commands:
     query    check whether a search was already run, or log one that was
     refresh  rebuild the known index and the ledger's computed columns from a Case Log workbook
 
-``check`` reports one of three verdicts per candidate:
-
-    EXACT_SOURCE        a candidate URL resolves to a source already attached to a case
-    POSSIBLE_DUPLICATE  no shared URL, but the dates agree and the place agrees (same rules as
-                        dedupe_candidates.py, plus an adjacent-day tolerance for full dates)
-    NEW                 neither
+The check command distinguishes EXACT_REPORT, IDENTITY_CONFLICT, SHARED_DOCUMENT,
+POSSIBLE_DUPLICATE, INSUFFICIENT_IDENTITY, COMPARISON_UNAVAILABLE and NO_KNOWN_MATCH.
+No verdict authorizes promotion.
 
 A possible duplicate is a prompt for review, not a decision: similarity never decides identity
 (docs/RESEARCH_LEDGERS.md). Near-duplicates with real differences stay as separate cases.
@@ -372,8 +369,10 @@ def check_candidate(candidate: dict[str, Any], known: list[dict[str, Any]]) -> d
         report_matches = [m for m in exact if any(native.fullmatch(k) for k in m["shared_keys"])]
         if report_matches:
             conflict = any(
-                cand_date and rec["date_local"]
-                and not date_agreement(cand_date, rec["date_local"])
+                (cand_date and rec["date_local"]
+                 and not date_relation(cand_date, rec["date_local"]))
+                or (_places(cand_place["municipality"]) and _places(rec["municipality"])
+                    and not (_places(cand_place["municipality"]) & _places(rec["municipality"])))
                 for rec in known
                 if any(native.fullmatch(k) for k in keys & rec["keys"])
             )
@@ -405,7 +404,12 @@ def check_candidate(candidate: dict[str, Any], known: list[dict[str, Any]]) -> d
             verdict="POSSIBLE_DUPLICATE", matches=possible, match_count=len(possible)
         )
     else:
-        result.update(verdict="NO_KNOWN_MATCH" if keys and cand_date and (cand_place["municipality"] or cand_place["location_name"]) else "INSUFFICIENT_IDENTITY", matches=[])
+        sufficient = bool(keys and cand_date and (
+            _places(cand_place["municipality"]) or _places(cand_place["location_name"])
+        ))
+        result.update(
+            verdict="NO_KNOWN_MATCH" if sufficient else "INSUFFICIENT_IDENTITY", matches=[]
+        )
     return result
 
 
@@ -425,8 +429,27 @@ def cmd_check(args: argparse.Namespace) -> int:
     if not candidates:
         print("check: give --url/--date/--municipality or --jsonl", file=sys.stderr)
         return 2
-    known = _known_records(Path(args.index), Path(args.master))
-    results = [check_candidate(c, known) for c in candidates]
+    index_path, master_path = Path(args.index), Path(args.master)
+    if not index_path.is_file() or not master_path.is_file():
+        print(json.dumps({"verdict": "COMPARISON_UNAVAILABLE", "reason": "missing index or master"}))
+        return 2
+    known = _known_records(index_path, master_path)
+    if not known:
+        print(json.dumps({"verdict": "COMPARISON_UNAVAILABLE", "reason": "empty comparison"}))
+        return 2
+    results = []
+    for number, candidate in enumerate(candidates):
+        result = check_candidate(candidate, known)
+        results.append(result)
+        normalized = result["candidate"]
+        known.append({
+            "dataset": "current_batch",
+            "case_id": f"batch:{number + 1}",
+            "date_local": normalized["date_local"],
+            "municipality": normalized["municipality"],
+            "location_name": normalized["location_name"],
+            "keys": set(normalized["url_keys"]),
+        })
     json.dump(results if len(results) > 1 else results[0], sys.stdout, ensure_ascii=False, indent=2)
     print()
     if args.fail_on_match and any(r["verdict"] != "NO_KNOWN_MATCH" for r in results):
@@ -540,6 +563,8 @@ def cmd_query(args: argparse.Namespace) -> int:
         for r in rows
         if _normalize_query(r["query"]) == wanted
         and (not args.source or r["source_or_engine"].casefold() == args.source.casefold())
+        and _normalize_query(r["language"]) == _normalize_query(args.language or "")
+        and _normalize_query(r["scope"]) == _normalize_query(args.scope or "")
     ]
     if args.log:
         rows.append(
