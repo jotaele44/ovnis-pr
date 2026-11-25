@@ -681,3 +681,49 @@ def test_native_report_municipality_conflict(tmp_path):
         {"url": "https://nuforc.org/sighting/?id=123", "municipality": "Salinas"}, known
     )
     assert out["verdict"] == "IDENTITY_CONFLICT"
+
+
+def test_check_persistent_intake(tmp_path, capsys):
+    index = _write(tmp_path / "index.csv", sl.INDEX_COLUMNS, [_index_row(case_id="C1")])
+    master = tmp_path / "master.jsonl"
+    master.write_text("", encoding="utf-8")
+    staged = tmp_path / "staged.jsonl"
+    staged.write_text(
+        json.dumps({"record_id": "CAND-1", "source_url": "https://nuforc.org/sighting/?id=123"})
+        + "\n",
+        encoding="utf-8",
+    )
+    assert sl.main([
+        "--index", str(index), "--master", str(master), "check",
+        "--candidate-ledger", str(staged), "--url", "https://nuforc.org/sighting/?id=123",
+    ]) == 0
+    result = json.loads(capsys.readouterr().out)
+    assert result["verdict"] == "EXACT_REPORT"
+    assert result["matches"][0]["dataset"] == "persistent_intake"
+
+
+def test_check_malformed_index(tmp_path, capsys):
+    index = tmp_path / "index.csv"
+    index.write_text("wrong_header\nvalue\n", encoding="utf-8")
+    master = tmp_path / "master.jsonl"
+    master.write_text("", encoding="utf-8")
+    assert sl.main([
+        "--index", str(index), "--master", str(master), "check",
+        "--url", "https://example.com/report",
+    ]) == 2
+    assert json.loads(capsys.readouterr().out)["verdict"] == "COMPARISON_UNAVAILABLE"
+
+
+def test_atomic_csv_preserves_previous_file_on_replace_failure(tmp_path, monkeypatch):
+    target = tmp_path / "ledger.csv"
+    sl.write_csv(target, ["value"], [{"value": "before"}])
+    original = target.read_bytes()
+
+    def fail_replace(*args):
+        raise OSError("simulated interruption")
+
+    monkeypatch.setattr(sl.os, "replace", fail_replace)
+    with pytest.raises(OSError):
+        sl.write_csv(target, ["value"], [{"value": "after"}])
+    assert target.read_bytes() == original
+    assert list(tmp_path.iterdir()) == [target]
