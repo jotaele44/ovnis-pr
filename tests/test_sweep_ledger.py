@@ -774,3 +774,23 @@ def test_atomic_csv_preserves_previous_file_on_replace_failure(tmp_path, monkeyp
         sl.write_csv(target, ["value"], [{"value": "after"}])
     assert target.read_bytes() == original
     assert list(tmp_path.iterdir()) == [target]
+
+
+def test_existing_writer_lock_blocks_record(tmp_path):
+    ledger = _ledger(tmp_path, Alpha={"state": "forward"})
+    original = ledger.read_bytes()
+    lock = ledger.with_name(ledger.name + ".lock")
+    lock.write_text("existing writer", encoding="utf-8")
+    assert sl.main([
+        "--ledger", str(ledger), "record", "--source", "Alpha", "--note", "blocked",
+    ]) == 2
+    assert ledger.read_bytes() == original
+    assert lock.read_text(encoding="utf-8") == "existing writer"
+
+
+def test_record_releases_own_lock(tmp_path):
+    ledger = _ledger(tmp_path, Alpha={"state": "forward"})
+    assert sl.main([
+        "--ledger", str(ledger), "record", "--source", "Alpha", "--note", "recorded",
+    ]) == 0
+    assert not ledger.with_name(ledger.name + ".lock").exists()
