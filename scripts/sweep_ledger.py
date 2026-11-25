@@ -367,7 +367,20 @@ def check_candidate(candidate: dict[str, Any], known: list[dict[str, Any]]) -> d
         },
     }
     if exact:
-        result.update(verdict="EXACT_SOURCE", matches=exact)
+        # A document URL is not an individual report identity.
+        native = re.compile(r"^(?:nuforc:\d+|ufosighting\.report:\d+|ufo-hunters:[0-9a-f]{24})$")
+        report_matches = [m for m in exact if any(native.fullmatch(k) for k in m["shared_keys"])]
+        if report_matches:
+            conflict = any(
+                cand_date and rec["date_local"]
+                and not date_agreement(cand_date, rec["date_local"])
+                for rec in known
+                if any(native.fullmatch(k) for k in keys & rec["keys"])
+            )
+            verdict = "IDENTITY_CONFLICT" if conflict else "EXACT_REPORT"
+        else:
+            verdict = "SHARED_DOCUMENT"
+        result.update(verdict=verdict, matches=exact, match_count=len(exact))
         return result
 
     possible = []
@@ -389,10 +402,10 @@ def check_candidate(candidate: dict[str, Any], known: list[dict[str, Any]]) -> d
     possible.sort(key=lambda m: (_RELATION_ORDER[m["basis"][0]], str(m["case_id"])))
     if possible:
         result.update(
-            verdict="POSSIBLE_DUPLICATE", matches=possible[:10], match_count=len(possible)
+            verdict="POSSIBLE_DUPLICATE", matches=possible, match_count=len(possible)
         )
     else:
-        result.update(verdict="NEW", matches=[])
+        result.update(verdict="NO_KNOWN_MATCH" if keys and cand_date and (cand_place["municipality"] or cand_place["location_name"]) else "INSUFFICIENT_IDENTITY", matches=[])
     return result
 
 
@@ -416,7 +429,7 @@ def cmd_check(args: argparse.Namespace) -> int:
     results = [check_candidate(c, known) for c in candidates]
     json.dump(results if len(results) > 1 else results[0], sys.stdout, ensure_ascii=False, indent=2)
     print()
-    if args.fail_on_match and any(r["verdict"] != "NEW" for r in results):
+    if args.fail_on_match and any(r["verdict"] != "NO_KNOWN_MATCH" for r in results):
         return 1
     return 0
 
@@ -717,7 +730,7 @@ def build_parser() -> argparse.ArgumentParser:
     check.add_argument("--location")
     check.add_argument("--jsonl", help="batch file; one candidate object per line")
     check.add_argument(
-        "--fail-on-match", action="store_true", help="exit 1 unless every verdict is NEW"
+        "--fail-on-match", action="store_true", help="exit 1 unless every verdict is NO_KNOWN_MATCH"
     )
     check.set_defaults(func=cmd_check)
 
