@@ -18,6 +18,7 @@ import { useLocale } from '@/lib/locale'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { cn } from '@/lib/utils'
 import { ChevronLeft, ChevronRight, MapPin, MapPinOff, X } from 'lucide-react'
+import { scrollRegion } from '@/lib/scrollRegion'
 
 export const PAGE_SIZES = [12, 24, 48, 100]
 export const DEFAULT_PAGE_SIZE = PAGE_SIZES[0]
@@ -180,7 +181,7 @@ export default function CaseGrid({ cases = [], selectedId, onSelect }) {
         ))}
       </div>
 
-      <div ref={scrollRef} className="flex-1 min-h-0 overflow-auto">
+      <div {...scrollRegion("Cases", scrollRef)} className="flex-1 min-h-0 overflow-auto">
         {rows.length === 0 ? (
           <FederationEmptyState
             className="py-8"
@@ -282,8 +283,8 @@ function CaseCard({ c, selected, onSelect, t }) {
         <Badge variant="outline" className={cn('shrink-0 text-xs', tierBadge(c.evidence_tier))}>{c.evidence_tier}</Badge>
       </span>
       <span className="mt-1.5 flex items-center gap-1.5 text-sm text-slate-300">
-        {!hasCoords(c) && <MapPinOff className="h-3.5 w-3.5 shrink-0 text-slate-600" aria-label={t('cases.noCoords')} />}
-        {hasCoords(c) && <MapPin className="h-3.5 w-3.5 shrink-0 text-slate-500" aria-hidden="true" />}
+        {!hasCoords(c) && <MapPinOff className="h-3.5 w-3.5 shrink-0 text-slate-400" aria-label={t('cases.noCoords')} />}
+        {hasCoords(c) && <MapPin className="h-3.5 w-3.5 shrink-0 text-slate-400" aria-hidden="true" />}
         <span className="min-w-0 truncate">{locString(c)}</span>
       </span>
       {(agency || !hasSourceUrl(c)) && (
@@ -341,7 +342,7 @@ function CaseTable({ items, selectedId, onSelect, t }) {
               <TableCell className="text-xs text-slate-400 whitespace-nowrap">{c.date_raw}</TableCell>
               <TableCell className="text-xs text-slate-300 max-w-[160px] truncate">
                 <span className="inline-flex items-center gap-1">
-                  {!hasCoords(c) && <MapPinOff className="h-3 w-3 text-slate-600 shrink-0" title={t('cases.noCoords')} />}
+                  {!hasCoords(c) && <MapPinOff className="h-3 w-3 text-slate-400 shrink-0" title={t('cases.noCoords')} />}
                   {locString(c)}
                 </span>
               </TableCell>
