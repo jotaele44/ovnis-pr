@@ -243,7 +243,7 @@
       "classification": "internal",
       "status": "active",
       "requires_terminal": false,
-      "rationale": "Human-gated case-intake pipeline (dedupe, score, import legacy PRUFON rows, promote one reviewed candidate at a time, validate ledgers, adapt the Centinelas cross-repo signal feed) that feeds case-research-dashboard's data; run as CLI steps outside the GUI, not a separate user workflow.",
+      "rationale": "Human-gated case-intake pipeline (dedupe, score, import legacy PRUFON rows, promote one reviewed candidate at a time, validate ledgers, adapt the Centinelas cross-repo signal feed, and the curator's source sweep ledger and duplicate check) that feeds case-research-dashboard's data; run as CLI steps outside the GUI, not a separate user workflow.",
       "candidate_ids": [
         "analysis_module:scripts/dedupe_candidates.py",
         "analysis_module:scripts/import_candidates.py",
@@ -251,6 +251,7 @@
         "analysis_module:scripts/ingest_centinelas_dispatch.py",
         "analysis_module:scripts/promote_candidate.py",
         "analysis_module:scripts/score_candidates.py",
+        "analysis_module:scripts/sweep_ledger.py",
         "analysis_module:scripts/validate_case_ledgers.py",
         "analysis_symbol:scripts/dedupe_candidates.py:date_score",
         "analysis_symbol:scripts/dedupe_candidates.py:haversine_km",
@@ -292,6 +293,22 @@
         "analysis_symbol:scripts/score_candidates.py:main",
         "analysis_symbol:scripts/score_candidates.py:score_row",
         "analysis_symbol:scripts/score_candidates.py:write_csv",
+        "analysis_symbol:scripts/sweep_ledger.py:build_index_and_stats",
+        "analysis_symbol:scripts/sweep_ledger.py:build_parser",
+        "analysis_symbol:scripts/sweep_ledger.py:check_candidate",
+        "analysis_symbol:scripts/sweep_ledger.py:cmd_check",
+        "analysis_symbol:scripts/sweep_ledger.py:cmd_query",
+        "analysis_symbol:scripts/sweep_ledger.py:cmd_record",
+        "analysis_symbol:scripts/sweep_ledger.py:cmd_refresh",
+        "analysis_symbol:scripts/sweep_ledger.py:cmd_status",
+        "analysis_symbol:scripts/sweep_ledger.py:date_agreement",
+        "analysis_symbol:scripts/sweep_ledger.py:iso_date",
+        "analysis_symbol:scripts/sweep_ledger.py:main",
+        "analysis_symbol:scripts/sweep_ledger.py:place_basis",
+        "analysis_symbol:scripts/sweep_ledger.py:read_csv",
+        "analysis_symbol:scripts/sweep_ledger.py:strip_accents",
+        "analysis_symbol:scripts/sweep_ledger.py:url_key",
+        "analysis_symbol:scripts/sweep_ledger.py:write_csv",
         "analysis_symbol:scripts/validate_case_ledgers.py:core_validate",
         "analysis_symbol:scripts/validate_case_ledgers.py:iter_jsonl",
         "analysis_symbol:scripts/validate_case_ledgers.py:load_schema",
@@ -305,12 +322,14 @@
         "cli_surface:scripts/ingest_centinelas_dispatch.py",
         "cli_surface:scripts/promote_candidate.py",
         "cli_surface:scripts/score_candidates.py",
+        "cli_surface:scripts/sweep_ledger.py",
         "cli_surface:scripts/validate_case_ledgers.py"
       ],
       "tests": {
         "backend": [
           "tests/test_prufon_legacy_contract.py",
-          "tests/test_ingest_centinelas_dispatch.py"
+          "tests/test_ingest_centinelas_dispatch.py",
+          "tests/test_sweep_ledger.py"
         ]
       }
     },
