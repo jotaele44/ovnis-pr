@@ -36,6 +36,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import hashlib
 import os
 import re
 import sys
@@ -563,6 +564,41 @@ def cmd_status(args: argparse.Namespace) -> int:
     return 0
 
 
+def acquisition_receipt(args: argparse.Namespace) -> str:
+    """Validate a local evidence receipt; never infer success from a frontier string."""
+    if not args.receipt:
+        raise ValueError("acquisition receipt required")
+    path = Path(args.receipt)
+    raw = path.read_bytes()
+    receipt = json.loads(raw)
+    expected = {
+        "source": args.source,
+        "verified_through": args.verified_through,
+        "status": "success",
+        "reconciliation": "complete",
+        "sweep_date": args.date or date.today().isoformat(),
+    }
+    if not isinstance(receipt, dict) or any(receipt.get(k) != v for k, v in expected.items()):
+        raise ValueError("receipt does not bind successful reconciled sweep")
+    for field in ("execution_id", "interval_start", "configuration_sha256"):
+        if not isinstance(receipt.get(field), str) or not receipt[field].strip():
+            raise ValueError(f"missing receipt field: {field}")
+    if not re.fullmatch(r"[0-9a-f]{64}", receipt["configuration_sha256"]):
+        raise ValueError("invalid configuration digest")
+    evidence = receipt.get("evidence")
+    if not isinstance(evidence, list) or not evidence:
+        raise ValueError("missing acquisition evidence")
+    for item in evidence:
+        if not isinstance(item, dict):
+            raise ValueError("invalid evidence entry")
+        artifact = (path.parent / item["path"]).resolve()
+        if not artifact.is_relative_to(path.parent.resolve()):
+            raise ValueError("evidence outside receipt directory")
+        if hashlib.sha256(artifact.read_bytes()).hexdigest() != item["sha256"]:
+            raise ValueError("evidence hash mismatch")
+    return hashlib.sha256(raw).hexdigest()
+
+
 def cmd_record(args: argparse.Namespace) -> int:
     path = Path(args.ledger)
     rows = read_csv(path)
@@ -596,8 +632,18 @@ def cmd_record(args: argparse.Namespace) -> int:
         row["kind"] = args.kind
     swept = args.date or date.today().isoformat()
     if args.verified_through is not None:
+        try:
+            digest = acquisition_receipt(args)
+        except (OSError, ValueError, TypeError, KeyError, AttributeError):
+            print("record: invalid or missing acquisition receipt", file=sys.stderr)
+            return 2
+        marker = f"receipt_sha256={digest}"
+        if marker in row["notes"].split(" | "):
+            print("receipt already recorded")
+            return 0
         row["verified_through"] = args.verified_through
         row["last_swept"] = swept
+        row["notes"] = (row["notes"] + " | " if row["notes"] else "") + marker
     if args.next_action is not None:
         row["next_action"] = args.next_action
     if args.note:
@@ -831,6 +877,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--verified-through", help="newest item confirmed swept, in the source's own terms"
     )
     record.add_argument("--date", help="sweep date (default today)")
+    record.add_argument("--receipt", help="local successful acquisition receipt JSON")
     record.add_argument("--state")
     record.add_argument("--access")
     record.add_argument("--kind")
