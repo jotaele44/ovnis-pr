@@ -4,8 +4,8 @@
 This audit is intentionally identity-conservative. A textual municipality label,
 case-folded name, normalized alias, location string, or coordinate proximity does
 not establish canonical municipio identity. ADMINISTRATIVE_SET admission requires
-an independently bound stable municipio identifier (currently a 5-digit PR GEOID)
-or another explicit authoritative binding supplied in the source record.
+an independently verified authoritative municipality registry and record binding.
+This audit does not yet consume those receipts and therefore admits no rows.
 
 The current master ledger therefore remains source-bounded: broad regional labels
 are preserved as written and are not converted into municipality polygons.
@@ -26,7 +26,7 @@ GEOID_FIELDS = (
     "municipio_geoid",
     "county_geoid",
 )
-CONTRACT = "ovnis-pr-grid-v2-administrative-set-denominator/1.0"
+CONTRACT = "ovnis-pr-grid-v2-administrative-set-denominator/1.1"
 
 
 class AdministrativeSetAuditError(ValueError):
@@ -64,19 +64,36 @@ def _raw_label(row: dict[str, Any]) -> str | None:
     return None
 
 
-def _stable_geoid(row: dict[str, Any]) -> str | None:
-    for field in GEOID_FIELDS:
-        value = row.get(field)
-        if isinstance(value, str) and len(value) == 5 and value.isdigit() and value.startswith("72"):
-            return value
-    return None
+def _syntactic_geoid(row: dict[str, Any]) -> str | None:
+    """Return a consistent candidate identifier, not an authoritative binding."""
+    values = [row[field] for field in GEOID_FIELDS if row.get(field) not in (None, "")]
+    if not values:
+        return None
+    if any(
+        not isinstance(value, str)
+        or len(value) != 5
+        or not value.isascii()
+        or not value.isdigit()
+        or not value.startswith("72")
+        for value in values
+    ):
+        return None
+    if len(set(values)) != 1:
+        return None
+    return values[0]
+
+
+def _administrative_set_admissible(row: dict[str, Any]) -> bool:
+    """Fail closed until authoritative membership and binding receipts are validated."""
+    return False
 
 
 def audit(path: Path) -> dict[str, Any]:
     rows = _load(path)
     masters = [row for row in rows if row.get("record_type") == "master"]
     labels = Counter()
-    geoid_bound = []
+    syntactic_candidates = []
+    admissible = []
     nonblank = 0
 
     for row in masters:
@@ -84,8 +101,10 @@ def audit(path: Path) -> dict[str, Any]:
         if label is not None:
             nonblank += 1
             labels[label] += 1
-        if _stable_geoid(row) is not None:
-            geoid_bound.append(row)
+        if _syntactic_geoid(row) is not None:
+            syntactic_candidates.append(row)
+        if _administrative_set_admissible(row):
+            admissible.append(row)
 
     return {
         "contract": CONTRACT,
@@ -98,8 +117,10 @@ def audit(path: Path) -> dict[str, Any]:
         "Municipality_Label_Counts_RAW": dict(
             sorted(labels.items(), key=lambda item: (-item[1], item[0]))
         ),
-        "Stable_Municipio_GEOID_Row_Count": len(geoid_bound),
-        "Administrative_Set_Admissible_Count": len(geoid_bound),
+        "Syntactic_Municipio_GEOID_Candidate_Row_Count": len(syntactic_candidates),
+        "Stable_Municipio_GEOID_Row_Count": 0,
+        "Administrative_Set_Admissible_Count": len(admissible),
+        "Authority_Receipt_Validation_State": "NOT_IMPLEMENTED",
         "Required_Stable_ID_Prefix": "72",
         "Text_Name_Match_Is_Identity": False,
         "Casefolded_Name_Match_Is_Identity": False,
@@ -110,18 +131,14 @@ def audit(path: Path) -> dict[str, Any]:
         "Required_Binding_Method": "ADMINISTRATIVE_SET",
         "Required_Uncertainty_Class": "ADMINISTRATIVE_ONLY",
         "Required_Geometry_Evidence_State": "VERIFIED_ADMINISTRATIVE_GEOMETRY",
-        "Migration_State": (
-            "CANDIDATE_ADMINISTRATIVE_SET_DENOMINATOR_AVAILABLE"
-            if geoid_bound
-            else "BLOCKED_NO_STABLE_MUNICIPIO_ID_DENOMINATOR"
-        ),
+        "Migration_State": "BLOCKED_AUTHORITATIVE_BINDING_VALIDATION_UNAVAILABLE",
         "Promotion_State": "CANDIDATE_NOT_CANONICAL",
         "Identity_Default": "CANDIDATE_NOT_IDENTITY",
         "Scope_Note": (
             "Raw municipality labels are preserved for discovery/source-bounded geography. "
             "No municipality polygon is assigned from name normalization, regional labels, "
-            "location text, or unverified coordinates. A stable authoritative municipio "
-            "identifier or explicit authoritative binding is required before Spiderweb "
+            "location text, or unverified coordinates. Authoritative municipio "
+            "registry membership and independently verified record binding are required before Spiderweb "
             "ADMINISTRATIVE_SET migration."
         ),
     }
