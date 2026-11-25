@@ -35,8 +35,8 @@ from __future__ import annotations
 
 import argparse
 import csv
-import json
 import hashlib
+import json
 import os
 import re
 import sys
@@ -564,7 +564,7 @@ def cmd_status(args: argparse.Namespace) -> int:
     return 0
 
 
-def acquisition_receipt(args: argparse.Namespace) -> str:
+def acquisition_receipt(args: argparse.Namespace, previous_frontier: str) -> str:
     """Validate a local evidence receipt; never infer success from a frontier string."""
     if not args.receipt:
         raise ValueError("acquisition receipt required")
@@ -573,6 +573,7 @@ def acquisition_receipt(args: argparse.Namespace) -> str:
     receipt = json.loads(raw)
     expected = {
         "source": args.source,
+        "previous_frontier": previous_frontier,
         "verified_through": args.verified_through,
         "status": "success",
         "reconciliation": "complete",
@@ -585,6 +586,11 @@ def acquisition_receipt(args: argparse.Namespace) -> str:
             raise ValueError(f"missing receipt field: {field}")
     if not re.fullmatch(r"[0-9a-f]{64}", receipt["configuration_sha256"]):
         raise ValueError("invalid configuration digest")
+    configuration = (path.parent / receipt["configuration_path"]).resolve()
+    if not configuration.is_relative_to(path.parent.resolve()):
+        raise ValueError("configuration outside receipt directory")
+    if hashlib.sha256(configuration.read_bytes()).hexdigest() != receipt["configuration_sha256"]:
+        raise ValueError("configuration hash mismatch")
     evidence = receipt.get("evidence")
     if not isinstance(evidence, list) or not evidence:
         raise ValueError("missing acquisition evidence")
@@ -633,7 +639,25 @@ def cmd_record(args: argparse.Namespace) -> int:
     swept = args.date or date.today().isoformat()
     if args.verified_through is not None:
         try:
-            digest = acquisition_receipt(args)
+            digest = hashlib.sha256(Path(args.receipt).read_bytes()).hexdigest() if args.receipt else ""
+            if digest and f"receipt_sha256={digest}" in row["notes"].split(" | "):
+                prior = json.loads(Path(args.receipt).read_bytes())["previous_frontier"]
+                acquisition_receipt(args, prior)
+                print("receipt already recorded")
+                return 0
+            digest = acquisition_receipt(args, row["verified_through"])
+            previous = row["verified_through"]
+            if previous:
+                before = re.fullmatch(r"#?(\d+)", previous)
+                after = re.fullmatch(r"#?(\d+)", args.verified_through)
+                if before and after:
+                    if int(after.group(1)) <= int(before.group(1)):
+                        raise ValueError("numeric frontier did not advance")
+                else:
+                    if date.fromisoformat(args.verified_through) <= date.fromisoformat(previous):
+                        raise ValueError("date frontier did not advance")
+            if row["last_swept"] and date.fromisoformat(swept) < date.fromisoformat(row["last_swept"]):
+                raise ValueError("stale sweep date")
         except (OSError, ValueError, TypeError, KeyError, AttributeError):
             print("record: invalid or missing acquisition receipt", file=sys.stderr)
             return 2
