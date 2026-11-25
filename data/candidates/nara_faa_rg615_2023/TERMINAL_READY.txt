@@ -1,0 +1,26 @@
+# TERMINAL_READY.txt — NARA FAA RG615 five-report intake
+STATUS=PROVISIONAL_AUDIT_ONLY_NONCANONICAL
+
+macOS / Linux (from repository root):
+  python3 - <<'PY'
+import json, pathlib
+p=pathlib.Path('data/candidates/nara_faa_rg615_2023.jsonl')
+rows=[json.loads(line) for line in p.read_text(encoding='utf-8').splitlines() if line.strip()]
+assert len(rows)==5
+assert len({r['record_id'] for r in rows})==5
+assert sum(r['record_type']=='candidate' for r in rows)==4
+assert sum(r['record_type']=='update_existing' for r in rows)==1
+assert all(r['latitude'] is None and r['longitude'] is None for r in rows)
+assert {r['source_family'] for r in rows}=={'FAA'}
+assert next(r for r in rows if r['nara_id']=='499915869')['matched_case_id']=='PRUAP-0449'
+print('INTAKE STRUCTURAL GATES PASS — promotion remains BLOCKED pending independent verification')
+PY
+  python3 scripts/validate_case_ledgers.py
+  python3 -m pytest -q
+
+Windows PowerShell: run the same Python heredoc test as an individual .py file, or:
+  python -c "import json,pathlib; r=[json.loads(x) for x in pathlib.Path('data/candidates/nara_faa_rg615_2023.jsonl').read_text(encoding='utf-8').splitlines() if x.strip()]; assert len(r)==5; assert len({x['record_id'] for x in r})==5; print('STRUCTURAL GATES PASS')"
+  python scripts/validate_case_ledgers.py
+  python -m pytest -q
+
+Original PDFs are not committed. Before any promotion, fetch the five URLs listed in docs/NARA_FAA_RG615_2023_INTAKE.md and verify their SHA-256 against the staged case records, inspect page layouts, and adjudicate conflicts. Fatal differences must fail closed; do not change master or claim canonical GIS coverage.
