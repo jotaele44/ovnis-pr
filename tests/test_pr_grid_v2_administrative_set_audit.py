@@ -2,7 +2,6 @@
 import json
 
 import pytest
-
 from federation.spatial import audit_pr_grid_v2_administrative_set as audit
 
 
