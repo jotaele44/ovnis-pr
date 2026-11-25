@@ -2,6 +2,8 @@
 
 import csv
 import json
+import subprocess
+import sys
 
 import pytest
 
@@ -794,3 +796,43 @@ def test_record_releases_own_lock(tmp_path):
         "--ledger", str(ledger), "record", "--source", "Alpha", "--note", "recorded",
     ]) == 0
     assert not ledger.with_name(ledger.name + ".lock").exists()
+
+
+def test_multiprocess_writer_contention(tmp_path):
+    ledger = _ledger(tmp_path, Alpha={"state": "forward"})
+    original = ledger.read_bytes()
+    lock = ledger.with_name(ledger.name + ".lock")
+    # A separate process owns the lock until the parent signals release.
+    program = (
+        "import os, sys; "
+        "fd = os.open(sys.argv[1], os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600); "
+        "os.close(fd); print('ready', flush=True); sys.stdin.readline(); "
+        "os.unlink(sys.argv[1])"
+    )
+    with subprocess.Popen(
+        [sys.executable, "-c", program, str(lock)],
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        text=True,
+    ) as owner:
+        try:
+            assert owner.stdout is not None
+            assert owner.stdout.readline().strip() == "ready"
+            argv = [
+                sys.executable, str(sl.REPO_ROOT / "scripts" / "sweep_ledger.py"),
+                "--ledger", str(ledger), "record", "--source", "Alpha",
+                "--note", "competing writer",
+            ]
+            rejected = subprocess.run(argv, capture_output=True, text=True, timeout=15)
+            assert rejected.returncode == 2
+            assert ledger.read_bytes() == original
+            assert lock.exists()
+        finally:
+            assert owner.stdin is not None
+            owner.stdin.write("\n")
+            owner.stdin.flush()
+            owner.wait(timeout=15)
+    assert not lock.exists()
+    accepted = subprocess.run(argv, capture_output=True, text=True, timeout=15)
+    assert accepted.returncode == 0
+    assert "competing writer" in sl.read_csv(ledger)[0]["notes"]
