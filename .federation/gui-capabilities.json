@@ -293,6 +293,7 @@
         "analysis_symbol:scripts/score_candidates.py:main",
         "analysis_symbol:scripts/score_candidates.py:score_row",
         "analysis_symbol:scripts/score_candidates.py:write_csv",
+        "analysis_symbol:scripts/sweep_ledger.py:acquisition_receipt",
         "analysis_symbol:scripts/sweep_ledger.py:build_index_and_stats",
         "analysis_symbol:scripts/sweep_ledger.py:build_parser",
         "analysis_symbol:scripts/sweep_ledger.py:check_candidate",
