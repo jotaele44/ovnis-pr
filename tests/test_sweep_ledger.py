@@ -254,7 +254,9 @@ def test_check_cli_fail_on_match_and_json(tmp_path, capsys):
             )
         ],
     )
-    base = ["--index", str(index), "--master", str(tmp_path / "none.jsonl")]
+    master = tmp_path / "none.jsonl"
+    master.write_text("", encoding="utf-8")
+    base = ["--index", str(index), "--master", str(master)]
     assert sl.main([*base, "check", "--url", "https://a.example/x", "--fail-on-match"]) == 1
     assert json.loads(capsys.readouterr().out)["verdict"] == "SHARED_DOCUMENT"
     assert sl.main([*base, "check", "--url", "https://z.example/new", "--date", "2025-01-01", "--municipality", "Ponce", "--fail-on-match"]) == 0
@@ -267,6 +269,7 @@ def test_check_batch_jsonl(tmp_path, capsys):
         sl.INDEX_COLUMNS,
         [_index_row(case_id="C1", source_keys="a.example/x")],
     )
+    (tmp_path / "none.jsonl").write_text("", encoding="utf-8")
     batch = tmp_path / "batch.jsonl"
     batch.write_text(
         '{"url": "https://a.example/x"}\n{"url": "https://b.example/y", "date": "2026-01-01"}\n',
@@ -658,3 +661,23 @@ def test_possible_duplicate_preserves_all_matches(tmp_path):
     out = sl.check_candidate({"date": "2026-01-02", "municipality": "Ponce"}, known)
     assert out["verdict"] == "POSSIBLE_DUPLICATE"
     assert len(out["matches"]) == 12
+
+
+def test_check_cli_missing_comparison_fails_closed(tmp_path, capsys):
+    argv = [
+        "--index", str(tmp_path / "missing.csv"),
+        "--master", str(tmp_path / "missing.jsonl"),
+        "check", "--url", "https://example.com/report",
+    ]
+    assert sl.main(argv) == 2
+    assert json.loads(capsys.readouterr().out)["verdict"] == "COMPARISON_UNAVAILABLE"
+
+
+def test_native_report_municipality_conflict(tmp_path):
+    known = _known(tmp_path, [
+        _index_row(case_id="C1", source_keys="nuforc:123", municipality="Ponce")
+    ])
+    out = sl.check_candidate(
+        {"url": "https://nuforc.org/sighting/?id=123", "municipality": "Salinas"}, known
+    )
+    assert out["verdict"] == "IDENTITY_CONFLICT"
