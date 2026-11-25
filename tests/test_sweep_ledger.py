@@ -149,7 +149,7 @@ def test_date_agreement_allows_one_day_only_between_full_dates():
 # ------------------------------------------------------------------ duplicate gate
 
 
-def test_check_exact_source_wins_even_when_date_and_place_differ(tmp_path):
+def test_check_native_report_with_conflicting_date(tmp_path):
     known = _known(
         tmp_path,
         [
@@ -164,7 +164,7 @@ def test_check_exact_source_wins_even_when_date_and_place_differ(tmp_path):
     out = sl.check_candidate(
         {"url": "https://nuforc.org/sighting/?id=79425", "date": "1999"}, known
     )
-    assert out["verdict"] == "EXACT_SOURCE"
+    assert out["verdict"] == "IDENTITY_CONFLICT"
     assert out["matches"][0]["case_id"] == "C1"
 
 
@@ -208,7 +208,7 @@ def test_check_new_when_nothing_agrees(tmp_path):
     out = sl.check_candidate(
         {"url": "https://new.example/a", "date": "2026-10-05", "municipality": "Ponce"}, known
     )
-    assert out["verdict"] == "NEW" and out["matches"] == []
+    assert out["verdict"] == "NO_KNOWN_MATCH" and out["matches"] == []
 
 
 def test_check_without_a_date_cannot_be_a_possible_duplicate(tmp_path):
@@ -216,7 +216,7 @@ def test_check_without_a_date_cannot_be_a_possible_duplicate(tmp_path):
         tmp_path, [_index_row(case_id="C1", date_local="2026-10-05", municipality="Salinas")]
     )
     out = sl.check_candidate({"url": "https://new.example/a", "municipality": "Salinas"}, known)
-    assert out["verdict"] == "NEW"
+    assert out["verdict"] == "INSUFFICIENT_IDENTITY"
 
 
 def test_check_reads_the_master_ledger_too(tmp_path):
@@ -238,7 +238,7 @@ def test_check_reads_the_master_ledger_too(tmp_path):
     )
     known = sl._known_records(tmp_path / "missing_index.csv", master)
     out = sl.check_candidate({"url": "http://www.archive.example.org/article/1/"}, known)
-    assert out["verdict"] == "EXACT_SOURCE" and out["matches"][0]["dataset"] == "master_cases"
+    assert out["verdict"] == "SHARED_DOCUMENT" and out["matches"][0]["dataset"] == "master_cases"
 
 
 def test_check_cli_fail_on_match_and_json(tmp_path, capsys):
@@ -256,8 +256,8 @@ def test_check_cli_fail_on_match_and_json(tmp_path, capsys):
     )
     base = ["--index", str(index), "--master", str(tmp_path / "none.jsonl")]
     assert sl.main([*base, "check", "--url", "https://a.example/x", "--fail-on-match"]) == 1
-    assert json.loads(capsys.readouterr().out)["verdict"] == "EXACT_SOURCE"
-    assert sl.main([*base, "check", "--url", "https://z.example/new", "--fail-on-match"]) == 0
+    assert json.loads(capsys.readouterr().out)["verdict"] == "SHARED_DOCUMENT"
+    assert sl.main([*base, "check", "--url", "https://z.example/new", "--date", "2025-01-01", "--municipality", "Ponce", "--fail-on-match"]) == 0
     assert sl.main([*base, "check"]) == 2
 
 
@@ -284,7 +284,7 @@ def test_check_batch_jsonl(tmp_path, capsys):
         ]
     )
     verdicts = [r["verdict"] for r in json.loads(capsys.readouterr().out)]
-    assert verdicts == ["EXACT_SOURCE", "NEW"]
+    assert verdicts == ["SHARED_DOCUMENT", "INSUFFICIENT_IDENTITY"]
 
 
 # ------------------------------------------------------------------ ledger, record, status
@@ -631,3 +631,30 @@ def test_committed_index_is_consistent():
 def test_committed_query_log_has_the_declared_columns():
     with sl.QUERY_LOG_PATH.open(newline="", encoding="utf-8") as fh:
         assert csv.DictReader(fh).fieldnames == sl.QUERY_COLUMNS
+
+
+def test_native_report_identity_without_date_conflict(tmp_path):
+    known = _known(tmp_path, [_index_row(case_id="C1", source_keys="nuforc:123")])
+    out = sl.check_candidate({"url": "https://nuforc.org/sighting/?id=123"}, known)
+    assert out["verdict"] == "EXACT_REPORT"
+
+
+def test_shared_document_preserves_all_matches(tmp_path):
+    rows = [
+        _index_row(case_id=f"C{i}", source_keys="example.com/compilation") for i in range(12)
+    ]
+    known = _known(tmp_path, rows)
+    out = sl.check_candidate({"url": "https://example.com/compilation"}, known)
+    assert out["verdict"] == "SHARED_DOCUMENT"
+    assert len(out["matches"]) == 12
+
+
+def test_possible_duplicate_preserves_all_matches(tmp_path):
+    rows = [
+        _index_row(case_id=f"C{i}", date_local="2026-01-01", municipality="Ponce")
+        for i in range(12)
+    ]
+    known = _known(tmp_path, rows)
+    out = sl.check_candidate({"date": "2026-01-02", "municipality": "Ponce"}, known)
+    assert out["verdict"] == "POSSIBLE_DUPLICATE"
+    assert len(out["matches"]) == 12
