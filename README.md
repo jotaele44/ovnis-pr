@@ -130,7 +130,9 @@ rows, plus computed duplicate-manifestation CANDIDATE pairs and a deterministic 
 family), mapped as thehub-pr's registry reader maps it, and when it last succeeded. That time comes only
 from a fetch-run receipt in `data/source_run_state.json`. No OVNIS fetch run writes one yet and no
 OVNIS output records a per-source success time, so every source is reported as not recorded
-(`tests/test_federation_source_monitors.py`).
+(`tests/test_federation_source_monitors.py`). The curator-maintained sweep ledger
+(`data/reference/source_sweep_ledger.csv`) records when a curator swept a source, not when a fetch ran.
+It does not feed `source_monitors.jsonl`.
 
 ## Research ledgers
 
@@ -148,6 +150,13 @@ manifestation adjudications, research questions and media episodes in the JSONL 
   case. Route parsing is pinned from spiderweb-pr (`federation/roads/pr_route_ref.pin.json`).
 
 See [`docs/RESEARCH_LEDGERS.md`](docs/RESEARCH_LEDGERS.md).
+
+## Source sweeps and duplicate checks
+
+`python3 scripts/sweep_ledger.py status` lists which sources still need a sweep, and
+`python3 scripts/sweep_ledger.py check --url <URL> --date <date> --municipality <place>` places a candidate
+against the known cases before it is staged (`EXACT_SOURCE`, `POSSIBLE_DUPLICATE` or `NEW`). Neither command
+edits a case or the master ledger. See [`docs/SOURCE_SWEEP_LEDGER.md`](docs/SOURCE_SWEEP_LEDGER.md).
 
 ## Corpus completeness
 
