@@ -67,6 +67,7 @@ export default function Dashboard() {
         </div>
         <TopControls />
       </header>
+        <div data-offline-status-host style={{ padding: "2px 12px", flexShrink: 0 }} />
 
       {isMobile ? (
         <>

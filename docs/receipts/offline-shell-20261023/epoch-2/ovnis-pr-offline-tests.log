@@ -1,0 +1,14 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> ovnis-dashboard@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.11 /workspace/scratch/c3a52f35ef78/ovnis-pr/dashboard
+
+
+ Test Files  8 passed (8)
+      Tests  122 passed (122)
+   Start at  20:35:51
+   Duration  10.03s (transform 4.75s, setup 2.95s, import 7.97s, tests 4.99s, environment 28.73s)
+
