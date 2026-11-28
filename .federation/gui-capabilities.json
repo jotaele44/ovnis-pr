@@ -626,6 +626,31 @@
           "tests/test_corpus_quality_report.py"
         ]
       }
+    },
+    {
+      "id": "municipality-derivation-report",
+      "classification": "internal",
+      "status": "active",
+      "requires_terminal": false,
+      "rationale": "Curator review report (scripts/derive_municipalities.py): tests each master case's coordinate against the municipio polygons and writes CANDIDATE municipio derivations, each with a review class, to the git-ignored reports/municipality_derivations.json. It never edits a case and is not exported; applying a reviewed derivation is a separate, reviewed ledger change. It is not an OVNIS user workflow and has no GUI surface of its own.",
+      "candidate_ids": [
+        "analysis_module:scripts/derive_municipalities.py",
+        "analysis_symbol:scripts/derive_municipalities.py:build_report",
+        "analysis_symbol:scripts/derive_municipalities.py:derive_case",
+        "analysis_symbol:scripts/derive_municipalities.py:existing_class",
+        "analysis_symbol:scripts/derive_municipalities.py:is_generic_location",
+        "analysis_symbol:scripts/derive_municipalities.py:load_municipios",
+        "analysis_symbol:scripts/derive_municipalities.py:main",
+        "analysis_symbol:scripts/derive_municipalities.py:named_in_location",
+        "analysis_symbol:scripts/derive_municipalities.py:other_municipios_named",
+        "analysis_symbol:scripts/derive_municipalities.py:review_class",
+        "cli_surface:scripts/derive_municipalities.py"
+      ],
+      "tests": {
+        "backend": [
+          "tests/test_derive_municipalities.py"
+        ]
+      }
     }
   ],
   "exceptions": []
