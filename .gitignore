@@ -111,6 +111,8 @@ reports/maintenance/
 reports/cases/
 # generated road-reference candidates (scripts/resolve_road_refs.py; reproducible from the ledgers)
 reports/road_refs.json
+# generated municipio derivations (scripts/derive_municipalities.py; reproducible from the ledgers)
+reports/municipality_derivations.json
 
 # Desktop wrapper (see desktop/README.md)
 .venv/

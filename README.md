@@ -165,6 +165,11 @@ how coordinates and confidence are distributed, how many real candidates are sta
 each research ledger holds. It never edits a ledger. The roadmap in
 [`docs/ROAD_TO_100.md`](docs/ROAD_TO_100.md) states its exit criteria against these counts.
 
+`python3 scripts/derive_municipalities.py` tests each case's coordinate against the municipio polygons and
+writes CANDIDATE municipios to `reports/municipality_derivations.json`, each with a review class. Many
+coordinates are a place-name centroid or a regional default point, so a derivation is never source
+evidence. The script never edits a case.
+
 <!-- PROJECT-OPERATING-CONTRACT:START -->
 ## Current development and certification contract
 
